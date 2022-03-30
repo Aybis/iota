@@ -1,0 +1,162 @@
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getImageFromAssets } from '../helpers/assetHelpers';
+import Cookies from 'js-cookie';
+import { useState } from 'react';
+
+export default function Login() {
+  let location = useLocation();
+  const navigate = useNavigate();
+
+  const [input, setinput] = useState({
+    username: '',
+  });
+
+  const handlerOnchange = (event) => {
+    setinput({
+      username: event.target.value,
+    });
+  };
+
+  const handlerSubmit = () => {
+    Cookies.set('session', 'user', { expires: 0.5 });
+    Cookies.remove('redirect');
+    navigate(location.state?.from?.pathname || '/', { replace: true });
+  };
+
+  return (
+    <div className="min-h-screen bg-white">
+      <div className="min-h-screen flex">
+        <div className="flex-1 lg:w-1/2 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+          <div className="absolute inset-x-0 lg:w-1/2  px-8 lg:px-12 top-4 lg:top-8">
+            <div className="flex justify-between items-center">
+              <img
+                className="h-14 lg:h-20 w-auto"
+                src={getImageFromAssets('/assets/telkom.png')}
+                alt=""
+              />
+              <img
+                className="h-9 lg:h-12 w-auto"
+                src={getImageFromAssets('/assets/pins.png')}
+                alt=""
+              />
+            </div>
+          </div>
+
+          <div className="absolute inset-x-0 lg:w-1/2  px-4 lg:px-12 bottom-4 lg:bottom-8">
+            <div className="flex justify-center items-center">
+              <p className="text-xs text-zinc-400">© Copyright PINS 2022.</p>
+            </div>
+          </div>
+          <div className="lg:mx-auto w-full max-w-md lg:w-96 bg-white lg:bg-transparent p-4 lg:p-0 rounded-lg">
+            <div className="block">
+              <img
+                className="h-8 w-auto"
+                src={getImageFromAssets('/assets/logo.svg')}
+                alt=""
+              />
+            </div>
+
+            <div className="mt-12 lg:mt-32">
+              <h1 className="text-xl lg:text-3xl font-semibold text-zinc-800">
+                Log in
+              </h1>
+              <p className="text-sm text-zinc-500 mt-1">
+                Welcome back, please login to continue!
+              </p>
+            </div>
+
+            <div className="mt-4">
+              <div className="mt-6">
+                <form onSubmit={handlerSubmit} className="space-y-6">
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700">
+                      Username
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        name="username"
+                        type="text"
+                        autoComplete="off"
+                        onChange={(e) => handlerOnchange(e)}
+                        value={input.username}
+                        required
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-indigo-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium text-gray-700">
+                      Password
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        autoComplete="current-password"
+                        required
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-indigo-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <input
+                        id="remember-me"
+                        name="remember-me"
+                        type="checkbox"
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <label
+                        htmlFor="remember-me"
+                        className="ml-2 block text-sm text-gray-900">
+                        Remember me
+                      </label>
+                    </div>
+
+                    <div className="text-sm">
+                      <p className="font-medium text-blue-600 hover:text-blue-500">
+                        Forgot your password?
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-6">
+                    <button
+                      type="submit"
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                      Sign in
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="hidden lg:block relative w-0 flex-1 bg-slate-50">
+          <div className="min-h-screen flex flex-col space-y-6 justify-center items-center lg:px-12 xl:px-24">
+            <img
+              className="h-96"
+              src={getImageFromAssets('/assets/ilustrasi.svg')}
+              alt=""
+            />
+            <h1 className="text-center text-xl font-bold text-zinc-800">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </h1>
+            <p className="text-center text-sm text-zinc-400">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis
+              et autem consectetur delectus! Nam iure suscipit laborum tempore
+              odit nobis.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

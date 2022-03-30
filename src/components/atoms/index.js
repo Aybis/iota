@@ -1,0 +1,9 @@
+export { default as Button } from './Button';
+export { default as Card } from './Card';
+export { default as GoogleMaps } from './GoogleMaps';
+export { default as InputPhoto } from './InputPhoto';
+export { default as InputRadio } from './InputRadio';
+export { default as Loading } from './Loading';
+export { default as Modals } from './Modals';
+export { default as Textarea } from './Textarea';
+export { default as Time } from './Time';

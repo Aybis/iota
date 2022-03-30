@@ -1,0 +1,9 @@
+export { default as Home } from './Home';
+export { default as Login } from './Login';
+export { default as Activity } from './Activity';
+export { default as DetailActivity } from './DetailActivity';
+export { default as Dashboard } from './Dashboard';
+export { default as SummaryPersonal } from './SummaryPersonal';
+export { default as ReportAbsen } from './ReportAbsen';
+export { default as NotFound } from './404';
+export { default as Checkin } from './Checkin';
