@@ -5,29 +5,27 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 
 const people = [
   { id: 1, name: 'ALL TREG' },
-  { id: 2, name: 'TREG 1 SUMATERA' },
-  { id: 3, name: 'TREG 2 JABODETABEK' },
-  { id: 4, name: 'TREG 3 JAWA BARAT' },
-  { id: 5, name: 'TREG 4 JAWA TENGAH' },
-  { id: 6, name: 'TREG 5 JAWA TIMUR' },
-  { id: 7, name: 'TREG 6 KALIMANTAN' },
-  { id: 8, name: 'TREG 7 KTI' },
-  { id: 9, name: 'TREG 8 BALI NUSRA' },
+  { id: 2, name: 'TR1 SUMATERA' },
+  { id: 3, name: 'TR2 JABODETABEK' },
+  { id: 4, name: 'TR3 JABAR' },
+  { id: 5, name: 'TR4 JATENG & DIY' },
+  { id: 6, name: 'TR5 JATIM & BALNUS' },
+  { id: 7, name: 'TR6 KALIMANTAN' },
+  { id: 8, name: 'TR7 KTI' },
 ];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
 export default function Dropdown() {
-  const [selected, setSelected] = useState(people[3]);
+  const [selected, setSelected] = useState(people[0]);
 
   return (
     <Listbox value={selected} onChange={setSelected}>
       {({ open }) => (
         <>
           <div className="mt-1 relative">
-            <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
               <span className="block truncate">{selected.name}</span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <SelectorIcon
@@ -49,7 +47,7 @@ export default function Dropdown() {
                     key={person.id}
                     className={({ active }) =>
                       classNames(
-                        active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                        active ? 'text-white bg-blue-600' : 'text-gray-900',
                         'cursor-default select-none relative py-2 pl-3 pr-9',
                       )
                     }

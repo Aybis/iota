@@ -4,7 +4,6 @@ import {
   ClipboardListIcon as Clipboard,
   FingerPrintIcon,
   HomeIcon as Home,
-  LogoutIcon,
 } from '@heroicons/react/outline';
 import {
   ChartBarIcon as ChartSolid,
@@ -13,11 +12,9 @@ import {
   FingerPrintIcon as FingerSolid,
   HomeIcon as HomeSolid,
 } from '@heroicons/react/solid';
-import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
-import swal from 'sweetalert';
 
 export default function BottomBar() {
   const USER = useSelector((state) => state.user);
@@ -65,6 +62,12 @@ export default function BottomBar() {
         ])
       : setmenumobiles([
           {
+            link: '/',
+            name: 'Home',
+            icon: Home,
+            iconActive: HomeSolid,
+          },
+          {
             link: '/absensi',
             name: 'Absensi',
             icon: ClipboardCheckIcon,
@@ -76,37 +79,31 @@ export default function BottomBar() {
             icon: Clipboard,
             iconActive: ClipboardSolid,
           },
-          {
-            link: '/logout',
-            name: 'Logout',
-            icon: LogoutIcon,
-            iconActive: LogoutIcon,
-          },
         ]);
   }, [USER]);
 
-  const handlerLogOut = () => {
-    swal({
-      title: 'Are you sure?',
-      text: 'Anda yakin ingin keluar dari aplikasi!',
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        Cookies.remove('session');
-        localStorage.clear();
-        swal('Anda berhasil logout!', {
-          icon: 'success',
-        });
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
-      } else {
-        swal('Okay!');
-      }
-    });
-  };
+  // const handlerLogOut = () => {
+  //   swal({
+  //     title: 'Are you sure?',
+  //     text: 'Anda yakin ingin keluar dari aplikasi!',
+  //     icon: 'warning',
+  //     buttons: true,
+  //     dangerMode: true,
+  //   }).then((willDelete) => {
+  //     if (willDelete) {
+  //       Cookies.remove('session');
+  //       localStorage.clear();
+  //       swal('Anda berhasil logout!', {
+  //         icon: 'success',
+  //       });
+  //       setTimeout(() => {
+  //         window.location.reload();
+  //       }, 300);
+  //     } else {
+  //       swal('Okay!');
+  //     }
+  //   });
+  // };
 
   return (
     <div className="fixed z-30 bottom-0 inset-x-0 lg:hidden shadow-xl">
@@ -134,14 +131,6 @@ export default function BottomBar() {
                 <p className={`text-xs mt-1 text-zinc-800 font-bold`}>{name}</p>
               </NavLink>
             )
-          ) : menu.link === '/logout' ? (
-            <button
-              key={Math.random()}
-              onClick={() => handlerLogOut()}
-              className="text-red-400 text-xs flex flex-col items-center justify-center">
-              <menu.icon className="h-5 w-5 mx-auto" />
-              Logout
-            </button>
           ) : (
             <NavLink
               key={Math.random()}

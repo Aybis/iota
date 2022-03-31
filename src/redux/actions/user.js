@@ -23,7 +23,7 @@ export const loginUser = (data) => async (dispatch) => {
     dispatch(
       setProfile({
         nama: 'Manar',
-        role: 'telkom',
+        role: 'admin',
       }),
     );
   } else {

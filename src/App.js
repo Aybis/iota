@@ -11,11 +11,16 @@ import {
   Home,
   Login,
   NotFound,
+  Profile,
   ReportAbsenUser,
 } from './pages';
 import Bulanan from './pages/dashboard_absensi/Bulanan';
 import Harian from './pages/dashboard_absensi/Harian';
 import Users from './pages/dashboard_absensi/Users';
+import Daily from './pages/dashboard_activity/Daily';
+import DetailUserAct from './pages/dashboard_activity/DetailUserAct';
+import Employee from './pages/dashboard_activity/Employee';
+import Monthly from './pages/dashboard_activity/Monthly';
 
 function App() {
   return (
@@ -28,6 +33,7 @@ function App() {
         <Route path="/activity/detail" element={<DetailActivity />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/checkin" element={<Checkin />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/absensi" element={<DashboardAbsensi />}>
           <Route index element={<Harian />} />
           <Route path="absensi" element={<Harian />} />
@@ -35,7 +41,14 @@ function App() {
           <Route path="karyawan" element={<Users />} />
           <Route path="*" element={<NotFound />} />
         </Route>
-        <Route path="/activities" element={<DashboardActivity />} />
+        <Route path="/activities" element={<DashboardActivity />}>
+          <Route index element={<Daily />} />
+          <Route path="activities" element={<Daily />} />
+          <Route path="bulanan" element={<Monthly />} />
+          <Route path="karyawan" element={<Employee />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+        <Route path="activities/detail" element={<DetailUserAct />} />
       </Route>
       <Route path="/*" element={<NotFound />} />
     </Routes>

@@ -9,3 +9,4 @@ export { default as NotFound } from './404';
 export { default as DashboardAbsensi } from './DashboardAbsensi';
 export { default as DashboardActivity } from './DashboardActivity';
 export { default as Checkin } from './Checkin';
+export { default as Profile } from './Profile';

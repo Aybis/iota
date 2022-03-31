@@ -2,9 +2,12 @@ import BottomBar from './BottomBar';
 import Footer from './Footer';
 import Header from './Header';
 
-export default function Layout({ showBottomBar = true, children }) {
+export default function Layout({ showBottomBar = true, children, moreClass }) {
   return (
-    <div className="bg-zinc-50 min-h-screen max-h-full pb-20">
+    <div
+      className={['bg-zinc-50 min-h-screen max-h-full pb-20', moreClass].join(
+        ' ',
+      )}>
       <div className="relative overflow-hidden">
         <Header />
 

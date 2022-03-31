@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Dropdown } from '../components/atoms';
 import { SectionHeaderPage } from '../components/molecules';
@@ -6,6 +7,8 @@ import Layout from './includes/Layout';
 
 export default function DashboardAbsensi() {
   const location = useLocation();
+  const USER = useSelector((state) => state.user);
+
   const dataSubMenu = [
     {
       name: 'Harian',
@@ -28,11 +31,13 @@ export default function DashboardAbsensi() {
     <Layout>
       <SectionHeaderPage title={'Dashboard Absensi'} />
 
-      <div className="relative m-4">
-        <Dropdown />
-      </div>
+      {USER?.profile?.role === 'telkom' && (
+        <div className="relative m-4">
+          <Dropdown />
+        </div>
+      )}
 
-      <div className="relative m-4 mt-5">
+      <div className="relative m-4 mt-8">
         <div className="grid grid-cols-3 gap-4">
           {dataSubMenu.map((item) => (
             <Link

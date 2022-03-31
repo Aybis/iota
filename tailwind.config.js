@@ -31,6 +31,11 @@ module.exports = {
       rose: colors.rose,
       apps: {
         primary: '#0062FF',
+        complete: '#ECF5E3',
+        hadir: '#E8EDF8',
+        belumabsen: '#E8DDDD',
+        todo: '#F8F1E8',
+        terlambat: '#DDE5E8',
         background: '#FCFCFC',
       },
     }),
