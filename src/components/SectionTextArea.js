@@ -1,19 +1,3 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { Fragment, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import {
@@ -48,7 +32,10 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function SectionTextArea() {
+export default function SectionTextArea({
+  buttonName = 'Update',
+  showTitle = false,
+}) {
   const [assigned, setAssigned] = useState(assignees[0]);
   const [labelled, setLabelled] = useState(labels[0]);
   const [dated, setDated] = useState(dueDates[0]);
@@ -56,6 +43,20 @@ export default function SectionTextArea() {
   return (
     <form action="#" className="relative">
       <div className="border pt-1 border-gray-300 rounded-lg shadow-sm overflow-hidden focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
+        {showTitle && (
+          <>
+            <label htmlFor="title" className="sr-only">
+              Title
+            </label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              className="block w-full border-0 pt-2.5 text-lg font-medium placeholder-gray-500 focus:ring-0"
+              placeholder="Title"
+            />
+          </>
+        )}
         <label htmlFor="description" className="sr-only">
           Description
         </label>
@@ -307,7 +308,7 @@ export default function SectionTextArea() {
             <button
               type="submit"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-              Update
+              {buttonName}
             </button>
           </div>
         </div>

@@ -48,7 +48,7 @@ export default function DetailActivity() {
       </div>
 
       <div className="relative my-8 mx-4">
-        <p className="text-sm font-semibold text-zinc-800 mb-4">
+        <p className="text-sm font-semibold text-zinc-800 mb-2">
           History Activity
         </p>
 

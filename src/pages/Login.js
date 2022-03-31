@@ -1,26 +1,39 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { getImageFromAssets } from '../helpers/assetHelpers';
-import Cookies from 'js-cookie';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
+import { getImageFromAssets } from '../helpers/assetHelpers';
+import { loginUser } from '../redux/actions/user';
 
 export default function Login() {
   let location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [input, setinput] = useState({
     username: '',
+    password: '',
   });
 
   const handlerOnchange = (event) => {
     setinput({
-      username: event.target.value,
+      ...input,
+      [event.target.name]: event.target.value,
     });
   };
 
-  const handlerSubmit = () => {
-    Cookies.set('session', 'user', { expires: 0.5 });
-    Cookies.remove('redirect');
-    navigate(location.state?.from?.pathname || '/', { replace: true });
+  const handlerSubmit = (event) => {
+    event.preventDefault();
+    return dispatch(loginUser(input))
+      .then((res) => {
+        if (res.status === 200) {
+          swal('Yeay', res.message, 'success');
+          navigate(location.state?.from?.pathname || '/', { replace: true });
+        }
+      })
+      .catch((err) => {
+        swal('Oh No!', 'Something Happened', 'error');
+      });
   };
 
   return (
@@ -42,7 +55,7 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="absolute inset-x-0 lg:w-1/2  px-4 lg:px-12 bottom-4 lg:bottom-8">
+          <div className="fixed inset-x-0 lg:w-1/2  px-4 lg:px-12 bottom-4 lg:bottom-8">
             <div className="flex justify-center items-center">
               <p className="text-xs text-zinc-400">© Copyright PINS 2022.</p>
             </div>
@@ -99,6 +112,7 @@ export default function Login() {
                         name="password"
                         type="password"
                         autoComplete="current-password"
+                        onChange={(e) => handlerOnchange(e)}
                         required
                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-indigo-500"
                       />

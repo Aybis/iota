@@ -4,6 +4,7 @@ import {
   ClipboardListIcon as Clipboard,
   FingerPrintIcon,
   HomeIcon as Home,
+  LogoutIcon,
 } from '@heroicons/react/outline';
 import {
   ChartBarIcon as ChartSolid,
@@ -12,54 +13,112 @@ import {
   FingerPrintIcon as FingerSolid,
   HomeIcon as HomeSolid,
 } from '@heroicons/react/solid';
-import React from 'react';
+import Cookies from 'js-cookie';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
+import swal from 'sweetalert';
 
 export default function BottomBar() {
+  const USER = useSelector((state) => state.user);
+
   let link = '/checkin';
   let name = 'Checkin';
   let colorIcon = 'bg-blue-600';
   const location = useLocation();
 
-  const menumobiles = [
-    {
-      link: '/',
-      name: 'Home',
-      icon: Home,
-      iconActive: HomeSolid,
-    },
-    {
-      link: '/report',
-      name: 'Laporan',
-      icon: Clipboard,
-      iconActive: ClipboardSolid,
-    },
-    {
-      link: '/checkin',
-      name: 'Check-in',
-      icon: FingerPrintIcon,
-      iconActive: FingerSolid,
-    },
-    {
-      link: '/activity',
-      name: 'Activity',
-      icon: ClipboardCheckIcon,
-      iconActive: ClipboardCheckIconSolid,
-    },
-    {
-      link: '/dashboard',
-      name: 'Summary',
-      icon: Chart,
-      iconActive: ChartSolid,
-    },
-  ];
+  const [menumobiles, setmenumobiles] = useState([]);
+
+  useEffect(() => {
+    USER?.profile?.role === 'user'
+      ? setmenumobiles([
+          {
+            link: '/',
+            name: 'Home',
+            icon: Home,
+            iconActive: HomeSolid,
+          },
+          {
+            link: '/report',
+            name: 'Laporan',
+            icon: Clipboard,
+            iconActive: ClipboardSolid,
+          },
+          {
+            link: '/checkin',
+            name: 'Check-in',
+            icon: FingerPrintIcon,
+            iconActive: FingerSolid,
+          },
+          {
+            link: '/activity',
+            name: 'Activity',
+            icon: ClipboardCheckIcon,
+            iconActive: ClipboardCheckIconSolid,
+          },
+          {
+            link: '/dashboard',
+            name: 'Summary',
+            icon: Chart,
+            iconActive: ChartSolid,
+          },
+        ])
+      : setmenumobiles([
+          {
+            link: '/absensi',
+            name: 'Absensi',
+            icon: ClipboardCheckIcon,
+            iconActive: ClipboardCheckIconSolid,
+          },
+          {
+            link: '/activities',
+            name: 'Activity',
+            icon: Clipboard,
+            iconActive: ClipboardSolid,
+          },
+          {
+            link: '/logout',
+            name: 'Logout',
+            icon: LogoutIcon,
+            iconActive: LogoutIcon,
+          },
+        ]);
+  }, [USER]);
+
+  const handlerLogOut = () => {
+    swal({
+      title: 'Are you sure?',
+      text: 'Anda yakin ingin keluar dari aplikasi!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        Cookies.remove('session');
+        localStorage.clear();
+        swal('Anda berhasil logout!', {
+          icon: 'success',
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 300);
+      } else {
+        swal('Okay!');
+      }
+    });
+  };
 
   return (
     <div className="fixed z-30 bottom-0 inset-x-0 lg:hidden shadow-xl">
       <div
-        className={`bg-white shadow-2xl grid ${
-          link === 'hidden' ? 'grid-cols-4' : 'grid-cols-5'
-        } place-items-center mb-0 py-1 border-t border-gray-200 border-opacity-50`}>
+        className={[
+          `bg-white shadow-2xl  mb-0 py-1 border-t border-gray-200 border-opacity-50`,
+          USER?.profile?.role
+            ? 'flex justify-evenly items-center'
+            : `grid ${
+                link === 'hidden' ? 'grid-cols-4' : 'grid-cols-5'
+              } place-items-center`,
+        ].join(' ')}>
         {menumobiles.map((menu) =>
           menu.link === '/checkin' ? (
             link !== 'hidden' && (
@@ -75,6 +134,14 @@ export default function BottomBar() {
                 <p className={`text-xs mt-1 text-zinc-800 font-bold`}>{name}</p>
               </NavLink>
             )
+          ) : menu.link === '/logout' ? (
+            <button
+              key={Math.random()}
+              onClick={() => handlerLogOut()}
+              className="text-red-400 text-xs flex flex-col items-center justify-center">
+              <menu.icon className="h-5 w-5 mx-auto" />
+              Logout
+            </button>
           ) : (
             <NavLink
               key={Math.random()}

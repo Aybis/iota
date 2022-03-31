@@ -14,7 +14,7 @@ export default function SectionActivity({
   return (
     <Link
       to={'/activity/detail'}
-      className="relative flex space-x-4 px-2 py-2 bg-white w-full rounded-lg shadow-lg shadow-zinc-200/50">
+      className="relative flex space-x-4 p-3 bg-white w-full rounded-lg shadow-lg shadow-zinc-200/50">
       <div className="relative flex flex-col w-full space-y-4 ">
         <div className="relative flex flex-col">
           <h1 className="text-sm font-semibold text-zinc-800">{title}</h1>
@@ -26,7 +26,7 @@ export default function SectionActivity({
             progress === 100 ? 'bg-teal-500' : 'bg-amber-500',
           ].join(' ')}>
           <p className="text-xs  capitalize">
-            {progress === 100 ? 'done' : 'on progress'}
+            {progress === 100 ? 'completed' : 'to do'}
           </p>
         </div>
 
@@ -50,9 +50,12 @@ export default function SectionActivity({
         )}
 
         <div className="flex items-center space-x-6">
-          <div className="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
+          <div className="w-full bg-gray-200 rounded-full h-1.5">
             <div
-              className="bg-blue-500 h-1.5 rounded-full dark:bg-gray-300"
+              className={[
+                ' h-1.5 rounded-full',
+                progress === 100 ? 'bg-teal-500' : 'bg-amber-500',
+              ].join(' ')}
               style={{ width: `${progress}%` }}></div>
           </div>
           <p className="text-sm text-zinc-400 font-medium">{progress}%</p>

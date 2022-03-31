@@ -7,3 +7,5 @@ export { default as Loading } from './Loading';
 export { default as Modals } from './Modals';
 export { default as Textarea } from './Textarea';
 export { default as Time } from './Time';
+export { default as ProgressBar } from './ProgressBar';
+export { default as Dropdown } from './Dropdown';

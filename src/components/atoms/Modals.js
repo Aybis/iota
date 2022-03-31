@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/solid';
 import { Fragment, useRef } from 'react';
 
-export default function Modal({
+export default function Modals({
   open,
   handlerClose,
   children,

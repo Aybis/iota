@@ -18,7 +18,7 @@ export default function SectionFilterMonthYear({ month, year, handlerChange }) {
   ];
 
   return (
-    <div className="relative grid grid-cols-2 lg:w-lg gap-4 mt-6">
+    <div className="relative grid grid-cols-2 w-full lg:w-lg gap-4 mt-6">
       <select
         value={month}
         name="month"

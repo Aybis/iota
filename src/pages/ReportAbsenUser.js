@@ -7,7 +7,7 @@ import {
 import { convertDate } from '../helpers/convertDate';
 import Layout from '../pages/includes/Layout';
 
-export default function ReportAbsen() {
+export default function ReportAbsenUser() {
   // const [showModal, setshowModal] = useState(false);
   // const [imageSource, setimageSource] = useState('');
   const [temporary, setTemporary] = useState({
