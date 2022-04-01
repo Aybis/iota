@@ -59,6 +59,17 @@ export default function Daily() {
             <p className="text-2xl font-bold text-white">76 </p>
           </div>
         </div>
+        <div className="flex items-center space-x-5 p-4 col-span-2 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg">
+          <div className="bg-white rounded-xl p-4 text-3xl font-bold text-red-500">
+            <p>120</p>
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-white">Pending activity</h1>
+            <p className="mt-1 text-sm text-zinc-100 text-opacity-70 font-medium">
+              hingga saat ini
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

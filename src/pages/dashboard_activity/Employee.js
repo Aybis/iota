@@ -69,14 +69,22 @@ export default function Employee() {
                 <div className="flex justify-around bg-zinc-100 px-2 py-1 w-full rounded-md mt-2">
                   <div className="flex flex-col space-y-1">
                     <h1 className="text-xs font-medium text-zinc-400">
+                      Pending
+                    </h1>
+                    <span className="font-semibold text-zinc-800 text-lg">
+                      30
+                    </span>
+                  </div>
+                  <div className="flex flex-col space-y-1">
+                    <h1 className="text-xs font-medium text-zinc-400">
                       Complete
                     </h1>
-                    <span className="font-semibold text-zinc-800">2</span>
+                    <span className="font-semibold text-zinc-800">50</span>
                   </div>
                   <div className="flex flex-col space-y-1">
                     <h1 className="text-xs font-medium text-zinc-400">To do</h1>
                     <span className="font-semibold text-zinc-800 text-lg">
-                      2
+                      23
                     </span>
                   </div>
                 </div>

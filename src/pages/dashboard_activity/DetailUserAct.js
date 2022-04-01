@@ -1,6 +1,7 @@
 import {
   ArrowNarrowLeftIcon,
   BadgeCheckIcon,
+  ExclamationIcon,
   TruckIcon,
 } from '@heroicons/react/solid';
 import React, { useState } from 'react';
@@ -19,12 +20,18 @@ export default function DetailUserAct() {
   const tabNavigation = [
     {
       id: 1,
+      name: 'Pending',
+      total: 30,
+      icon: ExclamationIcon,
+    },
+    {
+      id: 2,
       name: 'To Do',
       total: 23,
       icon: TruckIcon,
     },
     {
-      id: 2,
+      id: 3,
       name: 'Completed',
       total: 50,
       icon: BadgeCheckIcon,
@@ -65,7 +72,7 @@ export default function DetailUserAct() {
 
       {/* Section Detail */}
 
-      <div className="relative flex overflow-x-scroll hidden-scroll space-x-4 pl-4 border-b-2 border-zinc-100 pb-2">
+      <div className="relative flex overflow-x-scroll hidden-scroll space-x-4 px-4 border-b-2 border-zinc-100 pb-2">
         {tabNavigation.map((item, index) => (
           <div
             key={index}
@@ -93,25 +100,29 @@ export default function DetailUserAct() {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4 min-h-full max-h-fit transition-all duration-300 ease-in-out">
-              {Array.from({ length: tabActive === 1 ? 23 : 50 }).map(
-                (item, index) => (
-                  <SectionActivity
-                    key={Math.random()}
-                    title={`Activity ${index + 1}`}
-                    date={convertDate('tanggalHari')}
-                    totalUpdate={
-                      tabActive === 1
-                        ? (1 + Math.random() * (4 - 1)).toFixed(0)
-                        : (1 + Math.random() * (6 - 1)).toFixed(0)
-                    }
-                    progress={
-                      tabActive === 1
-                        ? (1 + Math.random() * (99 - 1)).toFixed(0)
-                        : 100
-                    }
-                  />
-                ),
-              )}
+              {Array.from({
+                length: tabActive === 1 ? 30 : tabActive === 2 ? 23 : 50,
+              }).map((item, index) => (
+                <SectionActivity
+                  key={Math.random()}
+                  title={`Activity ${index + 1}`}
+                  date={
+                    tabActive === 1
+                      ? convertDate('tanggalKemarin')
+                      : convertDate('tanggalHari')
+                  }
+                  totalUpdate={
+                    tabActive <= 2
+                      ? (1 + Math.random() * (4 - 1)).toFixed(0)
+                      : (1 + Math.random() * (6 - 1)).toFixed(0)
+                  }
+                  progress={
+                    tabActive <= 2
+                      ? (1 + Math.random() * (99 - 1)).toFixed(0)
+                      : 100
+                  }
+                />
+              ))}
             </div>
           )}
         </div>

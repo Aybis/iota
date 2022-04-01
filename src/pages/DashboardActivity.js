@@ -29,7 +29,7 @@ export default function DashboardActivity() {
 
   return (
     <Layout>
-      <SectionHeaderPage title={'Dashboard Absensi'} />
+      <SectionHeaderPage title={'Dashboard Activity'} />
 
       {USER?.profile?.role === 'telkom' && (
         <div className="relative m-4">

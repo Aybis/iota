@@ -5,6 +5,7 @@ import {
   MenuAlt2Icon,
   OfficeBuildingIcon,
   TruckIcon,
+  ClockIcon,
 } from '@heroicons/react/solid';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -276,11 +277,25 @@ export default function Home() {
                 defaultValue={'Today'}
                 placeholder="Today">
                 <option value="Today">Today</option>
-                <option value="Yesterday">Yesterday</option>
                 <option value="month">This Month</option>
               </select>
             </div>
             {/* End Section Headear */}
+
+            <div className="mt-6 flex space-x-4 items-center p-4 col-span-2 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg">
+              <div>
+                <ClockIcon className="h-12 text-white" />
+              </div>
+              <div>
+                <h1 className=" font-medium text-zinc-100">Pending Activity</h1>
+                <p className="mt-1 text-2xl font-bold text-white">
+                  120{' '}
+                  <small className="text-sm font-normal text-zinc-100">
+                    activity
+                  </small>
+                </p>
+              </div>
+            </div>
 
             <div className="mt-6 flex justify-between items-center px-8 col-span-2 bg-gradient-to-br from-blue-500 via-blue-400 to-teal-400 p-3 rounded-lg">
               <div>
