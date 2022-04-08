@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Dropdown } from '../components/atoms';
 import { SectionHeaderPage } from '../components/molecules';
@@ -7,6 +7,7 @@ import Layout from './includes/Layout';
 
 export default function DashboardActivity() {
   const location = useLocation();
+  const dispatch = useDispatch();
   const USER = useSelector((state) => state.user);
 
   const dataSubMenu = [
@@ -27,11 +28,15 @@ export default function DashboardActivity() {
     },
   ];
 
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
+
   return (
     <Layout>
       <SectionHeaderPage title={'Dashboard Activity'} />
 
-      {USER?.profile?.role === 'telkom' && (
+      {USER?.profile?.role_id === '3' && (
         <div className="relative m-4">
           <Dropdown />
         </div>

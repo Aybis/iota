@@ -2,12 +2,14 @@
 import { Dialog, Menu, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
+import Cookies from 'js-cookie';
 import { Fragment, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import swal from 'sweetalert';
 import { Loading } from '../components/atoms';
+import { setHeader } from '../config/api/constant';
+import iota from '../config/api/route/iota';
 import { imageApi } from '../helpers/assetHelpers';
-import Cookies from 'js-cookie';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -21,6 +23,8 @@ export default function Profile({ open, handlerOpen }) {
   const handlerLogout = (event) => {
     setisLoading(true);
     event.preventDefault();
+    setHeader();
+
     swal({
       title: 'Are you sure?',
       text: 'Anda yakin ingin keluar dari aplikasi!',
@@ -29,15 +33,25 @@ export default function Profile({ open, handlerOpen }) {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        Cookies.remove('session');
-        localStorage.clear();
-        swal('Anda berhasil logout!', {
-          icon: 'success',
-        });
-        setTimeout(() => {
-          setisLoading(false);
-          window.location.reload();
-        }, 300);
+        return iota
+          .logout()
+          .then((res) => {
+            Cookies.remove('session');
+            localStorage.clear();
+            swal('Anda berhasil logout!', {
+              icon: 'success',
+            });
+            setTimeout(() => {
+              setisLoading(false);
+              window.location.reload();
+            }, 300);
+          })
+          .catch((err) => {
+            console.log(err.response);
+            swal('Something Happened!', {
+              icon: 'error',
+            });
+          });
       } else {
         setisLoading(false);
         swal('Okay!');
@@ -93,7 +107,7 @@ export default function Profile({ open, handlerOpen }) {
                             className="absolute h-full w-full object-cover"
                             src={
                               USER?.profile?.image_url ??
-                              imageApi(USER?.profile?.nama)
+                              imageApi(USER?.profile?.name)
                             }
                             alt={USER?.profile?.name}
                           />
@@ -103,14 +117,14 @@ export default function Profile({ open, handlerOpen }) {
                             <div>
                               <div className="flex items-center">
                                 <h3 className="font-bold text-xl text-gray-900 sm:text-2xl capitalize">
-                                  {USER?.profile?.nama?.toLowerCase() ?? ''}
+                                  {USER?.profile?.name?.toLowerCase() ?? ''}
                                 </h3>
                                 <span className="ml-2.5 bg-green-400 flex-shrink-0 inline-block h-2 w-2 rounded-full">
                                   <span className="sr-only">Online</span>
                                 </span>
                               </div>
                               <p className="text-sm text-gray-500">
-                                {USER?.profile?.position ?? 'Position'} -{' '}
+                                {USER?.profile?.posisi ?? 'Position'} -{' '}
                                 {USER?.profile?.nik ?? 'NIK'}
                               </p>
                             </div>
@@ -238,7 +252,7 @@ export default function Profile({ open, handlerOpen }) {
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
                             <time dateTime="1988-06-23">
-                              {USER?.profile?.phone ?? '...'}
+                              +62 {USER?.profile?.phone ?? '...'}
                             </time>
                           </dd>
                         </div>

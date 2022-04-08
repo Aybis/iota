@@ -7,3 +7,6 @@ export { default as SectionReportMingguan } from './SectionReportMingguan';
 export { default as ReportAbsen } from './ReportAbsen';
 export { default as SectionSummary } from './SectionSummary';
 export { default as ReportTime } from './ReportTime';
+export { default as SkeletonDashboardSummary } from './SkeletonDashboardSummary';
+export { default as SkeletonTask } from './SkeletonTask';
+export { default as SectionDateHor } from './SectionDateHor';

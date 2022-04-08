@@ -27,7 +27,7 @@ export default function BottomBar() {
   const [menumobiles, setmenumobiles] = useState([]);
 
   useEffect(() => {
-    USER?.profile?.role === 'user'
+    USER?.profile?.role_id === '1'
       ? setmenumobiles([
           {
             link: '/',
@@ -110,11 +110,11 @@ export default function BottomBar() {
       <div
         className={[
           `bg-white shadow-2xl  mb-0 py-1 border-t border-gray-200 border-opacity-50`,
-          USER?.profile?.role
-            ? 'flex justify-evenly items-center'
-            : `grid ${
+          USER?.profile?.role_id === '1'
+            ? `grid ${
                 link === 'hidden' ? 'grid-cols-4' : 'grid-cols-5'
-              } place-items-center`,
+              } place-items-center`
+            : 'flex justify-evenly items-center',
         ].join(' ')}>
         {menumobiles.map((menu) =>
           menu.link === '/checkin' ? (

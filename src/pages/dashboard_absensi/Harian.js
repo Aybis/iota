@@ -79,14 +79,13 @@ export default function Harian() {
   ];
 
   const regional = [
-    { id: 2, name: 'TREG 1 SUMATERA', value: 70 },
-    { id: 3, name: 'TREG 2 JABODETABEK', value: 60 },
-    { id: 4, name: 'TREG 3 JAWA BARAT', value: 60 },
-    { id: 5, name: 'TREG 4 JAWA TENGAH', value: 60 },
-    { id: 6, name: 'TREG 5 JAWA TIMUR', value: 50 },
-    { id: 7, name: 'TREG 6 KALIMANTAN', value: 40 },
-    { id: 8, name: 'TREG 7 KTI', value: 40 },
-    { id: 9, name: 'TREG 8 BALI NUSRA', value: 40 },
+    { id: 2, name: 'TR1 SUMATERA', value: 70 },
+    { id: 3, name: 'TR2 JABODETABEK', value: 60 },
+    { id: 4, name: 'TR3 JABAR', value: 60 },
+    { id: 5, name: 'TR4 JATENG & DIY', value: 60 },
+    { id: 6, name: 'TR5 JATIM & BALNUS', value: 50 },
+    { id: 7, name: 'TR6 KALIMANTAN', value: 40 },
+    { id: 8, name: 'TR7 KTI', value: 40 },
   ];
 
   return (

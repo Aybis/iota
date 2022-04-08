@@ -1,17 +1,19 @@
+import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import { getImageFromAssets } from '../helpers/assetHelpers';
-import { loginUser } from '../redux/actions/user';
+import { userLogin } from '../redux/actions/user';
 
 export default function Login() {
   let location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [showPassword, setshowPassword] = useState(false);
 
   const [input, setinput] = useState({
-    username: '',
+    nik: '',
     password: '',
   });
 
@@ -24,15 +26,20 @@ export default function Login() {
 
   const handlerSubmit = (event) => {
     event.preventDefault();
-    return dispatch(loginUser(input))
+    return dispatch(userLogin(input))
       .then((res) => {
+        // swal('Yeay', 'Login Berhasil', 'success');
+        // navigate(location.state?.from?.pathname || '/', { replace: true });
         if (res.status === 200) {
-          swal('Yeay', res.message, 'success');
+          swal('Yeay', res.data.message ?? 'Login Berhasil', 'success');
           navigate(location.state?.from?.pathname || '/', { replace: true });
+        } else {
+          swal('Oh No!', res.data.message ?? 'Something Happened!', 'error');
         }
       })
       .catch((err) => {
-        swal('Oh No!', 'Something Happened', 'error');
+        console.log(err);
+        swal('Oh No!', 'Something Happened!', 'error');
       });
   };
 
@@ -85,17 +92,17 @@ export default function Login() {
                     <label
                       htmlFor="email"
                       className="block text-sm font-medium text-gray-700">
-                      Username
+                      NIK
                     </label>
                     <div className="mt-1">
                       <input
-                        name="username"
+                        name="nik"
                         type="text"
                         autoComplete="off"
                         onChange={(e) => handlerOnchange(e)}
-                        value={input.username}
+                        value={input.nik}
                         required
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-indigo-500"
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 font-medium text-zinc-800 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-indigo-500"
                       />
                     </div>
                   </div>
@@ -106,16 +113,26 @@ export default function Login() {
                       className="block text-sm font-medium text-gray-700">
                       Password
                     </label>
-                    <div className="mt-1">
+                    <div className="relative mt-1">
                       <input
                         id="password"
                         name="password"
-                        type="password"
+                        type={!showPassword ? 'password' : 'text'}
                         autoComplete="current-password"
                         onChange={(e) => handlerOnchange(e)}
+                        value={input.password}
                         required
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-indigo-500"
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 font-medium text-zinc-800 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-indigo-500"
                       />
+                      <span
+                        className="absolute top-3 right-4"
+                        onClick={() => setshowPassword(!showPassword)}>
+                        {showPassword ? (
+                          <EyeIcon className="h-5 text-zinc-400" />
+                        ) : (
+                          <EyeOffIcon className="h-5 text-zinc-400" />
+                        )}
+                      </span>
                     </div>
                   </div>
 

@@ -55,8 +55,8 @@ export default function Modals({
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
             <div
               className={[
-                'inline-block align-bottom bg-white p-3 shadow-xl transform transition-all h-auto',
-                margin ? 'mx-4 rounded-xl  max-w-full' : 'rounded-t-xl w-full',
+                'mx-4 inline-block align-bottom bg-white p-3 shadow-xl transform transition-all h-auto',
+                margin ? 'rounded-xl  max-w-full' : 'rounded-xl w-full',
               ].join(' ')}>
               <div className="p-2">
                 <div className="flex justify-between items-center mb-4">

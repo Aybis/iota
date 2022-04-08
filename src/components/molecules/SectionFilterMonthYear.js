@@ -27,7 +27,13 @@ export default function SectionFilterMonthYear({ month, year, handlerChange }) {
         {months.map((item, index) => (
           <option
             key={Math.random()}
-            value={item === 'All' ? 'all' : index + 1}>
+            value={
+              item === 'All'
+                ? 'all'
+                : index + 1 < 10
+                ? `0${index + 1}`
+                : index + 1
+            }>
             {item}
           </option>
         ))}
@@ -38,8 +44,6 @@ export default function SectionFilterMonthYear({ month, year, handlerChange }) {
         value={year}
         className="px-4 py-2 rounded bg-white border-2 pr-8 border-transparent focus:border-blue-500">
         <option value="2022">2022</option>
-        <option value="2021">2021</option>
-        <option value="2020">2020</option>
       </select>
     </div>
   );

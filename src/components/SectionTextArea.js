@@ -1,47 +1,20 @@
-import { Fragment, useState } from 'react';
-import { Listbox, Transition } from '@headlessui/react';
-import {
-  CalendarIcon,
-  PaperClipIcon,
-  TagIcon,
-  UserCircleIcon,
-} from '@heroicons/react/solid';
-
-const assignees = [
-  { name: 'Unassigned', value: null },
-  {
-    name: 'Wade Cooper',
-    value: 'wade-cooper',
-    avatar:
-      'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-  // More items...
-];
-const labels = [
-  { name: 'Unlabelled', value: null },
-  { name: 'Engineering', value: 'engineering' },
-  // More items...
-];
-const dueDates = [
-  { name: 'No due date', value: null },
-  { name: 'Today', value: 'today' },
-  // More items...
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import { PaperClipIcon } from '@heroicons/react/solid';
+import { Loading } from './atoms';
 
 export default function SectionTextArea({
   buttonName = 'Update',
   showTitle = false,
+  valueTitle,
+  valueDescription,
+  handlerChange,
+  handlerSubmit,
+  handlerChangePhoto,
+  namePhoto,
+  isLoading,
+  uploadPhoto = true,
 }) {
-  const [assigned, setAssigned] = useState(assignees[0]);
-  const [labelled, setLabelled] = useState(labels[0]);
-  const [dated, setDated] = useState(dueDates[0]);
-
   return (
-    <form action="#" className="relative">
+    <form onSubmit={handlerSubmit} className="relative">
       <div className="border pt-1 border-gray-300 rounded-lg shadow-sm overflow-hidden focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
         {showTitle && (
           <>
@@ -52,6 +25,8 @@ export default function SectionTextArea({
               type="text"
               name="title"
               id="title"
+              value={valueTitle}
+              onChange={(e) => handlerChange(e)}
               className="block w-full border-0 pt-2.5 text-lg font-medium placeholder-gray-500 focus:ring-0"
               placeholder="Title"
             />
@@ -64,9 +39,10 @@ export default function SectionTextArea({
           rows={2}
           name="description"
           id="description"
+          onChange={(e) => handlerChange(e)}
+          value={valueDescription}
           className="block w-full border-0 py-0 resize-none placeholder-gray-500 focus:ring-0 sm:text-sm"
           placeholder="Write a description..."
-          defaultValue={''}
         />
 
         {/* Spacer element to match the height of the toolbar */}
@@ -84,230 +60,45 @@ export default function SectionTextArea({
       </div>
 
       <div className="absolute bottom-0 inset-x-px">
-        {/* Actions: These are just examples to demonstrate the concept, replace/wire these up however makes sense for your project. */}
-        <div className=" flex-nowrap justify-end py-2 px-2 space-x-2 sm:px-3 hidden">
-          <Listbox
-            as="div"
-            value={assigned}
-            onChange={setAssigned}
-            className="flex-shrink-0">
-            {({ open }) => (
-              <>
-                <Listbox.Label className="sr-only">Assign</Listbox.Label>
-                <div className="relative">
-                  <Listbox.Button className="relative inline-flex items-center rounded-full py-2 px-2 bg-gray-50 text-sm font-medium text-gray-500 whitespace-nowrap hover:bg-gray-100 sm:px-3">
-                    {assigned.value === null ? (
-                      <UserCircleIcon
-                        className="flex-shrink-0 h-5 w-5 text-gray-300 sm:-ml-1"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <img
-                        src={assigned.avatar}
-                        alt=""
-                        className="flex-shrink-0 h-5 w-5 rounded-full"
-                      />
-                    )}
-
-                    <span
-                      className={classNames(
-                        assigned.value === null ? '' : 'text-gray-900',
-                        'hidden truncate sm:ml-2 sm:block',
-                      )}>
-                      {assigned.value === null ? 'Assign' : assigned.name}
-                    </span>
-                  </Listbox.Button>
-
-                  <Transition
-                    show={open}
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0">
-                    <Listbox.Options className="absolute right-0 z-10 mt-1 w-52 bg-white shadow max-h-56 rounded-lg py-3 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                      {assignees.map((assignee) => (
-                        <Listbox.Option
-                          key={assignee.value}
-                          className={({ active }) =>
-                            classNames(
-                              active ? 'bg-gray-100' : 'bg-white',
-                              'cursor-default select-none relative py-2 px-3',
-                            )
-                          }
-                          value={assignee}>
-                          <div className="flex items-center">
-                            {assignee.avatar ? (
-                              <img
-                                src={assignee.avatar}
-                                alt=""
-                                className="flex-shrink-0 h-5 w-5 rounded-full"
-                              />
-                            ) : (
-                              <UserCircleIcon
-                                className="flex-shrink-0 h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            )}
-
-                            <span className="ml-3 block font-medium truncate">
-                              {assignee.name}
-                            </span>
-                          </div>
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </>
-            )}
-          </Listbox>
-
-          <Listbox
-            as="div"
-            value={labelled}
-            onChange={setLabelled}
-            className="flex-shrink-0">
-            {({ open }) => (
-              <>
-                <Listbox.Label className="sr-only">Add a label</Listbox.Label>
-                <div className="relative">
-                  <Listbox.Button className="relative inline-flex items-center rounded-full py-2 px-2 bg-gray-50 text-sm font-medium text-gray-500 whitespace-nowrap hover:bg-gray-100 sm:px-3">
-                    <TagIcon
-                      className={classNames(
-                        labelled.value === null
-                          ? 'text-gray-300'
-                          : 'text-gray-500',
-                        'flex-shrink-0 h-5 w-5 sm:-ml-1',
-                      )}
-                      aria-hidden="true"
-                    />
-                    <span
-                      className={classNames(
-                        labelled.value === null ? '' : 'text-gray-900',
-                        'hidden truncate sm:ml-2 sm:block',
-                      )}>
-                      {labelled.value === null ? 'Label' : labelled.name}
-                    </span>
-                  </Listbox.Button>
-
-                  <Transition
-                    show={open}
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0">
-                    <Listbox.Options className="absolute right-0 z-10 mt-1 w-52 bg-white shadow max-h-56 rounded-lg py-3 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                      {labels.map((label) => (
-                        <Listbox.Option
-                          key={label.value}
-                          className={({ active }) =>
-                            classNames(
-                              active ? 'bg-gray-100' : 'bg-white',
-                              'cursor-default select-none relative py-2 px-3',
-                            )
-                          }
-                          value={label}>
-                          <div className="flex items-center">
-                            <span className="block font-medium truncate">
-                              {label.name}
-                            </span>
-                          </div>
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </>
-            )}
-          </Listbox>
-
-          <Listbox
-            as="div"
-            value={dated}
-            onChange={setDated}
-            className="flex-shrink-0">
-            {({ open }) => (
-              <>
-                <Listbox.Label className="sr-only">
-                  Add a due date
-                </Listbox.Label>
-                <div className="relative">
-                  <Listbox.Button className="relative inline-flex items-center rounded-full py-2 px-2 bg-gray-50 text-sm font-medium text-gray-500 whitespace-nowrap hover:bg-gray-100 sm:px-3">
-                    <CalendarIcon
-                      className={classNames(
-                        dated.value === null
-                          ? 'text-gray-300'
-                          : 'text-gray-500',
-                        'flex-shrink-0 h-5 w-5 sm:-ml-1',
-                      )}
-                      aria-hidden="true"
-                    />
-                    <span
-                      className={classNames(
-                        dated.value === null ? '' : 'text-gray-900',
-                        'hidden truncate sm:ml-2 sm:block',
-                      )}>
-                      {dated.value === null ? 'Due date' : dated.name}
-                    </span>
-                  </Listbox.Button>
-
-                  <Transition
-                    show={open}
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0">
-                    <Listbox.Options className="absolute right-0 z-10 mt-1 w-52 bg-white shadow max-h-56 rounded-lg py-3 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                      {dueDates.map((dueDate) => (
-                        <Listbox.Option
-                          key={dueDate.value}
-                          className={({ active }) =>
-                            classNames(
-                              active ? 'bg-gray-100' : 'bg-white',
-                              'cursor-default select-none relative py-2 px-3',
-                            )
-                          }
-                          value={dueDate}>
-                          <div className="flex items-center">
-                            <span className="block font-medium truncate">
-                              {dueDate.name}
-                            </span>
-                          </div>
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </>
-            )}
-          </Listbox>
-        </div>
         <div className="border-t border-gray-200 px-2 py-2 flex justify-between items-center space-x-3 sm:px-3">
-          <div className="flex">
-            <label
-              htmlFor="file-upload"
-              className="-ml-2 -my-2 rounded-full px-3 py-2 inline-flex items-center text-left text-gray-400 group">
-              <PaperClipIcon
-                className="-ml-1 h-5 w-5 mr-2 group-hover:text-gray-500"
-                aria-hidden="true"
-              />
-              <span className="text-sm text-gray-500 group-hover:text-gray-600 italic">
-                Attach a file
-              </span>
-              <input
-                id="file-upload"
-                accept="image/*"
-                capture="camera"
-                name="file-upload"
-                type="file"
-                className="sr-only"
-              />
-            </label>
-          </div>
+          {uploadPhoto && (
+            <div className="flex">
+              <label
+                htmlFor="file-upload"
+                className="-ml-2 -my-2 rounded-full px-3 py-2 inline-flex items-center text-left text-gray-400 group">
+                <PaperClipIcon
+                  className="-ml-1 h-5 w-5 mr-2 group-hover:text-gray-500"
+                  aria-hidden="true"
+                />
+                <span className="text-sm text-gray-500 group-hover:text-gray-600 italic">
+                  {namePhoto ?? 'Attach a file'}
+                </span>
+                <input
+                  // type="file"
+                  // name="image"
+                  // accept="image/*"
+                  // capture="camera"
+                  // id="image"
+                  // className="sr-only rounded-lg"
+                  // onChange={handlerChangePhoto}
+                  id="file-upload"
+                  accept="image/*"
+                  capture="camera"
+                  name="file-upload"
+                  type="file"
+                  className="sr-only"
+                  onChange={handlerChangePhoto}
+                />
+              </label>
+            </div>
+          )}
+
           <div className="flex-shrink-0">
             <button
               type="submit"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              disabled={isLoading}
+              className="disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              {isLoading && <Loading height={5} width={5} color="text-white" />}
               {buttonName}
             </button>
           </div>

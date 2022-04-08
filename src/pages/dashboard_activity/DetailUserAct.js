@@ -5,28 +5,34 @@ import {
   TruckIcon,
 } from '@heroicons/react/solid';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { SectionActivity } from '../../components';
-import { Loading } from '../../components/atoms';
+import { SkeletonTask } from '../../components/molecules';
 import { imageApi } from '../../helpers/assetHelpers';
-import { convertDate } from '../../helpers/convertDate';
 import Layout from '../includes/Layout';
 
 export default function DetailUserAct() {
+  const ACTIVITY = useSelector((state) => state.activity);
   const navigate = useNavigate();
   const [tabActive, setTabActive] = useState(1);
   const [isLoading, setisLoading] = useState(false);
+  const [dataActivity, setdataActivity] = useState(
+    ACTIVITY?.selectedActivities?.todo,
+  );
 
   const tabNavigation = [
     {
       id: 1,
-      name: 'Pending',
+      name: 'To Do',
+      title: 'todo',
       total: 30,
       icon: ExclamationIcon,
     },
     {
       id: 2,
-      name: 'To Do',
+      name: 'Progress',
+      title: 'progress',
       total: 23,
       icon: TruckIcon,
     },
@@ -34,17 +40,27 @@ export default function DetailUserAct() {
       id: 3,
       name: 'Completed',
       total: 50,
+      title: 'done',
       icon: BadgeCheckIcon,
     },
   ];
+
   const handlerSetTabActive = (item) => {
     setTabActive(item.id);
     setisLoading(true);
+    if (item.id === 1) {
+      setdataActivity(ACTIVITY?.selectedActivities?.todo);
+    } else if (item.id === 2) {
+      setdataActivity(ACTIVITY?.selectedActivities?.progress);
+    } else if (item.id === 3) {
+      setdataActivity(ACTIVITY?.selectedActivities?.done);
+    }
     setTimeout(() => {
       setisLoading(false);
     }, 200);
   };
 
+  console.log(ACTIVITY);
   return (
     <Layout showBottomBar={false}>
       {/* Section Header */}
@@ -62,12 +78,19 @@ export default function DetailUserAct() {
       </div>
 
       <div className="relative flex flex-col justify-center items-center m-4 mb-10">
-        <img src={imageApi('AMA')} alt="" className="h-24 w-24 rounded-lg" />
+        <img
+          src={imageApi(ACTIVITY?.selectedActivities?.name)}
+          alt=""
+          className="h-24 w-24 rounded-lg"
+        />
 
-        <h1 className="text-zinc-800 font-semibold mt-2">
-          Abdul Muchtar Astria
+        <h1 className="text-zinc-800 font-semibold mt-2 capitalize">
+          {ACTIVITY?.selectedActivities?.name?.toLowerCase()}
         </h1>
-        <p className="text-zinc-500 text-sm mt-1"> IT & Management Support</p>
+        <p className="text-zinc-500 text-sm mt-1">
+          {' '}
+          {ACTIVITY?.selectedActivities?.posisi}
+        </p>
       </div>
 
       {/* Section Detail */}
@@ -86,7 +109,9 @@ export default function DetailUserAct() {
             {item.name}
 
             <small className="text-xs bg-white text-zinc-500 ml-4 rounded-full px-2 py-1">
-              {item.total}
+              {item.id === 1 && ACTIVITY?.selectedActivities?.todo?.length}
+              {item.id === 2 && ACTIVITY?.selectedActivities?.progress?.length}
+              {item.id === 3 && ACTIVITY?.selectedActivities?.done?.length}
             </small>
           </div>
         ))}
@@ -95,34 +120,26 @@ export default function DetailUserAct() {
       <div className="relative bg-gradient-to-b from-zinc-100 to-zinc-50 p-4">
         <div className="relative">
           {isLoading ? (
-            <div className="flex justify-center items-center h-40">
-              <Loading height={7} width={7} />
-            </div>
+            <SkeletonTask />
           ) : (
             <div className="grid grid-cols-1 gap-4 min-h-full max-h-fit transition-all duration-300 ease-in-out">
-              {Array.from({
-                length: tabActive === 1 ? 30 : tabActive === 2 ? 23 : 50,
-              }).map((item, index) => (
-                <SectionActivity
-                  key={Math.random()}
-                  title={`Activity ${index + 1}`}
-                  date={
-                    tabActive === 1
-                      ? convertDate('tanggalKemarin')
-                      : convertDate('tanggalHari')
-                  }
-                  totalUpdate={
-                    tabActive <= 2
-                      ? (1 + Math.random() * (4 - 1)).toFixed(0)
-                      : (1 + Math.random() * (6 - 1)).toFixed(0)
-                  }
-                  progress={
-                    tabActive <= 2
-                      ? (1 + Math.random() * (99 - 1)).toFixed(0)
-                      : 100
-                  }
-                />
-              ))}
+              {dataActivity?.length > 0 ? (
+                dataActivity?.map((item, index) => (
+                  <SectionActivity
+                    key={Math.random()}
+                    date={item.created_at}
+                    desc={item.description}
+                    progress={item.progress}
+                    title={item.title}
+                    idActivity={item.id}
+                    totalUpdate={item?.progress_detail}
+                  />
+                ))
+              ) : (
+                <div className="text-sm flex justify-center items-center">
+                  Tidak ada data
+                </div>
+              )}
             </div>
           )}
         </div>

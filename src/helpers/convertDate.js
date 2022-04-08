@@ -9,6 +9,12 @@ export const convertDate = (type, time) => {
     year: 'numeric',
   };
 
+  let optionsShort = {
+    month: 'short',
+    day: 'numeric',
+    weekday: 'short',
+  };
+
   let day = {
     weekday: 'long',
   };
@@ -25,6 +31,9 @@ export const convertDate = (type, time) => {
     case 'tanggalBulanTahun':
       return date.toLocaleDateString('id-ID', options);
 
+    case 'tanggalShort':
+      return date.toLocaleDateString('id-ID', optionsShort);
+
     case 'tanggalWaktuLengkap':
       return (
         date.getFullYear() +
@@ -39,6 +48,13 @@ export const convertDate = (type, time) => {
         ':' +
         date.getSeconds()
       );
+
+    case 'tanggalFormat':
+      return `${date.getFullYear()}-${
+        date.getMonth() + 1 < 10
+          ? `0${date.getMonth() + 1}`
+          : date.getMonth() + 1
+      }-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() + 1}`;
 
     case 'tanggalHari':
       // Senin, 15 November 2021

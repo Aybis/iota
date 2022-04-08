@@ -10,6 +10,9 @@ export function addCSSClass(ele, cls) {
 export const getImageFromAssets = (pathname) =>
   process.env.PUBLIC_URL + pathname;
 
+export const getImageFromStorage = (pathname) =>
+  process.env.REACT_APP_API_IMAGE + '/' + pathname;
+
 export const imageApi = (name) =>
   `https://ui-avatars.com/api/?background=f4f4f5&color=000&length=2&name=${name}`;
 
