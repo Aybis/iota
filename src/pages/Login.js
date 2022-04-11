@@ -1,8 +1,9 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
+import Loading from '../components/atoms/Loading';
 import { getImageFromAssets } from '../helpers/assetHelpers';
 import { userLogin } from '../redux/actions/user';
 
@@ -10,6 +11,8 @@ export default function Login() {
   let location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [didMount, setDidMount] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
   const [showPassword, setshowPassword] = useState(false);
 
   const [input, setinput] = useState({
@@ -24,24 +27,37 @@ export default function Login() {
     });
   };
 
-  const handlerSubmit = (event) => {
+  const handlerSubmit = async (event) => {
+    setisLoading(true);
     event.preventDefault();
-    return dispatch(userLogin(input))
+    return await dispatch(userLogin(input))
       .then((res) => {
         // swal('Yeay', 'Login Berhasil', 'success');
         // navigate(location.state?.from?.pathname || '/', { replace: true });
         if (res.status === 200) {
           swal('Yeay', res.data.message ?? 'Login Berhasil', 'success');
           navigate(location.state?.from?.pathname || '/', { replace: true });
+          setisLoading(false);
         } else {
           swal('Oh No!', res.data.message ?? 'Something Happened!', 'error');
+          setisLoading(false);
         }
       })
       .catch((err) => {
-        console.log(err);
         swal('Oh No!', 'Something Happened!', 'error');
+        setisLoading(false);
       });
   };
+
+  useEffect(() => {
+    setDidMount(true);
+    return () => setDidMount(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
+
+  if (!didMount) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -161,7 +177,11 @@ export default function Login() {
                   <div className="pt-6">
                     <button
                       type="submit"
-                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                      disabled={isLoading}
+                      className="disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-300 ease-in-out w-full flex space-x-2 justify-center py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                      {isLoading && (
+                        <Loading height={5} width={5} color={'text-white'} />
+                      )}
                       Sign in
                     </button>
                   </div>

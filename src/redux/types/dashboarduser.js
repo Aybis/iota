@@ -1,0 +1,11 @@
+export const SUMMARY = 'SUMMARY';
+export const KEHADIRAN = 'KEHADIRAN';
+export const KETERANGAN = 'KETERANGAN';
+export const TERLAMBAT = 'TERLAMBAT';
+export const ABSENT = 'ABSENT';
+export const WORK = 'WORK';
+export const STATUS = 'STATUS';
+export const ERROR = 'ERROR';
+export const LOADING = 'LOADING';
+export const MESSAGE = 'MESSAGE';
+export const PROGRESS = 'PROGRESS';

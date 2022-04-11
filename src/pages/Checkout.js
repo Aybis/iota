@@ -3,46 +3,52 @@ import Compressor from 'compressorjs';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import swal from 'sweetalert';
-import { Card, GoogleMaps, InputPhoto, Time } from '../components/atoms';
-import FormCheckin from '../components/molecules/FormCheckin';
+import { useNavigate, useParams } from 'react-router-dom';
+import swal from 'sweetalert/';
+import {
+  Button,
+  Card,
+  GoogleMaps,
+  InputPhoto,
+  Time,
+} from '../components/atoms';
 import { convertDate } from '../helpers/convertDate';
 import useForm from '../helpers/useForm';
-import { insertCheckin } from '../redux/actions/absen';
+import { insertCheckout } from '../redux/actions/absen';
 
-export default function Checkin() {
+export default function Checkout() {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const USER = useSelector((state) => state.user);
   const [didMount, setDidMount] = useState(false);
   const [isSubmit, setisSubmit] = useState(false);
   const [photo, setPhoto] = useState(null);
-  const dispatch = useDispatch();
   const [longLat, setlongLat] = useState(null);
   const [address, setAddress] = useState(null);
-  const [image, setImage] = useState(null);
-  const [state, setState] = useForm({
-    user_id: null,
+
+  const [state] = useForm({
     lokasi: '',
     long_lat: '',
     photo: '',
-    kehadiran: '',
-    kondisi: '',
-    keterangan: '',
     jam: '',
-    is_shift: 0,
+    absensi_id: id,
+    user_id: USER?.id,
   });
 
   const inputPhoto = (event) => {
-    let file = event.target.files[0] ? event.target.files[0] : null;
-    if (!file) {
+    let fileValue = event.target.files[0] ? event.target.files[0] : null;
+    if (!fileValue) {
       return;
     } else {
-      new Compressor(file, {
-        quality: 0.5,
+      new Compressor(fileValue, {
+        quality: 0.5, // 0.6 can also be used, but its not recommended to go below.
         convertSize: 5000,
         success: (result) => {
-          setPhoto(URL.createObjectURL(result));
+          // compressedResult has the compressed file.
+          let source = URL.createObjectURL(result);
+          setPhoto(source);
+          // Use the compressed file to upload the images to your server.
           createImage(result);
         },
       });
@@ -52,7 +58,7 @@ export default function Checkin() {
   const createImage = (file) => {
     let reader = new FileReader();
     reader.onload = (e) => {
-      setImage(e.target.result);
+      state.photo = e.target.result;
     };
     reader.readAsDataURL(file);
   };
@@ -65,31 +71,34 @@ export default function Checkin() {
     setAddress(value);
   };
 
-  const handlerKondisi = (event) => {
-    if (event.target.name === 'kondisi') {
-      state.keterangan = '';
-    }
-  };
-
   const handlerSubmit = async (event) => {
     event.preventDefault();
     setisSubmit(true);
     state.long_lat = longLat;
-    state.user_id = USER?.profile?.id;
-    state.photo = image;
     state.lokasi = address;
     state.jam = convertDate('tanggalWaktuLengkap');
 
     try {
-      const result = await dispatch(insertCheckin(state));
+      const result = await dispatch(insertCheckout(state, id));
       if (result.status === 200) {
-        swal('Succes', result?.message, 'success');
+        swal({
+          title: 'Success!',
+          text: result.message,
+          icon: 'success',
+        });
         navigate('/');
       } else {
-        swal('Something Happened!', result?.message?.join(' '), 'error');
+        swal({
+          title: 'Something Happened!',
+          text: result.message.map((item) => item).join('\r\n'),
+          icon: 'error',
+        });
       }
     } catch (error) {
-      swal('Something Happened!', '', 'error');
+      swal({
+        title: 'Something Happened!',
+        icon: 'error',
+      });
     }
     setisSubmit(false);
   };
@@ -99,7 +108,8 @@ export default function Checkin() {
     return () => {
       setDidMount(false);
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   if (!didMount) {
     return null;
@@ -156,7 +166,7 @@ export default function Checkin() {
               className={` ${
                 !photo ? 'text-red-500' : 'text-warmGray-800'
               } text-sm capitalize font-semibold text-left`}>
-              {photo ? USER?.profile?.name?.toLowerCase() : 'Take a Selfie'}
+              {photo ? USER?.profile?.name.toLowerCase() : 'Take a Selfie'}
             </h1>
             <p className="text-xs font-light text-warmGray-400 tracking-wide">
               {address}
@@ -165,14 +175,11 @@ export default function Checkin() {
         </div>
       </Card>
 
-      <FormCheckin
-        handlerKondisi={handlerKondisi}
-        handlerSubmit={handlerSubmit}
-        state={state}
-        setState={setState}
-        photo={photo}
-        isSubmit={isSubmit}
-      />
+      <form onSubmit={handlerSubmit} className=" p-4 flex">
+        <Card addClass={'mt-6'}>
+          {photo && <Button type="out" value="Checkout" isSubmit={isSubmit} />}
+        </Card>
+      </form>
     </motion.div>
   );
 }

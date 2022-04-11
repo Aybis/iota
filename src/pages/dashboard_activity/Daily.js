@@ -2,7 +2,10 @@ import ReactCircularSlider from '@fseehawer/react-circular-slider';
 import { BadgeCheckIcon, ClockIcon, TruckIcon } from '@heroicons/react/solid';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SkeletonDashboardSummary } from '../../components/molecules';
+import {
+  SectionProgressCircle,
+  SkeletonDashboardSummary,
+} from '../../components/molecules';
 import { convertDate } from '../../helpers/convertDate';
 import {
   fetchActivityDoneDashboard,
@@ -11,35 +14,43 @@ import {
 } from '../../redux/actions/activity';
 
 export default function Daily() {
-  let arr = [];
-  Array.from({ length: 100 }).map((item, index) => arr.push(`${index}%`));
   const USER = useSelector((state) => state.user);
   const ACTIVITY = useSelector((state) => state.activity);
+  const REGIONAL = useSelector((state) => state.regional);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(
       fetchActivityProgressDashboard({
-        regional_id: USER?.profile?.regional_id,
+        regional_id:
+          USER?.profile?.regional_id === ''
+            ? REGIONAL?.selectRegional?.id
+            : USER?.profile?.regional_id,
         date: convertDate('tanggalFormat'),
       }),
     );
 
     dispatch(
       fetchActivityDoneDashboard({
-        regional_id: USER?.profile?.regional_id,
+        regional_id:
+          USER?.profile?.regional_id === ''
+            ? REGIONAL?.selectRegional?.id
+            : USER?.profile?.regional_id,
         date: convertDate('tanggalFormat'),
       }),
     );
 
     dispatch(
       fetchActivityPendingDashboard({
-        regional_id: USER?.profile?.regional_id,
+        regional_id:
+          USER?.profile?.regional_id === ''
+            ? REGIONAL?.selectRegional?.id
+            : USER?.profile?.regional_id,
       }),
     );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="relative my-8">
@@ -59,32 +70,14 @@ export default function Daily() {
                 completed
               </p>
             </div>
-            <div>
-              <ReactCircularSlider
-                width={100}
-                label=" "
-                verticalOffset="0"
-                labelColor="#fff"
-                knobColor="#005a58"
-                progressColorFrom="#fcd34d"
-                progressColorTo="#f59e0b"
-                progressSize={10}
-                trackColor="#fffbeb"
-                trackSize={5}
-                valueFontSize="2rem"
-                max={100}
-                min={0}
-                data={arr} //...
-                dataIndex={
-                  (ACTIVITY?.dashboardActDone?.value /
-                    (ACTIVITY?.dashboardActProgress?.value +
-                      ACTIVITY?.dashboardActDone?.value)) *
-                  100
-                }
-                hideKnob={true}
-                knobDraggable={false}
-              />
-            </div>
+
+            <SectionProgressCircle
+              value={ACTIVITY?.dashboardActDone?.value}
+              total={
+                ACTIVITY?.dashboardActProgress?.value +
+                ACTIVITY?.dashboardActDone?.value
+              }
+            />
           </div>
 
           <div className="bg-gradient-to-br from-amber-500 to-amber-400 rounded-lg px-4 py-3 shadow-lg shadow-amber-500/50 flex flex-col justify-between space-y-4">

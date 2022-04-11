@@ -15,9 +15,11 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
+import { convertDate } from '../../helpers/convertDate';
 
 export default function BottomBar() {
   const USER = useSelector((state) => state.user);
+  const ABSEN = useSelector((state) => state.absen);
 
   let link = '/checkin';
   let name = 'Checkin';
@@ -36,11 +38,12 @@ export default function BottomBar() {
             iconActive: HomeSolid,
           },
           {
-            link: '/report',
-            name: 'Laporan',
-            icon: Clipboard,
-            iconActive: ClipboardSolid,
+            link: '/activity',
+            name: 'Activity',
+            icon: ClipboardCheckIcon,
+            iconActive: ClipboardCheckIconSolid,
           },
+
           {
             link: '/checkin',
             name: 'Check-in',
@@ -48,10 +51,10 @@ export default function BottomBar() {
             iconActive: FingerSolid,
           },
           {
-            link: '/activity',
-            name: 'Activity',
-            icon: ClipboardCheckIcon,
-            iconActive: ClipboardCheckIconSolid,
+            link: '/report',
+            name: 'Laporan',
+            icon: Clipboard,
+            iconActive: ClipboardSolid,
           },
           {
             link: '/dashboard',
@@ -82,28 +85,39 @@ export default function BottomBar() {
         ]);
   }, [USER]);
 
-  // const handlerLogOut = () => {
-  //   swal({
-  //     title: 'Are you sure?',
-  //     text: 'Anda yakin ingin keluar dari aplikasi!',
-  //     icon: 'warning',
-  //     buttons: true,
-  //     dangerMode: true,
-  //   }).then((willDelete) => {
-  //     if (willDelete) {
-  //       Cookies.remove('session');
-  //       localStorage.clear();
-  //       swal('Anda berhasil logout!', {
-  //         icon: 'success',
-  //       });
-  //       setTimeout(() => {
-  //         window.location.reload();
-  //       }, 300);
-  //     } else {
-  //       swal('Okay!');
+  // console.log(ABSEN);
+  if (ABSEN?.absen === undefined) {
+    link = '/checkin';
+  } else {
+    if (ABSEN?.checkout?.jam) {
+      link = 'hidden';
+      if (
+        convertDate('tanggal', ABSEN?.checkin?.jam) !== convertDate('tanggal')
+      ) {
+        link = '/checkin';
+      }
+    } else if (ABSEN?.checkin?.jam) {
+      colorIcon = 'bg-red-600';
+      name = 'Checkout';
+      link = `/checkout/${ABSEN?.absen?.id}`;
+    }
+  }
+  // if (Object.entries(ABSEN?.absen)?.length < 1) {
+  //   link = '/checkin';
+  // } else {
+  //   if (ABSEN?.checkout?.jam) {
+  //     link = 'hidden';
+  //     if (
+  //       convertDate('tanggal', ABSEN?.checkin?.jam) !== convertDate('tanggal')
+  //     ) {
+  //       link = '/checkin';
   //     }
-  //   });
-  // };
+  //   } else if (ABSEN?.checkin?.jam) {
+  //     colorIcon = 'bg-red-600';
+  //     name = 'Checkout';
+  //     link = `/checkout/${ABSEN?.absen?.id}`;
+  //   }
+  // }
 
   return (
     <div className="fixed z-30 bottom-0 inset-x-0 lg:hidden shadow-xl">

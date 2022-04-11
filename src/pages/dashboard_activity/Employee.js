@@ -6,6 +6,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Loading } from '../../components/atoms';
 import { SectionFilterMonthYear } from '../../components/molecules';
 import { imageApiAvatarUser } from '../../helpers/assetHelpers';
 import { convertDate } from '../../helpers/convertDate';
@@ -18,7 +19,7 @@ import {
 
 export default function Employee() {
   const [visible, setVisible] = useState(false);
-
+  const [didMount, setDidMount] = useState(false);
   const [temporary, setTemporary] = useState({
     month:
       convertDate('bulan') < 10
@@ -31,7 +32,7 @@ export default function Employee() {
   const REGIONAL = useSelector((state) => state.regional);
   const [searchName, setsearchName] = useState('');
   const [loading, setloading] = useState(false);
-  const [dataFilter, setdataFilter] = useState(ACTIVITY?.dashboardActEmployee);
+  // const [dataFilter, setdataFilter] = useState(ACTIVITY?.dashboardActEmployee);
 
   const USER = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -47,6 +48,15 @@ export default function Employee() {
       });
 
       dispatch(setMonthAct(event.target.value));
+      dispatch(
+        fetchAllActivity({
+          regional_id:
+            USER?.profile?.rregional_id === null
+              ? REGIONAL?.selected?.id
+              : USER?.profile?.regional_id,
+          date: `${temporary.year}-${event.target.value}`,
+        }),
+      );
     }
 
     if (event.target.name === 'year') {
@@ -55,6 +65,15 @@ export default function Employee() {
         year: event.target.value,
       });
       dispatch(setYearAct(event.target.value));
+      dispatch(
+        fetchAllActivity({
+          regional_id:
+            USER?.profile?.rregional_id === null
+              ? REGIONAL?.selected?.id
+              : USER?.profile?.regional_id,
+          date: `${event.target.value}-${temporary.month}`,
+        }),
+      );
     }
   };
 
@@ -66,10 +85,10 @@ export default function Employee() {
   const handlerSearchEmployee = (event) => {
     setloading(true);
     setsearchName(event.target.value);
-    let result = ACTIVITY?.dashboardActEmployee?.filter(
+    ACTIVITY?.dashboardActEmployee?.filter(
       (item) => item?.name?.toLowerCase().search(event.target.value) !== -1,
     );
-    setdataFilter(result);
+    // setdataFilter(result);
     setTimeout(() => {
       setloading(false);
     }, 400);
@@ -94,22 +113,28 @@ export default function Employee() {
   window.addEventListener('scroll', toggleVisible);
 
   useEffect(() => {
-    dispatch(setMonthAct(temporary.month));
-    dispatch(setYearAct(temporary.year));
     dispatch(
       fetchAllActivity({
         regional_id:
-          USER?.profile?.rregional_id === null
+          USER?.profile?.regional_id === ''
             ? REGIONAL?.selected?.id
             : USER?.profile?.regional_id,
         date: `${temporary.year}-${temporary.month}`,
       }),
     );
 
-    setdataFilter(ACTIVITY?.dashboardActEmployee);
+    // setdataFilter(ACTIVITY?.dashboardActEmployee);
 
+    setDidMount(true);
+    return () => {
+      setDidMount(false);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+
+  if (!didMount) {
+    return null;
+  }
 
   return (
     <div className="relative my-8 mx-4">
@@ -131,7 +156,8 @@ export default function Employee() {
 
       <div className="flex justify-between items-center mt-8 mb-4">
         <p className="text-sm text-zinc-500 font-medium">
-          Result : {dataFilter?.length}
+          Result :{' '}
+          {ACTIVITY?.isLoading ? '' : ACTIVITY?.dashboardActEmployee?.length}
         </p>
         <div className="flex space-x-1 justify-center items-center text-sm font-medium text-zinc-500">
           <DownloadIcon className="h-4" />
@@ -141,7 +167,7 @@ export default function Employee() {
 
       <div>
         <div>
-          <div className=" my-6 sticky top-0">
+          <div className=" my-6 sticky top-0 hidden">
             <SearchIcon className="h-6 w-6 text-zinc-200 absolute left-4 top-3" />
             <input
               type="text"
@@ -153,68 +179,74 @@ export default function Employee() {
               className="px-4 py-2 text-lg text-zinc-800 focus:ring-blue-600 focus:border-sky-500 block w-full border-transparent rounded-lg shadow-lg shadow-zinc-200/40 placeholder-opacity-50 placeholder-gray-500 pl-12"
             />
           </div>
-          <div className="relative grid grid-cols-1 gap-y-5 mt-4">
-            {loading || ACTIVITY?.isLoading ? (
-              <div className="p-3 rounded-xl bg-white shadow-lg flex space-x-2">
-                <div className="h-24 w-24 flex rounded-lg bg-zinc-200 animate-pulse"></div>
-                <div className="flex flex-col w-full space-y-1">
-                  <div className="h-4 w-full bg-zinc-200 animate-pulse rounded-lg"></div>
-                  <div className="h-4 w-full bg-zinc-200 animate-pulse rounded-lg"></div>
-                  <div className="h-16 w-full bg-zinc-200 animate-pulse rounded-lg"></div>
+          {ACTIVITY?.isLoading ? (
+            <div className="flex justify-center items-center p-4">
+              <Loading height={6} width={6} />
+            </div>
+          ) : (
+            <div className="relative grid grid-cols-1 gap-y-5 mt-4">
+              {loading ? (
+                <div className="p-3 rounded-xl bg-white shadow-lg flex space-x-2">
+                  <div className="h-24 w-24 flex rounded-lg bg-zinc-200 animate-pulse"></div>
+                  <div className="flex flex-col w-full space-y-1">
+                    <div className="h-4 w-full bg-zinc-200 animate-pulse rounded-lg"></div>
+                    <div className="h-4 w-full bg-zinc-200 animate-pulse rounded-lg"></div>
+                    <div className="h-16 w-full bg-zinc-200 animate-pulse rounded-lg"></div>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              dataFilter?.map((item, index) => (
-                <div
-                  key={index}
-                  // to={`/activities/${item.user_id}`}
-                  onClick={() => handlerClickDetail(item)}
-                  className="flex flex-col justify-center bg-white shadow-lg shadow-zinc-200/50 rounded-lg p-3">
-                  <div className="flex space-x-3">
-                    <img
-                      src={imageApiAvatarUser(item?.name)}
-                      className="h-24 w-24 rounded-lg"
-                      alt=""
-                    />
-                    <div className="flex flex-col w-full">
-                      <p className="text-xs font-semibold text-zinc-800">
-                        {item?.name}
-                      </p>
-                      <p className="text-xs font-medium text-zinc-500 my-1">
-                        {item?.posisi} - {item?.witel}
-                      </p>
-                      <div className="flex justify-around bg-zinc-100 px-2 py-1 w-full rounded-md mt-2">
-                        <div className="flex flex-col space-y-1">
-                          <h1 className="text-xs font-medium text-zinc-400">
-                            To Do
-                          </h1>
-                          <span className="font-semibold text-zinc-800 text-lg">
-                            {item?.todo?.length}
-                          </span>
-                        </div>
-                        <div className="flex flex-col space-y-1">
-                          <h1 className="text-xs font-medium text-zinc-400">
-                            Progress
-                          </h1>
-                          <span className="font-semibold text-zinc-800">
-                            {item?.progress?.length}
-                          </span>
-                        </div>
-                        <div className="flex flex-col space-y-1">
-                          <h1 className="text-xs font-medium text-zinc-400">
-                            Complete
-                          </h1>
-                          <span className="font-semibold text-zinc-800 text-lg">
-                            {item?.done?.length}
-                          </span>
+              ) : (
+                ACTIVITY?.dashboardActEmployee?.map((item, index) => (
+                  <div
+                    key={index}
+                    // to={`/activities/${item.user_id}`}
+                    onClick={() => handlerClickDetail(item)}
+                    className="flex flex-col justify-center bg-white shadow-lg shadow-zinc-200/50 rounded-lg p-3">
+                    <div className="flex space-x-3">
+                      <img
+                        src={imageApiAvatarUser(item?.name)}
+                        className="h-24 w-24 rounded-lg"
+                        alt=""
+                      />
+                      <div className="flex flex-col w-full">
+                        <p className="text-xs font-semibold text-zinc-800">
+                          {item?.name}
+                        </p>
+                        <p className="text-xs font-medium text-zinc-500 my-1">
+                          {item?.posisi} - {item?.witel}
+                        </p>
+                        <div className="flex justify-around bg-zinc-100 px-2 py-1 w-full rounded-md mt-2">
+                          <div className="flex flex-col space-y-1">
+                            <h1 className="text-xs font-medium text-zinc-400">
+                              To Do
+                            </h1>
+                            <span className="font-semibold text-zinc-800 text-lg">
+                              {item?.todo?.length}
+                            </span>
+                          </div>
+                          <div className="flex flex-col space-y-1">
+                            <h1 className="text-xs font-medium text-zinc-400">
+                              Progress
+                            </h1>
+                            <span className="font-semibold text-zinc-800">
+                              {item?.progress?.length}
+                            </span>
+                          </div>
+                          <div className="flex flex-col space-y-1">
+                            <h1 className="text-xs font-medium text-zinc-400">
+                              Complete
+                            </h1>
+                            <span className="font-semibold text-zinc-800 text-lg">
+                              {item?.done?.length}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))
-            )}
-          </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

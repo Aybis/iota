@@ -1,4 +1,4 @@
-import { imageApi } from '../../helpers/assetHelpers';
+import { getImageFromStorage, imageApi } from '../../helpers/assetHelpers';
 import { convertDate } from '../../helpers/convertDate';
 
 export default function ReportAbsen({
@@ -26,7 +26,7 @@ export default function ReportAbsen({
             ? imageApi('NF')
             : image === 'By system'
             ? imageApi('NF')
-            : `${process.env.REACT_APP_API_IMAGE_ABSENSI}/${image}`
+            : getImageFromStorage(image)
         }
         alt={Math.random()}
       />

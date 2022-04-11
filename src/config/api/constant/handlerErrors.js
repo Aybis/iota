@@ -15,9 +15,9 @@ export default function handlerErrors(error) {
         ToastHandler('error', error.response.data.message);
         Cookies.remove('session');
         localStorage.clear();
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 300);
       } else {
         message = error.response.data.message;
       }

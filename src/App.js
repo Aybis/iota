@@ -16,6 +16,7 @@ import {
   Profile,
   ReportAbsenUser,
 } from './pages';
+import Checkout from './pages/Checkout';
 import Bulanan from './pages/dashboard_absensi/Bulanan';
 import Harian from './pages/dashboard_absensi/Harian';
 import Users from './pages/dashboard_absensi/Users';
@@ -42,6 +43,7 @@ function App() {
           <Route path="/activity/:activity" element={<DetailActivity />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/checkin" element={<Checkin />} />
+          <Route path="/checkout/:id" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/absensi" element={<DashboardAbsensi />}>
             <Route index element={<Harian />} />

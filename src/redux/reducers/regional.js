@@ -14,7 +14,11 @@ export default function (state = initialState, action) {
     case type.REGIONAL_SELECTED:
       return {
         ...state,
-        selectRegional: action.payload ?? {},
+        selectRegional: action.payload ?? {
+          id: null,
+          name: 'ALL TREG',
+          alias: 'ALL TREG',
+        },
       };
 
     case type.LOADING:

@@ -9,7 +9,7 @@ import {
   SectionHistoryActivity,
   SectionTextArea,
 } from '../components';
-import { Modals } from '../components/atoms';
+import { Loading, Modals } from '../components/atoms';
 import {
   getImageFromStorage,
   imageApiAvatarUser,
@@ -82,22 +82,24 @@ export default function DetailActivity() {
     setisSubmit(true);
     event.preventDefault();
 
-    dispatch(insertProgressActivity(input));
+    const result = await dispatch(insertProgressActivity(input));
 
-    setTimeout(() => {
+    if (result.status === 200) {
       input.description = '';
       input.photo = '';
+      setImage(null);
       setfileName(null);
       setisSubmit(false);
-    }, 300);
+    } else {
+      setfileName(null);
+      setisSubmit(false);
+    }
   };
 
   useEffect(() => {
     dispatch(fetchHistoryProgress(activity));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  console.log(ACTIVITY);
+  }, [dispatch]);
 
   return (
     <Layout showBottomBar={false}>
@@ -114,61 +116,69 @@ export default function DetailActivity() {
         </div>
       </div>
 
-      <div className="relative m-4">
-        <SectionActivity
-          desc={ACTIVITY?.historyActivity[0]?.description}
-          progress={ACTIVITY?.historyActivity[0]?.progress}
-          title={ACTIVITY?.historyActivity[0]?.title}
-          totalUpdate={ACTIVITY?.historyActivity[0]?.progress_detail}
-        />
-      </div>
-
       {/* Section Detail */}
-      {ACTIVITY?.tempActivities?.user_id === USER?.profile?.id &&
-        ACTIVITY?.historyActivity[0]?.progress < 100 && (
-          <div className="relative mx-4 my-8">
-            <p className="font-semibold text-zinc-800">
-              Tambah Progress Activity
-            </p>
-            <div className="relative space-y-3 mt-3 bg-white p-4 rounded-lg shadow-lg shadow-zinc-200/30">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-zinc-500">
-                  Update Progress
-                </label>
-                <div className="flex space-x-6 items-center px-1">
-                  <Slider
-                    onChange={(e) => handlerChange(e)}
-                    value={input.progress}
-                    aria-label="Progress"
-                    name="progress"
-                    valueLabelDisplay="auto"
-                  />
-                  <p className="text-sm text-zinc-400 font-medium">
-                    {input.progress}%
-                  </p>
-                </div>
-              </div>
-              <div>
-                <label
-                  htmlFor="deskripsi"
-                  className="block text-sm font-medium text-zinc-500 mb-3">
-                  Deskripsi Progress
-                </label>
-                <SectionTextArea
-                  handlerChange={handlerChange}
-                  valueDescription={input.description}
-                  handlerSubmit={handlerSubmitProgress}
-                  buttonName="Tambah Progress"
-                  handlerChangePhoto={(e) => inputPhoto(e)}
-                  namePhoto={fileName}
-                  isLoading={isSubmit}
+      {ACTIVITY?.isLoading ? (
+        <div className="flex justify-center items-center p-4">
+          <Loading height={6} width={6} />
+        </div>
+      ) : ACTIVITY?.tempActivities?.user_id === USER?.profile?.id &&
+        ACTIVITY?.historyActivity?.progress < 100 ? (
+        <div className="relative mx-4 my-6">
+          <p className="font-semibold text-zinc-800">
+            Tambah Progress Activity
+          </p>
+          <div className="relative space-y-3 mt-3 bg-white p-4 rounded-lg shadow-lg shadow-zinc-200/30">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-zinc-500">
+                Update Progress
+              </label>
+              <div className="flex space-x-6 items-center px-1">
+                <Slider
+                  onChange={(e) => handlerChange(e)}
+                  value={input?.progress}
+                  aria-label="Progress"
+                  name="progress"
+                  valueLabelDisplay="auto"
                 />
+                <p className="text-sm text-zinc-400 font-medium">
+                  {input?.progress}%
+                </p>
               </div>
             </div>
+            <div>
+              <label
+                htmlFor="deskripsi"
+                className="block text-sm font-medium text-zinc-500 mb-3">
+                Deskripsi Progress
+              </label>
+              <SectionTextArea
+                handlerChange={handlerChange}
+                valueDescription={input.description}
+                handlerSubmit={handlerSubmitProgress}
+                buttonName="Tambah Progress"
+                handlerChangePhoto={(e) => inputPhoto(e)}
+                namePhoto={fileName}
+                isLoading={isSubmit}
+              />
+            </div>
           </div>
-        )}
+        </div>
+      ) : (
+        <div className="relative m-4">
+          {ACTIVITY?.isLoading ? (
+            'wait'
+          ) : (
+            <SectionActivity
+              desc={ACTIVITY?.historyActivity?.description}
+              progress={ACTIVITY?.historyActivity?.progress}
+              title={ACTIVITY?.historyActivity?.title}
+              totalUpdate={ACTIVITY?.historyActivity?.progress_detail}
+            />
+          )}
+        </div>
+      )}
 
       <div className="relative my-8 mx-4">
         <p className="text-sm font-semibold text-zinc-800 mb-4">
@@ -177,24 +187,22 @@ export default function DetailActivity() {
 
         <div className="relative">
           <div className="grid grid-cols-1 gap-4 ">
-            {ACTIVITY?.historyActivity?.map((item, index) =>
-              item?.progress_detail?.length > 0 ? (
-                item?.progress_detail?.map((history) => (
-                  <SectionHistoryActivity
-                    key={Math.random()}
-                    item={history}
-                    title={item.title}
-                    desc={item.description}
-                    handlerShowImage={handlerClickShowImage}
-                  />
-                ))
-              ) : (
-                <div
+            {ACTIVITY?.historyActivity?.progress_detail?.length > 0 ? (
+              ACTIVITY?.historyActivity?.progress_detail?.map((history) => (
+                <SectionHistoryActivity
                   key={Math.random()}
-                  className="p-5 flex justify-center items-center text-sm text-zinc-500 font-medium">
-                  <p>Belum ada progress</p>
-                </div>
-              ),
+                  item={history}
+                  title={ACTIVITY?.historyActivity?.title}
+                  desc={ACTIVITY?.historyActivity?.description}
+                  handlerShowImage={handlerClickShowImage}
+                />
+              ))
+            ) : (
+              <div
+                key={Math.random()}
+                className="p-5 flex justify-center items-center text-sm text-zinc-500 font-medium">
+                <p>Belum ada progress</p>
+              </div>
             )}
           </div>
         </div>

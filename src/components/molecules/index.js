@@ -10,3 +10,7 @@ export { default as ReportTime } from './ReportTime';
 export { default as SkeletonDashboardSummary } from './SkeletonDashboardSummary';
 export { default as SkeletonTask } from './SkeletonTask';
 export { default as SectionDateHor } from './SectionDateHor';
+export { default as ChartBar } from './ChartBar';
+export { default as ChartDoughnut } from './ChartDoughnut';
+export { default as ChartGauge } from './ChartGauge';
+export { default as SectionProgressCircle } from './SectionProgressCircle';

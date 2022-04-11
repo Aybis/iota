@@ -1,82 +1,14 @@
 import { UserGroupIcon } from '@heroicons/react/solid';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Loading } from '../../components/atoms';
 import { SectionSummary } from '../../components/molecules';
 import { convertDate } from '../../helpers/convertDate';
+import { fetchDashboardHarian } from '../../redux/actions/dashboardadmin';
 
 export default function Harian() {
-  const dataKehadiran = [
-    {
-      title: 'Kehadiran',
-      value: 100,
-      name: 'hadir',
-      desc: 'Karyawan',
-    },
-    {
-      title: 'Terlambat',
-      value: 10,
-      name: 'terlambat',
-      desc: 'Karyawan',
-    },
-    {
-      title: 'Keterangan',
-      value: 10,
-      name: 'keterangan',
-      desc: 'Karyawan',
-    },
-    {
-      title: 'Belum Absen',
-      value: 40,
-      name: 'belum absen',
-      desc: 'Karyawan',
-    },
-    {
-      title: 'Tidak Checkout',
-      value: 20,
-      name: 'tidak checkout',
-      desc: 'Karyawan',
-    },
-    {
-      title: 'Tidak Absen',
-      value: 30,
-      name: 'tidak absen',
-      desc: 'Karyawan',
-    },
-  ];
-
-  const dataSummary = [
-    {
-      name: 'WFH',
-      value: 80,
-    },
-    {
-      name: 'WFO',
-      value: 20,
-    },
-    {
-      name: 'sakit',
-      value: 5,
-    },
-    {
-      name: 'izin',
-      value: 0,
-    },
-    {
-      name: 'sppd',
-      value: 2,
-    },
-    {
-      name: 'cuti',
-      value: 3,
-    },
-    {
-      name: 'tidak checkout',
-      value: 3,
-    },
-    {
-      name: 'tidak absen',
-      value: 3,
-    },
-  ];
+  const dispatch = useDispatch();
+  const DASHBOARD = useSelector((state) => state.dashboardadmin);
 
   const regional = [
     { id: 2, name: 'TR1 SUMATERA', value: 70 },
@@ -88,40 +20,87 @@ export default function Harian() {
     { id: 8, name: 'TR7 KTI', value: 40 },
   ];
 
+  useEffect(() => {
+    dispatch(fetchDashboardHarian(DASHBOARD?.regionalSelected?.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
+
   return (
     <div className="relative my-8 mx-4">
       <h1 className="text-sm font-semibold text-zinc-700">
         {convertDate('tanggalHari')}
       </h1>
-
       <div className="relative mt-4 mb-6 lg:px-0 container mx-auto max-w-7xl">
         <div className="grid grid-cols-4 lg:grid-cols-6 gap-2 gap-y-3 divide-x divide-zinc-100 bg-white rounded-md p-2">
-          {dataKehadiran
-            .filter(
-              (item) =>
-                item.name !== 'tidak absen' && item.name !== 'tidak checkout',
-            )
-            .map((item) => (
-              <div key={Math.random()} className="relative pl-2">
-                <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
-                  {item.title}
-                </h4>
-                <h1 className="text-zinc-900 font-bold text-xl mt-3">
-                  {item.value}
-                </h1>
-              </div>
-            ))}
+          {DASHBOARD?.reportKehadiran?.length > 0 &&
+            DASHBOARD?.reportKehadiran
+              ?.filter(
+                (item) =>
+                  item.name !== 'Tidak Checkout' && item.name !== 'Tidak Absen',
+              )
+              .map((item) => (
+                <div key={Math.random()} className="relative pl-2">
+                  <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
+                    {item.name}
+                  </h4>
+                  <h1 className="text-zinc-900 font-bold text-xl mt-3">
+                    {item.value}
+                  </h1>
+                </div>
+              ))}
         </div>
       </div>
 
+      {/* ================ */}
       <h1 className="text-zinc-800 font-semibold">Summary</h1>
-      <div className="relative grid grid-cols-2 gap-4 mt-2">
-        {dataSummary.map((item) => (
-          <SectionSummary key={Math.random()} data={item} type="karyawan" />
-        ))}
-      </div>
 
-      <div className="relative my-8">
+      {DASHBOARD?.isLoading ? (
+        <div className="flex justify-center items-center col-span-2 lg:col-span-4">
+          <Loading height={6} width={6} color={'text-blue-500'} />
+        </div>
+      ) : (
+        <div className="relative my-8 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:px-0 container mx-auto max-w-7xl">
+          {DASHBOARD?.reportKerja?.length > 0 &&
+            DASHBOARD?.reportKerja?.map((item) => (
+              <SectionSummary
+                key={Math.random()}
+                type="karyawan"
+                data={item}
+                handlerClick={() => null}
+                isEvent={true}
+              />
+            ))}
+          {DASHBOARD?.reportKeterangan?.length > 0 &&
+            DASHBOARD?.reportKeterangan?.map((item) => (
+              <SectionSummary
+                key={Math.random()}
+                type="karyawan"
+                data={item}
+                handlerClick={() => null}
+                isEvent={true}
+              />
+            ))}
+          {DASHBOARD?.reportKehadiran?.length > 0 &&
+            DASHBOARD?.reportKehadiran
+              ?.filter(
+                (item) =>
+                  item.name === 'Tidak Checkout' || item.name === 'Tidak Absen',
+              )
+              .map((item) => (
+                <SectionSummary
+                  key={Math.random()}
+                  type="karyawan"
+                  data={item}
+                  handlerClick={() => null}
+                  isEvent={true}
+                />
+              ))}
+        </div>
+      )}
+
+      {/* ======================= */}
+      {/* Section Performansi Regional */}
+      <div className="relative my-8 hidden">
         <h1 className="text-zinc-800 font-semibold">Performansi</h1>
 
         <div className="grid grid-cols-1 gap-y-4 mt-3">

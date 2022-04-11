@@ -232,10 +232,10 @@ export default function Profile({ open, handlerOpen }) {
                         </div>
                         <div>
                           <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">
-                            Sub Unit
+                            Witel
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 capitalize">
-                            {USER?.profile?.subunit ?? '...'}
+                            {USER?.profile?.witel ?? '...'}
                           </dd>
                         </div>
                         <div>

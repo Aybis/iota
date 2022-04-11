@@ -1,6 +1,7 @@
 import { BadgeCheckIcon, PlusIcon, TruckIcon } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import { SectionActivity, SectionTextArea } from '../components';
 import { Loading } from '../components/atoms';
@@ -17,6 +18,7 @@ import Layout from './includes/Layout';
 
 export default function Activity() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const USER = useSelector((state) => state.user);
   const ACTIVITY = useSelector((state) => state.activity);
   const [showModal, setshowModal] = useState(false);
@@ -90,6 +92,7 @@ export default function Activity() {
       });
   };
 
+  console.log(date);
   const handlerChangeDate = async (item) => {
     dispatch(
       fetchActivityProgressByUser({
@@ -130,8 +133,13 @@ export default function Activity() {
       }),
     );
 
+    if (USER?.profile?.role_id !== '1') {
+      navigate('/404');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+
+  console.log(ACTIVITY);
 
   return (
     <Layout>
@@ -190,8 +198,8 @@ export default function Activity() {
             ) : (
               <div className="grid grid-cols-1 gap-4 min-h-full max-h-fit transition-all duration-300 ease-in-out">
                 {(tabActive === 1
-                  ? ACTIVITY?.activitiesByUserProgress
-                  : ACTIVITY?.activitiesByUserDone
+                  ? ACTIVITY?.activitiesByUserProgress ?? []
+                  : ACTIVITY?.activitiesByUserDone ?? []
                 ).length > 0 ? (
                   (tabActive === 1
                     ? ACTIVITY?.activitiesByUserProgress

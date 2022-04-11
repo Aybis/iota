@@ -9,6 +9,11 @@ export const setLoadingAct = (data) => ({
   payload: data,
 });
 
+export const setRegionalAct = (data) => ({
+  type: type.SELECT_REGIONAL,
+  payload: data,
+});
+
 export const setMessageAct = (data) => ({
   type: type.MESSAGE,
   payload: data,
@@ -98,11 +103,9 @@ export const fetchActivityProgressByUserDaily = (data) => async (dispatch) => {
       },
     })
     .then((res) => {
-      console.log(res);
       dispatch(setLoadingAct(false));
     })
     .catch((err) => {
-      console.log(err.response);
       dispatch(setLoadingAct(false));
     });
 };
@@ -195,13 +198,12 @@ export const fetchActivityDoneByUser = (data) => async (dispatch) => {
 export const fetchActivityProgressDashboard = (data) => async (dispatch) => {
   let count = 0;
   dispatch(setLoadingAct(true));
-
   setHeader();
 
   return iota
     .activityProgress({
       params: {
-        regional_id: data.regional_id,
+        regional_id: data.regional_id ?? null,
         date: data.date,
       },
     })
@@ -212,7 +214,6 @@ export const fetchActivityProgressDashboard = (data) => async (dispatch) => {
           count += item?.activity?.length ?? 0;
           return count;
         });
-
       dispatch(
         setAcitvityDashboardByProgress({
           name: 'todo',
@@ -268,7 +269,6 @@ export const fetchActivityDoneDashboard = (data) => async (dispatch) => {
 export const fetchActivityPendingDashboard = (data) => async (dispatch) => {
   setHeader();
   dispatch(setLoadingAct(true));
-
   let count = 0;
 
   return iota
@@ -326,15 +326,24 @@ export const fetchAllActivity = (data) => async (dispatch) => {
           ),
           done: user?.activity?.filter((item) => item.progress === 100),
         });
-        return user;
+        return {
+          name: user?.name,
+          user_id: user?.id,
+          posisi: user?.posisi,
+          witel: user?.witel,
+          todo: user?.activity?.filter((item) => item.progress === 0),
+          progress: user?.activity?.filter(
+            (item) => item.progress > 0 && item.progress < 100,
+          ),
+          done: user?.activity?.filter((item) => item.progress === 100),
+        };
       });
-      dispatch(setActivityEmployee(dataActivty));
+      dispatch(setActivityEmployee(result));
       dispatch(setLoadingAct(false));
 
-      return result;
+      return res;
     })
     .catch((err) => {
-      console.log(err.response);
       dispatch(setLoadingAct(false));
 
       return err.response;
@@ -353,14 +362,12 @@ export const fetchHistoryProgress = (data) => async (dispatch) => {
       },
     })
     .then((res) => {
+      dispatch(setHistoryAct(res.data[0]));
       dispatch(setLoadingAct(false));
-
-      dispatch(setHistoryAct(res.data));
       return res;
     })
     .catch((err) => {
       dispatch(setLoadingAct(false));
-
       return err.response;
     });
 };

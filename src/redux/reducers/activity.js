@@ -1,5 +1,18 @@
+import { convertDate } from '../../helpers/convertDate';
 import * as type from '../types/activity';
-const initialState = {};
+
+const initialState = {
+  regionalSelectedAct: {
+    id: null,
+    name: 'ALL TREG',
+    alias: 'ALL TREG',
+  },
+  month:
+    convertDate('bulan') < 10
+      ? `0${convertDate('bulan')}`
+      : convertDate('bulan'),
+  year: convertDate('tahun'),
+};
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function (state = initialState, action) {
@@ -8,6 +21,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         activitiesByUser: action.payload ?? {},
+      };
+
+    case type.SELECT_REGIONAL:
+      return {
+        ...state,
+        regionalSelectedAct: action.payload ?? {},
       };
 
     case type.ACTIVITIES_BY_USER_PROGRESS:
@@ -103,13 +122,16 @@ export default function (state = initialState, action) {
     case type.MONTH:
       return {
         ...state,
-        month: action.payload,
+        month:
+          action.payload ?? convertDate('bulan') < 10
+            ? `0${convertDate('bulan')}`
+            : convertDate('bulan'),
       };
 
     case type.YEAR:
       return {
         ...state,
-        year: action.payload,
+        year: action.payload ?? convertDate('tahun'),
       };
 
     default:

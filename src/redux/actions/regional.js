@@ -24,15 +24,18 @@ export const setSelectedRegional = (data) => ({
 
 export const fetchAllRegional = () => async (dispatch) => {
   setHeader();
-
+  let data = [{ id: null, name: 'ALL TREG', alias: 'ALL TREG' }];
   return iota
     .regional()
     .then((res) => {
-      console.log(res);
+      res.data.map((item) => {
+        data.push(item);
+        return item;
+      });
+      dispatch(setDataRegional(data));
       return res;
     })
     .catch((err) => {
-      console.log(err.response);
       return err.reseponse;
     });
 };

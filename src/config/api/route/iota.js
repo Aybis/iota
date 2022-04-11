@@ -30,4 +30,29 @@ export default {
   // 1.name 2.alias
   updateRegional: (data, id) => axios.post(`regional/${id}`, data),
   deleteRegional: (id) => axios.post(`regional/${id}`),
+
+  // =======================================================================
+
+  // functional absensi
+  checkIn: (data) => axios.post('absensi/check-in', data),
+  checkOut: (data, absensi) => axios.post(`absensi/check-out/${absensi}`, data),
+  exportDataByUnit: (data) => axios.get('export-user-by-unit', data),
+
+  // end point data personal absensi
+  fetchDailyPersonal: (data) =>
+    axios.get(`absensi/user/daily/?user_id=${data}`),
+  fetchWeeklyPersonal: (data) => axios.get(`absensi/user/weekly`, data),
+  fetchReportPersonal: (data) => axios.get('absensi/user/report', data),
+  fetchSummaryPersonal: (data) => axios.get('absensi/user/summary', data),
+  exportPersonal: (data) => axios.get('absensi/export-personal', data),
+
+  // end point dashboard absensi
+  fetchDataDashboardPresent: (data) => axios.get('absensi/users/present', data),
+  fetchDataDashboardStatus: (data) => axios.get('absensi/users/status', data),
+
+  // endpoint dashboard manar and leader
+  fetchDataDashboardDaily: (params) => axios.get('absensi/users/daily', params),
+  fetchDataDashboardMonthly: (data) => axios.get('absensi/users/monthly', data),
+  fetchDataDashboardByRegional: (params) =>
+    axios.get('absensi/users/employe', params),
 };

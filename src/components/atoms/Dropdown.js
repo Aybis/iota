@@ -1,32 +1,33 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { Fragment, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllRegional } from '../../redux/actions/regional';
 
-const people = [
-  { id: 1, name: 'ALL TREG' },
-  { id: 2, name: 'TR1 SUMATERA' },
-  { id: 3, name: 'TR2 JABODETABEK' },
-  { id: 4, name: 'TR3 JABAR' },
-  { id: 5, name: 'TR4 JATENG & DIY' },
-  { id: 6, name: 'TR5 JATIM & BALNUS' },
-  { id: 7, name: 'TR6 KALIMANTAN' },
-  { id: 8, name: 'TR7 KTI' },
-];
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Dropdown() {
-  const [selected, setSelected] = useState(people[0]);
+export default function Dropdown({ handlerOnChnage }) {
+  const dispatch = useDispatch();
+  const REGIONAL = useSelector((state) => state.regional);
+
+  useEffect(() => {
+    dispatch(fetchAllRegional());
+  }, [dispatch]);
 
   return (
-    <Listbox value={selected} onChange={setSelected}>
+    <Listbox
+      value={REGIONAL?.selectRegional}
+      onChange={(item) => handlerOnChnage(item)}>
       {({ open }) => (
         <>
           <div className="mt-1 relative">
             <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-              <span className="block truncate">{selected.name}</span>
+              <span className="block truncate">
+                {REGIONAL?.selectRegional?.alias}
+              </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <SelectorIcon
                   className="h-5 w-5 text-gray-400"
@@ -42,39 +43,43 @@ export default function Dropdown() {
               leaveFrom="opacity-100"
               leaveTo="opacity-0">
               <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                {people.map((person) => (
-                  <Listbox.Option
-                    key={person.id}
-                    className={({ active }) =>
-                      classNames(
-                        active ? 'text-white bg-blue-600' : 'text-gray-900',
-                        'cursor-default select-none relative py-2 pl-3 pr-9',
-                      )
-                    }
-                    value={person}>
-                    {({ selected, active }) => (
-                      <>
-                        <span
-                          className={classNames(
-                            selected ? 'font-semibold' : 'font-normal',
-                            'block truncate',
-                          )}>
-                          {person.name}
-                        </span>
-
-                        {selected ? (
+                {REGIONAL?.listRegional?.length > 0 &&
+                  REGIONAL?.listRegional?.map((reg) => (
+                    <Listbox.Option
+                      key={reg.id}
+                      className={({ active }) =>
+                        classNames(
+                          active ? 'text-white bg-blue-600' : 'text-gray-900',
+                          'cursor-default select-none relative py-2 pl-3 pr-9',
+                        )
+                      }
+                      value={reg}>
+                      {({ selected, active }) => (
+                        <>
                           <span
                             className={classNames(
-                              active ? 'text-white' : 'text-indigo-600',
-                              'absolute inset-y-0 right-0 flex items-center pr-4',
+                              selected ? 'font-semibold' : 'font-normal',
+                              'block truncate',
                             )}>
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                            {reg.alias}
                           </span>
-                        ) : null}
-                      </>
-                    )}
-                  </Listbox.Option>
-                ))}
+
+                          {selected ? (
+                            <span
+                              className={classNames(
+                                active ? 'text-white' : 'text-indigo-600',
+                                'absolute inset-y-0 right-0 flex items-center pr-4',
+                              )}>
+                              <CheckIcon
+                                className="h-5 w-5"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          ) : null}
+                        </>
+                      )}
+                    </Listbox.Option>
+                  ))}
               </Listbox.Options>
             </Transition>
           </div>

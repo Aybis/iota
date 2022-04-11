@@ -54,7 +54,7 @@ export const convertDate = (type, time) => {
         date.getMonth() + 1 < 10
           ? `0${date.getMonth() + 1}`
           : date.getMonth() + 1
-      }-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() + 1}`;
+      }-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}`;
 
     case 'tanggalHari':
       // Senin, 15 November 2021

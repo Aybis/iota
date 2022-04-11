@@ -1,45 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Loading } from '../components/atoms';
 import {
+  ChartDoughnut,
+  ChartGauge,
   SectionFilterMonthYear,
   SectionHeaderPage,
   SectionSummary,
 } from '../components/molecules';
-import { getImageFromAssets } from '../helpers/assetHelpers';
+import { imageApi } from '../helpers/assetHelpers';
 import { convertDate } from '../helpers/convertDate';
+import { fetchDataSummary } from '../redux/actions/dashboarduser';
 import Layout from './includes/Layout';
 
-export default function Dashboard() {
+export default function DashboardUser() {
+  const dispatch = useDispatch();
+  const USER = useSelector((state) => state.user);
+  const SUMMARY = useSelector((state) => state.dashboarduser);
+  const navigate = useNavigate();
+
   const [temporary, setTemporary] = useState({
-    month: convertDate('bulan'),
+    month:
+      convertDate('bulan') < 10
+        ? `0${convertDate('bulan')}`
+        : convertDate('bulan'),
     year: convertDate('tahun'),
   });
-
-  const dataSummary = [
-    {
-      name: 'WFH',
-      value: 9,
-    },
-    {
-      name: 'WFO',
-      value: 9,
-    },
-    {
-      name: 'sakit',
-      value: 0,
-    },
-    {
-      name: 'izin',
-      value: 2,
-    },
-    {
-      name: 'sppd',
-      value: 4,
-    },
-    {
-      name: 'cuti',
-      value: 0,
-    },
-  ];
 
   const handlerOnChange = (event) => {
     event.preventDefault();
@@ -49,6 +36,13 @@ export default function Dashboard() {
         month: event.target.value,
         year: temporary.year,
       });
+      dispatch(
+        fetchDataSummary({
+          user_id: USER?.profile.id,
+          month: event.target.value,
+          year: temporary.year,
+        }),
+      );
     }
 
     if (event.target.name === 'year') {
@@ -56,8 +50,30 @@ export default function Dashboard() {
         month: temporary.month,
         year: event.target.value,
       });
+      dispatch(
+        fetchDataSummary({
+          user_id: USER?.profile.id,
+          month: temporary.month,
+          year: event.target.value,
+        }),
+      );
     }
   };
+
+  useEffect(() => {
+    dispatch(
+      fetchDataSummary({
+        user_id: USER?.profile.id,
+        month: convertDate('bulan'),
+        year: convertDate('tahun'),
+      }),
+    );
+
+    if (USER?.profile?.role_id !== '1') {
+      navigate('/404');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   return (
     <Layout>
@@ -78,16 +94,16 @@ export default function Dashboard() {
         <div className="grid grid-cols-4 lg:grid-cols-6 gap-2 lg:divide-x divide-zinc-100 bg-white rounded-md p-2">
           <div className="lg:flex justify-start hidden items-start gap-3 pl-4 col-span-2">
             <img
-              src={getImageFromAssets('/assets/img.jpg')}
+              src={USER?.profile?.avatar ?? imageApi(USER?.profile?.name)}
               alt=""
               className="h-16 w-16 object-cover rounded-md"
             />
             <div className="relative">
               <h1 className="text-zinc-900 font-semibold text-base mt-3 capitalize">
-                Abdul Muchtar Astria
+                {USER?.profile?.name?.toLowerCase()}
               </h1>
               <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
-                CEO of KerjaKuda
+                {USER?.profile?.posisi}
               </h4>
             </div>
           </div>
@@ -95,33 +111,113 @@ export default function Dashboard() {
             <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
               Kehadiran
             </h4>
-            <h1 className="text-zinc-900 font-bold text-xl mt-3">{14}</h1>
+            <h1 className="text-zinc-900 font-bold text-xl mt-3">
+              {SUMMARY?.kehadiran}
+            </h1>
           </div>
           <div className="relative pl-4 border-l border-zinc-100 ">
             <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
               Keterangan
             </h4>
-            <h1 className="text-zinc-900 font-bold text-xl mt-3">0</h1>
+            <h1 className="text-zinc-900 font-bold text-xl mt-3">
+              {SUMMARY?.keterangan}
+            </h1>
           </div>
           <div className="relative pl-4 border-l border-zinc-100 ">
             <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
               Terlambat
             </h4>
-            <h1 className="text-zinc-900 font-bold text-xl mt-3">2</h1>
+            <h1 className="text-zinc-900 font-bold text-xl mt-3">
+              {SUMMARY?.terlambat}
+            </h1>
           </div>
           <div className="relative pl-4 border-l border-zinc-100 ">
             <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
               Alfa
             </h4>
-            <h1 className="text-zinc-900 font-bold text-xl mt-3">0</h1>
+            <h1 className="text-zinc-900 font-bold text-xl mt-3">
+              {SUMMARY?.absent}
+            </h1>
           </div>
         </div>
       </div>
 
       <div className="relative my-8 px-4 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:px-0 container mx-auto max-w-7xl">
-        {dataSummary.map((item, index) => (
-          <SectionSummary key={index + 1} type="day" data={item} />
-        ))}
+        {SUMMARY?.isLoading ? (
+          <div className="flex justify-center items-center col-span-2 lg:col-span-4">
+            <Loading height={6} width={6} color={'text-blue-500'} />
+          </div>
+        ) : (
+          SUMMARY?.summary?.kehadiran?.map((item, index) => (
+            <SectionSummary key={index + 1} type="day" data={item} />
+          ))
+        )}
+      </div>
+
+      {/* Chart  */}
+      <div className="relative my-8 px-4 lg:px-0 container mx-auto max-w-7xl">
+        <h1 className="text-zinc-900 font-semibold lg:text-lg">Performansi</h1>
+
+        <div className="grid lg:grid-cols-3 gap-4 lg:gap-6 mt-4">
+          <div className="bg-white rounded-md p-4">
+            {SUMMARY?.isLoading ? (
+              <div className="flex justify-center items-center">
+                <Loading height={6} width={6} color={'text-blue-500'} />
+              </div>
+            ) : (
+              SUMMARY?.work?.length > 0 && (
+                <ChartGauge
+                  dataChart={SUMMARY?.work}
+                  title={'Persentase Kehadiran Kerja'}
+                  type="hari"
+                />
+              )
+            )}
+          </div>
+          <div className="bg-white rounded-md p-4">
+            {SUMMARY?.isLoading ? (
+              <div className="flex justify-center items-center">
+                <Loading color={'text-blue-500'} />
+              </div>
+            ) : (
+              <ChartGauge
+                dataChart={[
+                  {
+                    name: 'Hadir',
+                    value: SUMMARY?.kehadiran ?? 0,
+                  },
+                  {
+                    name: 'Tidak',
+                    value: SUMMARY?.absent ?? 0,
+                  },
+                ]}
+                title={'Persentase Kehadiran '}
+                type="hari"
+                isNegative={true}
+              />
+            )}
+          </div>
+          <div className="bg-white rounded-md p-4">
+            {SUMMARY?.isLoading ? (
+              <div className="flex justify-center items-center">
+                <Loading color={'text-blue-500'} />
+              </div>
+            ) : (
+              SUMMARY?.kehadiran && (
+                <ChartDoughnut
+                  dataChart={[
+                    {
+                      name: 'sehat',
+                      value: SUMMARY?.kehadiran,
+                    },
+                  ].concat(SUMMARY?.status)}
+                  type={'hari'}
+                  title={'Persentase Absensi'}
+                />
+              )
+            )}
+          </div>
+        </div>
       </div>
     </Layout>
   );

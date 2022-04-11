@@ -86,7 +86,7 @@ export default function SectionSummary({
       case 'absent':
         return <XIcon className={[addClas, 'text-red-500'].join(' ')} />;
 
-      case 'tidak absen':
+      case 'Tidak Absen':
         return <XIcon className={[addClas, 'text-red-500'].join(' ')} />;
 
       case 'keterangan':
@@ -99,7 +99,7 @@ export default function SectionSummary({
       case 'belum absen':
         return <LoginIcon className={[addClas, 'text-red-500'].join(' ')} />;
 
-      case 'tidak checkout':
+      case 'Tidak Checkout':
         return <LogoutIcon className={[addClas, 'text-red-500'].join(' ')} />;
       case 'hadir':
         return <CheckIcon className={[addClas, 'text-blue-500'].join(' ')} />;
