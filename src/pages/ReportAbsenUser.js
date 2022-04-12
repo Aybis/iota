@@ -110,7 +110,7 @@ export default function ReportUser() {
 
   return (
     <Layout>
-      <SectionHeaderPage title={'Personal Absence Attendance'} />
+      <SectionHeaderPage title={'Personal Attendance Report'} />
 
       <div className="relative mt-8 max-w-7xl container mx-auto">
         <h1 className="px-4 font-semibold text-zinc-900">
