@@ -28,7 +28,13 @@ export default function Admin() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchDashboardHarian(null));
+    dispatch(
+      fetchDashboardHarian(
+        USER?.profile?.regional_id === ''
+          ? DASHBOARD?.regionalSelected?.id
+          : USER?.profile?.regional_id,
+      ),
+    );
 
     dispatch(
       fetchActivityProgressDashboard({
@@ -52,6 +58,8 @@ export default function Admin() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+
+  console.log(ACTIVITY?.dashboardActPending);
 
   return (
     <Layout>

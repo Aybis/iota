@@ -216,18 +216,10 @@ export default function Profile({ open, handlerOpen }) {
                       <dl className="space-y-8 px-4 sm:px-6 sm:space-y-6">
                         <div>
                           <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">
-                            Direktorat
+                            Regional
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 capitalize">
-                            {USER?.profile?.direktorat ?? '...'}
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">
-                            Unit
-                          </dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 capitalize">
-                            {USER?.profile?.unit ?? '...'}
+                            {USER?.profile?.regional ?? '...'}
                           </dd>
                         </div>
                         <div>
@@ -240,20 +232,20 @@ export default function Profile({ open, handlerOpen }) {
                         </div>
                         <div>
                           <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">
-                            Email
-                          </dt>
-                          <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
-                            {USER?.profile?.email ?? '...'}
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">
                             No. HP
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
                             <time dateTime="1988-06-23">
                               +62 {USER?.profile?.phone ?? '...'}
                             </time>
+                          </dd>
+                        </div>
+                        <div>
+                          <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">
+                            Email
+                          </dt>
+                          <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
+                            {USER?.profile?.email ?? '...'}
                           </dd>
                         </div>
                       </dl>

@@ -14,6 +14,7 @@ import {
 export default function Users() {
   const dispatch = useDispatch();
   const DASHBOARD = useSelector((state) => state.dashboardadmin);
+  const USER = useSelector((state) => state.user);
   const [temporary, setTemporary] = useState({
     month:
       convertDate('bulan') < 10
@@ -63,7 +64,10 @@ export default function Users() {
   useEffect(() => {
     dispatch(
       fetchDashboardRegional({
-        regional_id: DASHBOARD?.regionalSelected?.id,
+        regional_id:
+          USER?.profile?.regional_id === ''
+            ? DASHBOARD?.regionalSelected?.id
+            : USER?.profile?.regional_id,
         month: temporary.month,
         year: temporary.year,
       }),
@@ -122,23 +126,11 @@ export default function Users() {
                 </div>
                 <div className="grid grid-cols-4 gap-2 bg-zinc-100 px-4 py-2 rounded-md mt-4">
                   <div className="flex flex-col space-y-1">
-                    <h1 className="text-xs font-medium text-zinc-400">Hadir</h1>
-                    <span className="font-semibold text-zinc-800">
-                      {item?.wfh + item?.wfo}
-                    </span>
-                  </div>
-                  <div className="flex flex-col space-y-1">
-                    <h1 className="text-xs font-medium text-zinc-400">Telat</h1>
-                    <span className="font-semibold text-zinc-800">
-                      {item?.telat}
-                    </span>
-                  </div>
-                  <div className="flex flex-col space-y-1">
                     <h1 className="text-xs font-medium text-zinc-400">
-                      Absent
+                      Kehadiran
                     </h1>
                     <span className="font-semibold text-zinc-800">
-                      {item?.tidak_hadir}
+                      {item?.wfh + item?.wfo}
                     </span>
                   </div>
                   <div className="flex flex-col space-y-1">
@@ -147,6 +139,22 @@ export default function Users() {
                     </h1>
                     <span className="font-semibold text-zinc-800">
                       {item?.cuti + item?.sakit + item?.sppd}
+                    </span>
+                  </div>
+                  <div className="flex flex-col space-y-1">
+                    <h1 className="text-xs font-medium text-zinc-400">
+                      Terlambat
+                    </h1>
+                    <span className="font-semibold text-zinc-800">
+                      {item?.telat}
+                    </span>
+                  </div>
+                  <div className="flex flex-col space-y-1">
+                    <h1 className="text-xs font-medium text-zinc-400">
+                      Tdk Absen
+                    </h1>
+                    <span className="font-semibold text-zinc-800">
+                      {item?.tidak_hadir}
                     </span>
                   </div>
                 </div>

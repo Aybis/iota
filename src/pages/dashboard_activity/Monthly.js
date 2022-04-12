@@ -45,7 +45,7 @@ export default function Monthly() {
         fetchActivityProgressDashboard({
           regional_id:
             USER?.profile?.regional_id === ''
-              ? REGIONAL?.selectRegional?.id
+              ? ACTIVITY?.regionalSelectedAct?.id
               : USER?.profile?.regional_id,
           date: `${temporary.year}-${event.target.value}`,
         }),
@@ -55,7 +55,7 @@ export default function Monthly() {
         fetchActivityDoneDashboard({
           regional_id:
             USER?.profile?.regional_id === ''
-              ? REGIONAL?.selectRegional?.id
+              ? ACTIVITY?.regionalSelectedAct?.id
               : USER?.profile?.regional_id,
           date: `${temporary.year}-${event.target.value}`,
         }),
@@ -65,7 +65,7 @@ export default function Monthly() {
         fetchActivityPendingDashboard({
           regional_id:
             USER?.profile?.regional_id === ''
-              ? REGIONAL?.selectRegional?.id
+              ? ACTIVITY?.regionalSelectedAct?.id
               : USER?.profile?.regional_id,
           date: `${temporary.year}-${event.target.value}`,
         }),
@@ -84,7 +84,7 @@ export default function Monthly() {
         fetchActivityProgressDashboard({
           regional_id:
             USER?.profile?.regional_id === ''
-              ? REGIONAL?.selectRegional?.id
+              ? ACTIVITY?.regionalSelectedAct?.id
               : USER?.profile?.regional_id,
           date: `${event.target.value}-${temporary.month}`,
         }),
@@ -94,7 +94,7 @@ export default function Monthly() {
         fetchActivityDoneDashboard({
           regional_id:
             USER?.profile?.regional_id === ''
-              ? REGIONAL?.selectRegional?.id
+              ? ACTIVITY?.regionalSelectedAct?.id
               : USER?.profile?.regional_id,
           date: `${event.target.value}-${temporary.month}`,
         }),
@@ -104,7 +104,7 @@ export default function Monthly() {
         fetchActivityPendingDashboard({
           regional_id:
             USER?.profile?.regional_id === ''
-              ? REGIONAL?.selectRegional?.id
+              ? ACTIVITY?.regionalSelectedAct?.id
               : USER?.profile?.regional_id,
           date: `${event.target.value}-${temporary.month}`,
         }),
@@ -117,7 +117,7 @@ export default function Monthly() {
       fetchActivityProgressDashboard({
         regional_id:
           USER?.profile?.regional_id === ''
-            ? REGIONAL?.selectRegional?.id
+            ? ACTIVITY?.regionalSelectedAct?.id
             : USER?.profile?.regional_id,
         date: `${temporary.year}-${temporary.month}`,
       }),
@@ -127,7 +127,7 @@ export default function Monthly() {
       fetchActivityDoneDashboard({
         regional_id:
           USER?.profile?.regional_id === ''
-            ? REGIONAL?.selectRegional?.id
+            ? ACTIVITY?.regionalSelectedAct?.id
             : USER?.profile?.regional_id,
         date: `${temporary.year}-${temporary.month}`,
       }),
@@ -137,7 +137,7 @@ export default function Monthly() {
       fetchActivityPendingDashboard({
         regional_id:
           USER?.profile?.regional_id === ''
-            ? REGIONAL?.selectRegional?.id
+            ? ACTIVITY?.regionalSelectedAct?.id
             : USER?.profile?.regional_id,
         date: `${temporary.year}-${temporary.month}`,
       }),

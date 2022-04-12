@@ -16,15 +16,14 @@ import {
 export default function Daily() {
   const USER = useSelector((state) => state.user);
   const ACTIVITY = useSelector((state) => state.activity);
-  const REGIONAL = useSelector((state) => state.regional);
   const dispatch = useDispatch();
-
+  console.log(ACTIVITY);
   useEffect(() => {
     dispatch(
       fetchActivityProgressDashboard({
         regional_id:
           USER?.profile?.regional_id === ''
-            ? REGIONAL?.selectRegional?.id
+            ? ACTIVITY?.regionalSelectedAct?.id
             : USER?.profile?.regional_id,
         date: convertDate('tanggalFormat'),
       }),
@@ -34,7 +33,7 @@ export default function Daily() {
       fetchActivityDoneDashboard({
         regional_id:
           USER?.profile?.regional_id === ''
-            ? REGIONAL?.selectRegional?.id
+            ? ACTIVITY?.regionalSelectedAct?.id
             : USER?.profile?.regional_id,
         date: convertDate('tanggalFormat'),
       }),
@@ -44,7 +43,7 @@ export default function Daily() {
       fetchActivityPendingDashboard({
         regional_id:
           USER?.profile?.regional_id === ''
-            ? REGIONAL?.selectRegional?.id
+            ? ACTIVITY?.regionalSelectedAct?.id
             : USER?.profile?.regional_id,
       }),
     );

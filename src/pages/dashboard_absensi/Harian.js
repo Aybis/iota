@@ -9,6 +9,7 @@ import { fetchDashboardHarian } from '../../redux/actions/dashboardadmin';
 export default function Harian() {
   const dispatch = useDispatch();
   const DASHBOARD = useSelector((state) => state.dashboardadmin);
+  const USER = useSelector((state) => state.user);
 
   const regional = [
     { id: 2, name: 'TR1 SUMATERA', value: 70 },
@@ -21,9 +22,17 @@ export default function Harian() {
   ];
 
   useEffect(() => {
-    dispatch(fetchDashboardHarian(DASHBOARD?.regionalSelected?.id));
+    dispatch(
+      fetchDashboardHarian(
+        USER?.profile?.regional_id === ''
+          ? DASHBOARD?.regionalSelected?.id
+          : USER?.profile?.regional_id,
+      ),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+
+  console.log(DASHBOARD);
 
   return (
     <div className="relative my-8 mx-4">
@@ -80,21 +89,6 @@ export default function Harian() {
                 isEvent={true}
               />
             ))}
-          {DASHBOARD?.reportKehadiran?.length > 0 &&
-            DASHBOARD?.reportKehadiran
-              ?.filter(
-                (item) =>
-                  item.name === 'Tidak Checkout' || item.name === 'Tidak Absen',
-              )
-              .map((item) => (
-                <SectionSummary
-                  key={Math.random()}
-                  type="karyawan"
-                  data={item}
-                  handlerClick={() => null}
-                  isEvent={true}
-                />
-              ))}
         </div>
       )}
 

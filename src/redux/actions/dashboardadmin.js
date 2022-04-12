@@ -240,9 +240,14 @@ export const fetchDashboardHarian = (data) => async (dispatch) => {
   dispatch(
     setReportKeterangan([
       {
-        name: 'Sakit',
-        value: result.kehadiran.sakit.value,
-        users: result.kehadiran.sakit.users,
+        name: 'SPPD',
+        value: result.kehadiran.sppd.value,
+        users: result.kehadiran.sppd.users,
+      },
+      {
+        name: 'Izin',
+        value: 0,
+        users: 0,
       },
       {
         name: 'Cuti',
@@ -250,9 +255,9 @@ export const fetchDashboardHarian = (data) => async (dispatch) => {
         users: result.kehadiran.cuti.users,
       },
       {
-        name: 'SPPD',
-        value: result.kehadiran.sppd.value,
-        users: result.kehadiran.sppd.users,
+        name: 'Sakit',
+        value: result.kehadiran.sakit.value,
+        users: result.kehadiran.sakit.users,
       },
     ]),
   );

@@ -133,7 +133,7 @@ export default function DashboardUser() {
           </div>
           <div className="relative pl-4 border-l border-zinc-100 ">
             <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
-              Alfa
+              Tdk Absen
             </h4>
             <h1 className="text-zinc-900 font-bold text-xl mt-3">
               {SUMMARY?.absent}
@@ -168,7 +168,7 @@ export default function DashboardUser() {
               SUMMARY?.work?.length > 0 && (
                 <ChartGauge
                   dataChart={SUMMARY?.work}
-                  title={'Persentase Kehadiran Kerja'}
+                  title={'Flexible Working Arrangement (FWA)'}
                   type="hari"
                 />
               )
@@ -191,7 +191,7 @@ export default function DashboardUser() {
                     value: SUMMARY?.absent ?? 0,
                   },
                 ]}
-                title={'Persentase Kehadiran '}
+                title={'Kehadiran Kerja'}
                 type="hari"
                 isNegative={true}
               />
@@ -212,7 +212,7 @@ export default function DashboardUser() {
                     },
                   ].concat(SUMMARY?.status)}
                   type={'hari'}
-                  title={'Persentase Absensi'}
+                  title={'Keterangan Absensi'}
                 />
               )
             )}

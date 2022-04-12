@@ -55,6 +55,10 @@ export default function SectionSummary({
         return (
           <ClipboardListIcon className={[addClas, 'text-zinc-500'].join(' ')} />
         );
+      case 'Izin':
+        return (
+          <ClipboardListIcon className={[addClas, 'text-zinc-500'].join(' ')} />
+        );
       case 'sakit':
         return (
           <BeakerIcon className={[addClas, 'text-orange-500'].join(' ')} />
