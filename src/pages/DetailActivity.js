@@ -11,8 +11,8 @@ import {
 } from '../components';
 import { Loading, Modals } from '../components/atoms';
 import {
+  getImageFromAssets,
   getImageFromStorage,
-  imageApiAvatarUser,
 } from '../helpers/assetHelpers';
 import {
   fetchHistoryProgress,
@@ -125,7 +125,7 @@ export default function DetailActivity() {
         ACTIVITY?.historyActivity?.progress < 100 ? (
         <div className="relative mx-4 my-6">
           <p className="font-semibold text-zinc-800">
-            Tambah Progress Activity
+            Update Progress Activity
           </p>
           <div className="relative space-y-3 mt-3 bg-white p-4 rounded-lg shadow-lg shadow-zinc-200/30">
             <div>
@@ -151,7 +151,7 @@ export default function DetailActivity() {
               <label
                 htmlFor="deskripsi"
                 className="block text-sm font-medium text-zinc-500 mb-3">
-                Deskripsi Progress
+                Progress Description
               </label>
               <SectionTextArea
                 handlerChange={handlerChange}
@@ -213,7 +213,7 @@ export default function DetailActivity() {
           src={
             imageSource
               ? getImageFromStorage(imageSource)
-              : imageApiAvatarUser('UPD')
+              : getImageFromAssets('/assets/nfimage.jpeg')
           }
           alt={imageSource}
           className="rounded-lg object-cover lg:h-96"

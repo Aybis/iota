@@ -1,7 +1,6 @@
 import swal from 'sweetalert';
 import { setHeader } from '../../config/api/constant';
 import iota from '../../config/api/route/iota';
-import { convertDate } from '../../helpers/convertDate';
 import ToastHandler from '../../helpers/toast';
 import * as type from '../types/activity';
 
@@ -280,20 +279,9 @@ export const fetchActivityPendingDashboard = (data) => async (dispatch) => {
       },
     })
     .then((res) => {
-      console.log(res.data);
       res.data
         .filter((item) => item.role_id === '1')
-
         .map((item) => {
-          item
-            .filter(
-              (act) =>
-                convertDate('tanggalHari', act.created_at) !==
-                convertDate('tanggalHari'),
-            )
-            .map((list) => {
-              return list;
-            });
           count += item?.activity?.length;
           return count;
         });

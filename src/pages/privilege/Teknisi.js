@@ -44,7 +44,7 @@ export default function Teknisi() {
     },
     {
       id: 2,
-      name: 'To Do',
+      name: 'To do',
       icon: TruckIcon,
     },
     {

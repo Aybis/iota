@@ -1,6 +1,6 @@
 import {
+  getImageFromAssets,
   getImageFromStorage,
-  imageApiAvatarUser,
 } from '../helpers/assetHelpers';
 import { convertTimeAgo } from '../helpers/timeAgo';
 import { ProgressBar } from './atoms';
@@ -23,7 +23,7 @@ export default function SectionHistoryActivity({
           src={
             item.photo
               ? getImageFromStorage(item.photo)
-              : imageApiAvatarUser('UPDATED')
+              : getImageFromAssets('/assets/nfimage.jpeg')
           }
           alt={item.photo}
         />

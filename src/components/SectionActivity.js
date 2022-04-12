@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
+  getImageFromAssets,
   getImageFromStorage,
-  imageApiAvatarUser,
 } from '../helpers/assetHelpers';
 import { convertDate } from '../helpers/convertDate';
 import { ProgressBar } from './atoms';
@@ -55,7 +55,7 @@ export default function SectionActivity({
                     src={
                       item.photo
                         ? getImageFromStorage(item.photo)
-                        : imageApiAvatarUser('UPDATE')
+                        : getImageFromAssets('/assets/nfimage.jpeg')
                     }
                     alt=""
                     className="h-8 w-8 rounded-full object-cover ring-2 ring-zinc-100 object-top"
