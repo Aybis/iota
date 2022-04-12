@@ -110,10 +110,12 @@ export default function ReportUser() {
 
   return (
     <Layout>
-      <SectionHeaderPage title={'Laporan Personal Absensi'} />
+      <SectionHeaderPage title={'Personal Absence Attendance'} />
 
       <div className="relative mt-8 max-w-7xl container mx-auto">
-        <h1 className="px-4 font-semibold text-zinc-900">Absensi Minggu Ini</h1>
+        <h1 className="px-4 font-semibold text-zinc-900">
+          Attendance This Week
+        </h1>
         <div className="flex overflow-x-auto  lg:grid grid-cols-5 gap-4  p-4">
           {REPORT?.mingguan?.length > 0 ? (
             REPORT?.mingguan?.map((item) => (

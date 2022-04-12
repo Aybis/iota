@@ -29,10 +29,10 @@ export const convertDate = (type, time) => {
 
   switch (type) {
     case 'tanggalBulanTahun':
-      return date.toLocaleDateString('id-ID', options);
+      return date.toLocaleDateString('en-EN', options);
 
     case 'tanggalShort':
-      return date.toLocaleDateString('id-ID', optionsShort);
+      return date.toLocaleDateString('en-EN', optionsShort);
 
     case 'tanggalWaktuLengkap':
       return (
@@ -58,26 +58,26 @@ export const convertDate = (type, time) => {
 
     case 'tanggalHari':
       // Senin, 15 November 2021
-      return date.toLocaleString('id-ID', options);
+      return date.toLocaleString('en-EN', options);
 
     case 'tanggalKemarin':
       // Senin, 15 November 2021
       date.setDate(date.getDate() - 1);
 
-      return date.toLocaleString('id-ID', options);
+      return date.toLocaleString('en-EN', options);
 
     case 'tanggal':
       return date.getDate();
 
     case 'namaHari':
       //   Rabu
-      return date.toLocaleString('id-ID', day);
+      return date.toLocaleString('en-EN', day);
 
     case 'bulan':
       return date.getMonth() + 1;
 
     case 'namaBulan':
-      return date.toLocaleString('id-ID', month);
+      return date.toLocaleString('en-EN', month);
 
     case 'tahun':
       return date.getFullYear();
@@ -117,7 +117,7 @@ export const convertDate = (type, time) => {
         '.' +
         date.getFullYear() +
         ', ' +
-        date.toLocaleString('id-ID', dateDay)
+        date.toLocaleString('en-EN', dateDay)
       );
 
     case 'jam':

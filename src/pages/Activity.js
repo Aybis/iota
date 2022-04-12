@@ -29,7 +29,7 @@ export default function Activity() {
   const tabNavigation = [
     {
       id: 1,
-      name: 'To Do',
+      name: 'To do',
       status: 'progress',
       icon: TruckIcon,
     },
@@ -92,7 +92,6 @@ export default function Activity() {
       });
   };
 
-  console.log(date);
   const handlerChangeDate = async (item) => {
     dispatch(
       fetchActivityProgressByUser({
@@ -138,8 +137,6 @@ export default function Activity() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
-
-  console.log(ACTIVITY);
 
   return (
     <Layout>

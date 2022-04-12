@@ -8,7 +8,7 @@ export default function SectionDateHor({ setDate, handlerChange }) {
 
   const [activeRef, setactiveRef] = useState(useRef(null));
   const [dayNow, setdayNow] = useState(
-    new Date().toLocaleString('id-ID', {
+    new Date().toLocaleString('en-EN', {
       month: 'long',
       day: 'numeric',
       weekday: 'long',
@@ -42,10 +42,10 @@ export default function SectionDateHor({ setDate, handlerChange }) {
       convertDate('tahun'),
     ).map((x) => {
       return {
-        day: x.toLocaleString('id-ID', {
+        day: x.toLocaleString('en-EN', {
           weekday: 'short',
         }),
-        date: x.toLocaleString('id-ID', {
+        date: x.toLocaleString('en-EN', {
           day: 'numeric',
         }),
         uniq: x.toLocaleString('en-CA', {
@@ -53,7 +53,7 @@ export default function SectionDateHor({ setDate, handlerChange }) {
           month: '2-digit',
           day: '2-digit',
         }),
-        timestamp: x.toLocaleString('id-ID', {
+        timestamp: x.toLocaleString('en-EN', {
           month: 'long',
           day: 'numeric',
           weekday: 'long',

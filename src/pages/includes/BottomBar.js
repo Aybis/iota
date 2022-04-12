@@ -52,7 +52,7 @@ export default function BottomBar() {
           },
           {
             link: '/report',
-            name: 'Laporan',
+            name: 'Report',
             icon: Clipboard,
             iconActive: ClipboardSolid,
           },
@@ -72,7 +72,7 @@ export default function BottomBar() {
           },
           {
             link: '/absensi',
-            name: 'Absensi',
+            name: 'Attendance',
             icon: ClipboardCheckIcon,
             iconActive: ClipboardCheckIconSolid,
           },
