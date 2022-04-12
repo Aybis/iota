@@ -157,7 +157,7 @@ export default function DetailActivity() {
                 handlerChange={handlerChange}
                 valueDescription={input.description}
                 handlerSubmit={handlerSubmitProgress}
-                buttonName="Tambah Progress"
+                buttonName="Update Progress"
                 handlerChangePhoto={(e) => inputPhoto(e)}
                 namePhoto={fileName}
                 isLoading={isSubmit}
