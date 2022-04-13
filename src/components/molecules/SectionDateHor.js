@@ -95,7 +95,7 @@ export default function SectionDateHor({ setDate, handlerChange }) {
             'flex justify-center items-center px-3 py-1 flex-col rounded-lg shadow-lg ',
             dayNow === item.timestamp
               ? 'bg-blue-500 text-white font-semibold shadow-blue-500/50'
-              : 'bg-white text-zinc-400 font-medium shadow-zinc-200/40',
+              : 'bg-white text-zinc-400 font-medium shadow-zinc-200/0',
           ].join(' ')}>
           <span className="text-sm">{item.day}</span>
           <span className="">{item.date}</span>

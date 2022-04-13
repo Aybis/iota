@@ -32,6 +32,8 @@ export default function SectionReportMingguan({ item }) {
           ? item.kehadiran === 'WFH'
             ? 'At Home'
             : 'At Office'
+          : item.kondisi === 'sppd'
+          ? 'SPPD'
           : item.kondisi}
       </p>
       <p className="font-medium text-sm lg:text-base text-zinc-500">

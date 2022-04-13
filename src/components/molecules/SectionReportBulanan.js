@@ -4,6 +4,38 @@ import { ReportAbsen, ReportTime } from '.';
 import { convertDate } from '../../helpers/convertDate';
 
 export default function SectionReportBulanan({ item, handlerClickImage }) {
+  const titleCard = (title) => {
+    switch (title) {
+      case 'WFO':
+        return 'At Office';
+      case 'WFH':
+        return 'At Home';
+      case 'sppd':
+        return 'Buss. Trip';
+      case 'SPPD':
+        return 'Buss. Trip';
+      case 'izin':
+        return 'Permit';
+      case 'Izin':
+        return 'Permit';
+      case 'absent':
+        return 'Tidak Absen';
+      case 'hadir':
+        return 'Kehadiran';
+      case 'cuti':
+        return 'Leave';
+      case 'sakit':
+        return 'Sick';
+      case 'Cuti':
+        return 'Leave';
+      case 'Sakit':
+        return 'Sick';
+
+      default:
+        return title;
+    }
+  };
+
   return (
     <div className="shadow-lg shadow-zinc-200/50 bg-white rounded-lg p-3 relative flex flex-col lg:flex-row gap-2 justify-between ">
       <div
@@ -15,11 +47,7 @@ export default function SectionReportBulanan({ item, handlerClickImage }) {
           item.kehadiran === null &&
             'shadow-yellow-500/50 bg-yellow-500 text-black',
         ].join(' ')}>
-        {item.kehadiran
-          ? item.kehadiran === 'WFH'
-            ? 'At Home'
-            : 'At Office'
-          : item.kondisi}
+        {titleCard(item.kehadiran ?? item.kondisi)}
       </div>
       {/* Checkin */}
       <ReportAbsen

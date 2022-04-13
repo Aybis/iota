@@ -66,6 +66,9 @@ export default function Activity() {
             res?.data?.message ?? 'Activity berhasil dibuat',
             'success',
           );
+          form.description = '';
+          form.title = '';
+
           dispatch(
             fetchActivityProgressByUser({
               user_id: USER?.profile?.id,
@@ -230,7 +233,7 @@ export default function Activity() {
         moreClass="rounded-xl"
         handlerClose={setshowModal}
         open={showModal}
-        title={'Tambah Activity'}>
+        title={'Add Activity'}>
         <div className="relative">
           <SectionTextArea
             uploadPhoto={false}
@@ -240,7 +243,7 @@ export default function Activity() {
             valueDescription={form.description}
             valueTitle={form.title}
             showTitle={true}
-            buttonName="Tambah"
+            buttonName="Add"
           />
         </div>
       </Modals>

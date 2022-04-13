@@ -180,30 +180,30 @@ export default function Admin() {
 
           <div className="relative grid grid-cols-2 p-2 gap-1 bg-zinc-100 rounded-xl mt-6">
             <div className="flex flex-col rounded-xl justify-start p-4">
-              <p className="font-medium text-zinc-500 text-sm">Absensi</p>
+              <p className="font-medium text-zinc-500 text-sm">Attendance</p>
               <h1 className="font-semibold text-4xl text-zinc-800">
                 {DASHBOARD?.reportKehadiran
                   ?.filter((item) => item.name === 'Hadir')
                   .map((item) => item.value)}
               </h1>
               <p className="mt-2 px-2 py-1 text-blue-600 bg-blue-50 rounded-full text-xs w-fit">
-                Kehadiran
+                Presence
               </p>
             </div>
             <div className="flex flex-col bg-white shadow-lg rounded-lg justify-start p-4">
-              <p className="font-medium text-zinc-500 text-sm">Absensi</p>
+              <p className="font-medium text-zinc-500 text-sm">Attendance</p>
               <h1 className="font-semibold text-4xl text-zinc-800">
                 {DASHBOARD?.reportKehadiran
                   ?.filter((item) => item.name === 'Belum Absen')
                   .map((item) => item.value)}
               </h1>
               <p className="mt-2 px-2 py-1 text-red-600 bg-red-50 rounded-full text-xs w-fit">
-                Belum Absen
+                Not Absent
               </p>
             </div>
           </div>
 
-          <div className="relative grid grid-cols-2 p-3 rounded-xl bg-blue-500 mt-6">
+          <div className="relative hidden grid-cols-2 p-3 rounded-xl bg-blue-500 mt-6 ">
             <div className="flex flex-col p-3">
               <p className="font-medium text-white">Total Absensi</p>
               <h1 className="text-4xl text-white font-bold">

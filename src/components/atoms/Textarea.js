@@ -9,6 +9,7 @@ export default function Textarea({
   placeholder,
   labelName,
   inputClassName,
+  labelClass,
 }) {
   return (
     <div className="flex flex-col mb-2">
@@ -18,6 +19,7 @@ export default function Textarea({
           className={[
             'font-semibold mb-2',
             error ? 'text-red-600' : 'text-zinc-700',
+            labelClass,
           ].join(' ')}>
           {labelName}
         </label>

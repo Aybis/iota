@@ -22,7 +22,7 @@ export default function SectionActivity({
     <Link
       to={`/activity/${idActivity}`}
       onClick={handlerClick ?? null}
-      className="relative flex space-x-4 p-4 bg-white w-full rounded-lg shadow-lg shadow-zinc-200/50">
+      className="relative flex flex-col p-4 bg-white w-full rounded-lg shadow-lg shadow-zinc-200/50">
       <div className="relative flex flex-col w-full ">
         <div className="relative flex flex-col">
           <h1 className="text-sm font-semibold text-zinc-800 capitalize">
@@ -49,7 +49,7 @@ export default function SectionActivity({
           {totalUpdate.length > 0 && (
             <div className="flex justify-between items-center">
               <div className="flex -space-x-3" key={Math.random()}>
-                {totalUpdate.map((item) => (
+                {totalUpdate.slice(0, 7).map((item) => (
                   <img
                     key={Math.random()}
                     src={

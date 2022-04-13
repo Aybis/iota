@@ -1,11 +1,47 @@
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import React from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { capitalize } from '../../helpers/assetHelpers';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function ChartDoughnut({ dataChart, title, type }) {
+  const titleCard = (title) => {
+    switch (title) {
+      case 'WFO':
+        return 'At Office';
+      case 'WFH':
+        return 'At Home';
+      case 'sppd':
+        return 'Buss. Trip';
+      case 'SPPD':
+        return 'Buss. Trip';
+      case 'izin':
+        return 'Permit';
+      case 'Izin':
+        return 'Permit';
+      case 'absent':
+        return 'Tidak Absen';
+      case 'hadir':
+        return 'Kehadiran';
+      case 'cuti':
+        return 'Leave';
+      case 'sakit':
+        return 'Sick';
+      case 'Cuti':
+        return 'Leave';
+      case 'Sakit':
+        return 'Sick';
+      case 'kehadiran':
+        return 'Presence';
+
+      case 'Tidak Absen':
+        return 'Absent';
+
+      default:
+        return title;
+    }
+  };
+
   const options = {
     mainAspectRatio: false,
     cutout: '80%',
@@ -39,7 +75,7 @@ export default function ChartDoughnut({ dataChart, title, type }) {
   };
 
   const data = {
-    labels: dataChart.map((item) => capitalize(item.name)),
+    labels: dataChart.map((item) => titleCard(item.name)),
     datasets: [
       {
         label: '# of Votes',
@@ -62,9 +98,9 @@ export default function ChartDoughnut({ dataChart, title, type }) {
       <Doughnut data={data} options={options} />
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 p-4 bg-slate-50 rounded-md shadow-md shadow-slate-200/50 mt-4">
         {dataChart.map((item) => (
-          <div key={Math.random()} className="flex gap-2">
-            <span className="text-zinc-500 font-medium capitalize">
-              {item.name}
+          <div key={Math.random()} className="flex items-center gap-2">
+            <span className="text-zinc-400 text-sm capitalize">
+              {titleCard(item.name)}
             </span>{' '}
             :{' '}
             <span className="text-zinc-800 font-semibold">

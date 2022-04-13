@@ -32,7 +32,7 @@ export default function FormCheckin({
       <Card>
         <GroupInputRadio
           title="Kondisi"
-          data={['sehat', 'sakit', 'cuti', 'sppd']}
+          data={['sehat', 'sakit', 'cuti', 'SPPD', 'izin']}
           isSelected={state.kondisi}
           handlerOnClick={handlerKondisi}
           setState={setState}

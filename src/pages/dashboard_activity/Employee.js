@@ -217,7 +217,7 @@ export default function Employee() {
                         <div className="flex justify-around bg-zinc-100 px-2 py-1 w-full rounded-md mt-2">
                           <div className="flex flex-col space-y-1">
                             <h1 className="text-xs font-medium text-zinc-400">
-                              To Do
+                              To do
                             </h1>
                             <span className="font-semibold text-zinc-800 text-lg">
                               {item?.todo?.length}

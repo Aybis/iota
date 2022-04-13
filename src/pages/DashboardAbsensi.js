@@ -21,17 +21,17 @@ export default function DashboardAbsensi() {
 
   const dataSubMenu = [
     {
-      name: 'Harian',
+      name: 'Daily',
       link: '/absensi',
       url: '/absensi',
     },
     {
-      name: 'Bulanan',
+      name: 'Monthly',
       link: 'bulanan',
       url: '/absensi/bulanan',
     },
     {
-      name: 'Karyawan',
+      name: 'Employee',
       link: 'karyawan',
       url: '/absensi/karyawan',
     },
@@ -81,7 +81,7 @@ export default function DashboardAbsensi() {
 
   return (
     <Layout>
-      <SectionHeaderPage title={'Dashboard Absensi'} />
+      <SectionHeaderPage title={'Attendance Dashboard'} />
 
       {USER?.profile?.role_id === '3' && (
         <div className="relative m-4">

@@ -74,10 +74,11 @@ export default function DashboardUser() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+  console.log(SUMMARY);
 
   return (
     <Layout>
-      <SectionHeaderPage title={'Dashboard Absensi Personal'} />
+      <SectionHeaderPage title={'Personal Attendance Dashboard'} />
       <div className="relative mx-auto container px-4 pt-4 lg:pt-8 lg:px-0 max-w-7xl">
         <h1 className="text-zinc-900 font-semibold lg:text-lg">Summary</h1>
       </div>
@@ -109,7 +110,7 @@ export default function DashboardUser() {
           </div>
           <div className="relative pl-4">
             <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
-              Kehadiran
+              Presence
             </h4>
             <h1 className="text-zinc-900 font-bold text-xl mt-3">
               {SUMMARY?.kehadiran}
@@ -117,7 +118,7 @@ export default function DashboardUser() {
           </div>
           <div className="relative pl-4 border-l border-zinc-100 ">
             <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
-              Keterangan
+              Explanation
             </h4>
             <h1 className="text-zinc-900 font-bold text-xl mt-3">
               {SUMMARY?.keterangan}
@@ -125,7 +126,7 @@ export default function DashboardUser() {
           </div>
           <div className="relative pl-4 border-l border-zinc-100 ">
             <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
-              Terlambat
+              Late
             </h4>
             <h1 className="text-zinc-900 font-bold text-xl mt-3">
               {SUMMARY?.terlambat}
@@ -133,7 +134,7 @@ export default function DashboardUser() {
           </div>
           <div className="relative pl-4 border-l border-zinc-100 ">
             <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
-              Tdk Absen
+              Absent
             </h4>
             <h1 className="text-zinc-900 font-bold text-xl mt-3">
               {SUMMARY?.absent}
@@ -156,20 +157,20 @@ export default function DashboardUser() {
 
       {/* Chart  */}
       <div className="relative my-8 px-4 lg:px-0 container mx-auto max-w-7xl">
-        <h1 className="text-zinc-900 font-semibold lg:text-lg">Performansi</h1>
+        <h1 className="text-zinc-900 font-semibold lg:text-lg">Performance</h1>
 
         <div className="grid lg:grid-cols-3 gap-4 lg:gap-6 mt-4">
           <div className="bg-white rounded-md p-4">
             {SUMMARY?.isLoading ? (
               <div className="flex justify-center items-center">
-                <Loading height={6} width={6} color={'text-blue-500'} />
+                <Loading color={'text-blue-500'} />
               </div>
             ) : (
-              SUMMARY?.work?.length > 0 && (
-                <ChartGauge
-                  dataChart={SUMMARY?.work}
-                  title={'Flexible Working Arrangement (FWA)'}
-                  type="hari"
+              SUMMARY?.kehadiran && (
+                <ChartDoughnut
+                  dataChart={SUMMARY?.summary?.kehadiran}
+                  type={'day'}
+                  title={'Attendance Explanation'}
                 />
               )
             )}
@@ -183,38 +184,18 @@ export default function DashboardUser() {
               <ChartGauge
                 dataChart={[
                   {
-                    name: 'Hadir',
+                    name: 'Presence',
                     value: SUMMARY?.kehadiran ?? 0,
                   },
                   {
-                    name: 'Tidak',
+                    name: 'Absent',
                     value: SUMMARY?.absent ?? 0,
                   },
                 ]}
-                title={'Kehadiran Kerja'}
-                type="hari"
+                title={'Attendance'}
+                type="days"
                 isNegative={true}
               />
-            )}
-          </div>
-          <div className="bg-white rounded-md p-4">
-            {SUMMARY?.isLoading ? (
-              <div className="flex justify-center items-center">
-                <Loading color={'text-blue-500'} />
-              </div>
-            ) : (
-              SUMMARY?.kehadiran && (
-                <ChartDoughnut
-                  dataChart={[
-                    {
-                      name: 'sehat',
-                      value: SUMMARY?.kehadiran,
-                    },
-                  ].concat(SUMMARY?.status)}
-                  type={'hari'}
-                  title={'Keterangan Absensi'}
-                />
-              )
             )}
           </div>
         </div>

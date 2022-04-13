@@ -1,4 +1,7 @@
-import { getImageFromStorage, imageApi } from '../../helpers/assetHelpers';
+import {
+  getImageFromAssets,
+  getImageFromStorage,
+} from '../../helpers/assetHelpers';
 import { convertDate } from '../../helpers/convertDate';
 
 export default function ReportAbsen({
@@ -23,9 +26,9 @@ export default function ReportAbsen({
         className="h-16 w-16 lg:h-24 lg:w-24 rounded-md object-cover cursor-pointer shadow-md shadow-zinc-200/50"
         src={
           image === '' || image === null
-            ? imageApi('NF')
+            ? getImageFromAssets('assets/nfimage.jpeg')
             : image === 'By system'
-            ? imageApi('NF')
+            ? getImageFromAssets('assets/nfimage.jpeg')
             : getImageFromStorage(image)
         }
         alt={Math.random()}

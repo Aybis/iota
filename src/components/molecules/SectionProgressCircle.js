@@ -1,7 +1,16 @@
 import ReactCircularSlider from '@fseehawer/react-circular-slider';
 import React from 'react';
 
-export default function SectionProgressCircle({ value, total }) {
+export default function SectionProgressCircle({
+  value,
+  total,
+  labelColor = '#FFF',
+  width = 100,
+  fontSize = '2rem',
+  colorProgress = '#fffbeb',
+  colorFinish = '#f59e0b',
+  colorStart = '#fcd34d',
+}) {
   let arr = [];
 
   Array.from({ length: 101 }).map((item, index) => arr.push(`${index}%`));
@@ -9,17 +18,17 @@ export default function SectionProgressCircle({ value, total }) {
   return (
     <div>
       <ReactCircularSlider
-        width={100}
+        width={width}
         label=" "
         verticalOffset="0"
-        labelColor="#fff"
+        labelColor={labelColor}
         knobColor="#005a58"
-        progressColorFrom="#fcd34d"
-        progressColorTo="#f59e0b"
+        progressColorFrom={colorStart}
+        progressColorTo={colorFinish}
         progressSize={10}
-        trackColor="#fffbeb"
+        trackColor={colorProgress}
         trackSize={5}
-        valueFontSize="2rem"
+        valueFontSize={fontSize}
         max={100}
         min={0}
         data={arr} //...

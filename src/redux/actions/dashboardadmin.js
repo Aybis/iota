@@ -169,6 +169,7 @@ export const fetchDashboardHarian = (data) => async (dispatch) => {
       },
     })
     .then((res) => {
+      console.log(res.data);
       return res.data;
     })
     .catch((err) => {
@@ -199,13 +200,14 @@ export const fetchDashboardHarian = (data) => async (dispatch) => {
     setReportKehadiran([
       {
         name: 'Hadir',
-        value: result.kehadiran.wfh.value + result.kehadiran.wfo.value,
-        users: result.kehadiran.wfh.users.concat(result.kehadiran.wfo.users),
-      },
-      {
-        name: 'Terlambat',
-        value: result.kehadiran.telat.value,
-        users: result.kehadiran.telat.users,
+        value:
+          result.kehadiran.wfh.value +
+          result.kehadiran.wfo.value +
+          result.kehadiran.sppd.value,
+        users: result.kehadiran.wfh.users.concat(
+          result.kehadiran.wfo.users,
+          result.kehadiran.sppd.users,
+        ),
       },
       {
         name: 'Keterangan',
@@ -217,6 +219,11 @@ export const fetchDashboardHarian = (data) => async (dispatch) => {
           result.kehadiran.cuti.users,
           result.kehadiran.sppd.users,
         ),
+      },
+      {
+        name: 'Terlambat',
+        value: result.kehadiran.telat.value,
+        users: result.kehadiran.telat.users,
       },
       {
         name: 'Belum Absen',
@@ -239,6 +246,16 @@ export const fetchDashboardHarian = (data) => async (dispatch) => {
   dispatch(setReportUnit(result.unit));
   dispatch(
     setReportKeterangan([
+      {
+        name: 'WFH',
+        value: result.kehadiran.wfh.value,
+        users: result.kehadiran.wfh.users,
+      },
+      {
+        name: 'WFO',
+        value: result.kehadiran.wfo.value,
+        users: result.kehadiran.wfo.users,
+      },
       {
         name: 'SPPD',
         value: result.kehadiran.sppd.value,
@@ -303,12 +320,12 @@ export const fetchDashboardBulanan = (data) => async (dispatch) => {
       value: result.wfh + result.wfo,
     },
     {
-      name: 'terlambat',
-      value: result.telat ?? 0,
-    },
-    {
       name: 'keterangan',
       value: result.cuti + result.sakit + result.sppd ?? 0,
+    },
+    {
+      name: 'terlambat',
+      value: result.telat ?? 0,
     },
     {
       name: 'Tidak Absen',
@@ -318,6 +335,18 @@ export const fetchDashboardBulanan = (data) => async (dispatch) => {
 
   let dataKeteranganBulanan = [
     {
+      name: 'WFH',
+      value: result.wfh ?? 0,
+    },
+    {
+      name: 'WFO',
+      value: result.wfo ?? 0,
+    },
+    {
+      name: 'SPPD',
+      value: result.sppd ?? 0,
+    },
+    {
       name: 'Sakit',
       value: result.sakit ?? 0,
     },
@@ -326,8 +355,8 @@ export const fetchDashboardBulanan = (data) => async (dispatch) => {
       value: result.cuti ?? 0,
     },
     {
-      name: 'SPPD',
-      value: result.sppd ?? 0,
+      name: 'Izin',
+      value: result.izin ?? 0,
     },
   ];
 

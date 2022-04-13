@@ -28,13 +28,25 @@ export default function SectionSummary({
       case 'WFH':
         return 'At Home';
       case 'sppd':
-        return 'SPPD';
+        return 'Buss. Trip';
+      case 'SPPD':
+        return 'Buss. Trip';
       case 'izin':
-        return 'Ijin';
+        return 'Permit';
+      case 'Izin':
+        return 'Permit';
       case 'absent':
         return 'Tidak Absen';
       case 'hadir':
         return 'Kehadiran';
+      case 'cuti':
+        return 'Leave';
+      case 'sakit':
+        return 'Sick';
+      case 'Cuti':
+        return 'Leave';
+      case 'Sakit':
+        return 'Sick';
 
       default:
         return title;

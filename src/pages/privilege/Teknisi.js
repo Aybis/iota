@@ -6,6 +6,15 @@ import {
 } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  SectionProgressCircle,
+  SkeletonTask,
+} from '../../components/molecules';
+import SectionActivity from '../../components/SectionActivity';
+import {
+  getImageFromAssets,
+  imageApiAvatarUser,
+} from '../../helpers/assetHelpers';
 import { convertDate } from '../../helpers/convertDate';
 import { checkAbsensi } from '../../redux/actions/absen';
 import {
@@ -16,16 +25,6 @@ import {
 } from '../../redux/actions/activity';
 import Layout from '../includes/Layout';
 import Profile from '../Profile';
-import {
-  getImageFromAssets,
-  imageApiAvatarUser,
-} from '../../helpers/assetHelpers';
-import { Loading } from '../../components/atoms';
-import {
-  SectionProgressCircle,
-  SkeletonTask,
-} from '../../components/molecules';
-import SectionActivity from '../../components/SectionActivity';
 
 export default function Teknisi() {
   const USER = useSelector((state) => state.user);
@@ -33,7 +32,6 @@ export default function Teknisi() {
   const [tabActive, setTabActive] = useState(1);
   const [isLoading, setisLoading] = useState(false);
   const [profile, setprofile] = useState(false);
-  const [dataActivity, setdataActivity] = useState([]);
   const dispatch = useDispatch();
 
   const tabNavigation = [
@@ -58,19 +56,6 @@ export default function Teknisi() {
     setTabActive(item.id);
     setisLoading(true);
 
-    if (item.id === 1) {
-      setdataActivity(
-        ACTIVITY?.activitiesByUserPending?.filter(
-          (item) =>
-            convertDate('tanggalHari', item.created_at) !==
-            convertDate('tanggalHari'),
-        ),
-      );
-    } else if (item.id === 2) {
-      setdataActivity(ACTIVITY?.activitiesByUserProgress);
-    } else if (item.id === 3) {
-      setdataActivity(ACTIVITY?.activitiesByUserDone);
-    }
     setTimeout(() => {
       setisLoading(false);
     }, 200);
@@ -91,18 +76,6 @@ export default function Teknisi() {
         user_id: USER?.profile?.id,
         date: convertDate('tanggalFormat'),
       }),
-    );
-
-    setdataActivity(
-      tabActive === 1
-        ? ACTIVITY?.activitiesByUserPending?.filter(
-            (item) =>
-              convertDate('tanggalHari', item.created_at) !==
-              convertDate('tanggalHari'),
-          )
-        : tabActive === 2
-        ? ACTIVITY?.activitiesByUserProgress
-        : ACTIVITY?.activitiesByUserDone,
     );
 
     dispatch(checkAbsensi(USER?.profile?.id));
@@ -280,41 +253,52 @@ export default function Teknisi() {
             ))}
           </div>
 
-          {ACTIVITY?.isLoading ? (
-            <div className="flex justify-center items-center p-4">
-              <Loading height={5} width={5} />
-            </div>
-          ) : (
-            <div className="relative bg-gradient-to-b from-zinc-100 to-zinc-50 p-4 scroll-smooth transition-all duration-300 ease-in-out">
-              <div className="relative">
+          <div className="relative bg-gradient-to-b from-zinc-100 to-zinc-50 p-4 scroll-smooth transition-all duration-300 ease-in-out">
+            {ACTIVITY?.isLoading ? (
+              <SkeletonTask />
+            ) : (
+              <div className="grid grid-cols-1 gap-4 min-h-full max-h-fit transition-all duration-300 ease-in-out scroll-smooth">
                 {isLoading ? (
                   <SkeletonTask />
+                ) : (tabActive === 1
+                    ? ACTIVITY?.activitiesByUserPending?.filter(
+                        (item) =>
+                          convertDate('tanggalHari', item.created_at) !==
+                          convertDate('tanggalHari'),
+                      )
+                    : tabActive === 2
+                    ? ACTIVITY?.activitiesByUserProgress
+                    : ACTIVITY?.activitiesByUserDone
+                  )?.length > 0 ? (
+                  (tabActive === 1
+                    ? ACTIVITY?.activitiesByUserPending?.filter(
+                        (item) =>
+                          convertDate('tanggalHari', item.created_at) !==
+                          convertDate('tanggalHari'),
+                      )
+                    : tabActive === 2
+                    ? ACTIVITY?.activitiesByUserProgress
+                    : ACTIVITY?.activitiesByUserDone
+                  ).map((item) => (
+                    <SectionActivity
+                      handlerClick={() => dispatch(setTempAct(item))}
+                      key={Math.random()}
+                      idActivity={item?.id}
+                      totalUpdate={item?.progress_detail}
+                      date={item?.created_at}
+                      desc={item?.description}
+                      title={item?.title}
+                      progress={item?.progress}
+                    />
+                  ))
                 ) : (
-                  <div className="grid grid-cols-1 gap-4 min-h-full max-h-fit transition-all duration-300 ease-in-out scroll-smooth">
-                    {ACTIVITY?.activitiesByUserProgress ||
-                    dataActivity?.length > 0 ? (
-                      dataActivity?.map((item) => (
-                        <SectionActivity
-                          handlerClick={() => dispatch(setTempAct(item))}
-                          key={Math.random()}
-                          idActivity={item?.id}
-                          totalUpdate={item?.progress_detail}
-                          date={item?.created_at}
-                          desc={item?.description}
-                          title={item?.title}
-                          progress={item?.progress}
-                        />
-                      ))
-                    ) : (
-                      <div className="flex justify-center items-center p-4 text-sm text-zinc-500">
-                        Tidak ada data
-                      </div>
-                    )}
+                  <div className="p-4 text-sm flex justify-center items-center text-zinc-400">
+                    Tidak ada data
                   </div>
                 )}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </>
     </Layout>

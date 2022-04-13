@@ -1,35 +1,33 @@
-import { ArrowNarrowLeftIcon } from '@heroicons/react/solid';
-import { Slider } from '@mui/material';
-import Compressor from 'compressorjs';
+import {
+  ArrowNarrowLeftIcon,
+  PencilIcon,
+  PlusIcon,
+} from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import {
-  SectionActivity,
-  SectionHistoryActivity,
-  SectionTextArea,
-} from '../components';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { SectionHistoryActivity, SectionTextArea } from '../components';
 import { Loading, Modals } from '../components/atoms';
+import { SectionProgressCircle } from '../components/molecules';
 import {
   getImageFromAssets,
   getImageFromStorage,
 } from '../helpers/assetHelpers';
+import { convertDate } from '../helpers/convertDate';
 import {
   fetchHistoryProgress,
-  insertProgressActivity,
+  updateActivity,
 } from '../redux/actions/activity';
 import Layout from './includes/Layout';
 
 export default function DetailActivity() {
   const navigate = useNavigate();
   const { activity } = useParams();
-  const [image, setImage] = useState(null);
-  const [isSubmit, setisSubmit] = useState(false);
-  const [fileName, setfileName] = useState(null);
+  const [showModalUpdated, setshowModalUpdated] = useState(false);
   const ACTIVITY = useSelector((state) => state.activity);
   const USER = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
+  const [isLoading, setisLoading] = useState(false);
   const [showModal, setshowModal] = useState(false);
   const [imageSource, setImageSource] = useState(null);
 
@@ -38,152 +36,154 @@ export default function DetailActivity() {
     setImageSource(item.photo);
   };
 
-  const [input, setinput] = useState({
-    progress: ACTIVITY?.tempActivities?.progress,
+  const handlerClickShowModalUpdate = () => {
+    setshowModalUpdated(true);
+    formInput.description = ACTIVITY?.historyActivity?.description;
+    formInput.title = ACTIVITY?.historyActivity?.title;
+  };
+
+  const [formInput, setformInput] = useState({
+    title: '',
     description: '',
-    photo: '',
-    activity_id: activity,
+    user_id: USER?.profile?.id,
   });
 
-  const handlerChange = (event) => {
-    setinput({
-      ...input,
+  const handlerChangInput = (event) => {
+    setformInput({
+      ...formInput,
       [event.target.name]: event.target.value,
     });
   };
 
-  const inputPhoto = (event) => {
-    let file = event.target.files[0] ? event.target.files[0] : null;
-    setfileName(event.target.files[0].name);
-    if (!file) {
-      return;
-    } else {
-      new Compressor(file, {
-        quality: 0.5,
-        convertSize: 5000,
-        success: (result) => {
-          // setPhoto(URL.createObjectURL(result));
-          createImage(result);
-        },
-      });
-    }
-  };
-
-  const createImage = (file) => {
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      setImage(e.target.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handlerSubmitProgress = async (event) => {
-    input.photo = image;
-    setisSubmit(true);
+  const handlerSubmitEditActivity = async (event) => {
+    setisLoading(true);
     event.preventDefault();
 
-    const result = await dispatch(insertProgressActivity(input));
-
-    if (result.status === 200) {
-      input.description = '';
-      input.photo = '';
-      setImage(null);
-      setfileName(null);
-      setisSubmit(false);
-    } else {
-      setfileName(null);
-      setisSubmit(false);
-    }
+    await dispatch(updateActivity(formInput, activity))
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(fetchHistoryProgress(activity));
+        }
+        setisLoading(false);
+      })
+      .catch((err) => {
+        setisLoading(false);
+      });
   };
 
   useEffect(() => {
     dispatch(fetchHistoryProgress(activity));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [dispatch, activity]);
 
-  return (
+  return ACTIVITY?.isLoading ? (
+    <div className="relative min-h-screen flex justify-center items-center">
+      <Loading />
+    </div>
+  ) : (
     <Layout showBottomBar={false}>
       {/* Section Header */}
-      <div className="relative mx-4 my-4 flex justify-between">
+      <div className="relative mx-4 mt-6 mb-6 flex items-center justify-between">
         <div
-          className="relative cursor-pointer hover:bg-white rounded-lg transition-all duration-300 ease-out p-2"
+          className="relative cursor-pointer hover:bg-white rounded-lg transition-all duration-300 ease-out text-zinc-600"
           onClick={() => navigate(-1)}>
           <ArrowNarrowLeftIcon className="h-6" />
         </div>
-        <h1 className="text-lg font-semibold text-zinc-800">Activity Detail</h1>
-        <div className="relative">
-          <ArrowNarrowLeftIcon className="h-6 text-white" />
+        {ACTIVITY?.historyActivity?.progress < 100 && (
+          <button
+            onClick={() => handlerClickShowModalUpdate()}
+            className="h-8 w-8 rounded-lg bg-green-600 flex justify-center items-center shadow-lg shadow-green-500/50">
+            <PencilIcon className="h-6 text-white" />
+          </button>
+        )}
+      </div>
+
+      <div className="relative flex justify-between my-4 p-4">
+        <div className="flex flex-col flex-none w-64">
+          <h1 className="text-lg font-semibold text-zinc-700 capitalize">
+            {ACTIVITY?.historyActivity?.title}
+          </h1>
+          <p className="text-xs text-zinc-400 mt-1">
+            {convertDate('namaHari', ACTIVITY?.historyActivity?.created_at)},{' '}
+            {`${convertDate(
+              'tanggal',
+              ACTIVITY?.historyActivity?.created_at,
+            )} ${convertDate(
+              'namaBulan',
+              ACTIVITY?.historyActivity?.created_at,
+            )} ${convertDate('tahun', ACTIVITY?.historyActivity?.created_at)}`}
+          </p>
+
+          <div className="relative mt-4 flex items-center">
+            {ACTIVITY?.historyActivity?.progress_detail?.length > 0 ? (
+              <div className="flex justify-between items-center">
+                <div className="flex -space-x-3" key={Math.random()}>
+                  {ACTIVITY?.historyActivity?.progress_detail
+                    ?.slice(0, 4)
+                    .map((item) => (
+                      <img
+                        key={Math.random()}
+                        src={
+                          item.photo
+                            ? getImageFromStorage(item.photo)
+                            : getImageFromAssets('/assets/nfimage.jpeg')
+                        }
+                        alt=""
+                        className="h-8 w-8 rounded-full object-cover ring-2 ring-zinc-100 object-top"
+                      />
+                    ))}
+                </div>
+                <p className="text-zinc-500 text-xs font-medium ml-1">
+                  {'  '}+{ACTIVITY?.historyActivity?.progress_detail?.length}{' '}
+                  updated
+                </p>
+              </div>
+            ) : (
+              <p className="text-xs text-zinc-400 font-light"></p>
+            )}
+          </div>
+        </div>
+        <div className="text-black mt-2 mr-4">
+          <SectionProgressCircle
+            fontSize="1.2rem"
+            value={ACTIVITY?.historyActivity?.progress}
+            total={100}
+            width={75}
+            colorFinish="#16a34a"
+            colorStart="#fbbf24"
+            colorProgress="#e7e5e4"
+            labelColor="#27272a"
+          />
         </div>
       </div>
 
-      {/* Section Detail */}
-      {ACTIVITY?.isLoading ? (
-        <div className="flex justify-center items-center p-4">
-          <Loading height={6} width={6} />
-        </div>
-      ) : ACTIVITY?.tempActivities?.user_id === USER?.profile?.id &&
-        ACTIVITY?.historyActivity?.progress < 100 ? (
-        <div className="relative mx-4 my-6">
-          <p className="font-semibold text-zinc-800">
-            Update Progress Activity
-          </p>
-          <div className="relative space-y-3 mt-3 bg-white p-4 rounded-lg shadow-lg shadow-zinc-200/30">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-zinc-500">
-                Update Progress
-              </label>
-              <div className="flex space-x-6 items-center px-1">
-                <Slider
-                  onChange={(e) => handlerChange(e)}
-                  value={input?.progress}
-                  aria-label="Progress"
-                  name="progress"
-                  valueLabelDisplay="auto"
-                />
-                <p className="text-sm text-zinc-400 font-medium">
-                  {input?.progress}%
-                </p>
-              </div>
-            </div>
-            <div>
-              <label
-                htmlFor="deskripsi"
-                className="block text-sm font-medium text-zinc-500 mb-3">
-                Progress Description
-              </label>
-              <SectionTextArea
-                handlerChange={handlerChange}
-                valueDescription={input.description}
-                handlerSubmit={handlerSubmitProgress}
-                buttonName="Update Progress"
-                handlerChangePhoto={(e) => inputPhoto(e)}
-                namePhoto={fileName}
-                isLoading={isSubmit}
-              />
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="relative m-4">
-          {ACTIVITY?.isLoading ? (
-            'wait'
-          ) : (
-            <SectionActivity
-              desc={ACTIVITY?.historyActivity?.description}
-              progress={ACTIVITY?.historyActivity?.progress}
-              title={ACTIVITY?.historyActivity?.title}
-              totalUpdate={ACTIVITY?.historyActivity?.progress_detail}
-            />
-          )}
-        </div>
-      )}
+      <div className="relative p-4 -mt-6">
+        <p className="text-sm font-medium text-zinc-800">Description</p>
+        <p className="text-sm text-zinc-400 mt-1">
+          {ACTIVITY?.historyActivity?.description}
+        </p>
+      </div>
+
+      <hr className="mx-4 border-zinc-200" />
 
       <div className="relative my-8 mx-4">
-        <p className="text-sm font-semibold text-zinc-800 mb-4">
-          History Activity
-        </p>
+        <div className="flex justify-between items-center mb-4">
+          <p className="text-sm font-semibold text-zinc-800">
+            History Activity{' '}
+            <span className="ml-1 text-xs bg-blue-400 text-white px-3 py-1 rounded-full">
+              {ACTIVITY?.historyActivity?.progress_detail?.length}
+            </span>
+          </p>
+
+          {ACTIVITY?.historyActivity?.progress < 100 && (
+            <Link
+              to={`/add-progress/${activity}`}
+              className="flex gap-1 items-center text-sm text-blue-600 font-semibold">
+              <PlusIcon className="h-4" />
+              Add Progress
+            </Link>
+          )}
+        </div>
 
         <div className="relative">
           <div className="grid grid-cols-1 gap-4 ">
@@ -201,7 +201,7 @@ export default function DetailActivity() {
               <div
                 key={Math.random()}
                 className="p-5 flex justify-center items-center text-sm text-zinc-500 font-medium">
-                <p>Belum ada progress</p>
+                <p>Haven't progress yet</p>
               </div>
             )}
           </div>
@@ -218,6 +218,27 @@ export default function DetailActivity() {
           alt={imageSource}
           className="rounded-lg object-cover lg:h-96"
         />
+      </Modals>
+
+      <Modals
+        margin={false}
+        dontClose={isLoading}
+        moreClass="rounded-xl"
+        handlerClose={setshowModalUpdated}
+        open={showModalUpdated}
+        title={'Edit Activity'}>
+        <div className="relative">
+          <SectionTextArea
+            isLoading={isLoading}
+            uploadPhoto={false}
+            handlerChange={handlerChangInput}
+            handlerSubmit={handlerSubmitEditActivity}
+            valueDescription={formInput.description}
+            valueTitle={formInput.title}
+            showTitle={true}
+            buttonName="Edit"
+          />
+        </div>
       </Modals>
     </Layout>
   );

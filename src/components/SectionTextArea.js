@@ -25,6 +25,7 @@ export default function SectionTextArea({
               type="text"
               name="title"
               id="title"
+              required
               value={valueTitle}
               onChange={(e) => handlerChange(e)}
               className="block w-full border-0 pt-2.5 text-lg font-medium placeholder-gray-500 focus:ring-0"
@@ -36,7 +37,7 @@ export default function SectionTextArea({
           Description
         </label>
         <textarea
-          rows={2}
+          rows={5}
           name="description"
           id="description"
           onChange={(e) => handlerChange(e)}
@@ -48,12 +49,12 @@ export default function SectionTextArea({
         {/* Spacer element to match the height of the toolbar */}
         <div aria-hidden="true">
           <div className="py-2">
-            <div className="h-9" />
+            <div className="h-4" />
           </div>
           <div className="h-px" />
           <div className="py-2">
             <div className="py-px">
-              <div className="h-9" />
+              <div className="h-4" />
             </div>
           </div>
         </div>
@@ -97,7 +98,7 @@ export default function SectionTextArea({
             <button
               type="submit"
               disabled={isLoading}
-              className="disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              className="disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center px-4 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
               {isLoading && <Loading height={5} width={5} color="text-white" />}
               {buttonName}
             </button>

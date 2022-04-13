@@ -10,8 +10,45 @@ export default function ChartGauge({
   type = '',
   isNegative,
 }) {
+  const titleCard = (title) => {
+    switch (title) {
+      case 'WFO':
+        return 'At Office';
+      case 'WFH':
+        return 'At Home';
+      case 'sppd':
+        return 'Buss. Trip';
+      case 'SPPD':
+        return 'Buss. Trip';
+      case 'izin':
+        return 'Permit';
+      case 'Izin':
+        return 'Permit';
+      case 'absent':
+        return 'Tidak Absen';
+      case 'hadir':
+        return 'Kehadiran';
+      case 'cuti':
+        return 'Leave';
+      case 'sakit':
+        return 'Sick';
+      case 'Cuti':
+        return 'Leave';
+      case 'Sakit':
+        return 'Sick';
+      case 'kehadiran':
+        return 'Presence';
+
+      case 'Tidak Absen':
+        return 'Absent';
+
+      default:
+        return title;
+    }
+  };
+
   const data = {
-    labels: dataChart?.map((item) => item.name),
+    labels: dataChart?.map((item) => titleCard(item.name)),
     datasets: [
       {
         label: '# of Work',
@@ -69,9 +106,9 @@ export default function ChartGauge({
       <Doughnut data={data} options={options} />
       <div className="flex justify-evenly items-center p-4 bg-slate-50 rounded-md shadow-md shadow-slate-200/50 mt-4">
         {dataChart.map((item) => (
-          <div key={Math.random()} className="flex gap-2">
-            <span className="text-zinc-500 font-medium capitalize">
-              {item.name}
+          <div key={Math.random()} className="flex items-center gap-2">
+            <span className="text-zinc-500 text-sm capitalize">
+              {titleCard(item.name)}
             </span>{' '}
             :{' '}
             <span className="text-zinc-800 font-semibold">

@@ -385,21 +385,28 @@ export const insertActivity = (data) => async (dispatch) => {
     });
 };
 
-export const updateActivity = (data) => async (dispatch) => {
+export const updateActivity = (data, id) => async (dispatch) => {
   setHeader();
 
   return iota
-    .updateActivity({
-      params: {
-        description: data.description,
-        title: data.title,
-      },
-    })
+    .updateActivity(data, id)
     .then((res) => {
       console.log(res);
+      swal(
+        'Yeay',
+        res?.data?.message ?? 'Update Actiivty Berhasil!',
+        'success',
+      );
+      return res;
     })
     .catch((err) => {
       console.log(err.response);
+      swal(
+        'Oh no',
+        err?.response?.data?.message ?? 'Something Happened',
+        'error',
+      );
+      return err.response;
     });
 };
 
@@ -414,7 +421,6 @@ export const insertProgressActivity = (data) => async (dispatch) => {
         res?.data?.message ?? 'Progress berhasil ditambahkan!',
         'success',
       );
-
       dispatch(fetchHistoryProgress(data.activity_id));
 
       return res;

@@ -1,9 +1,15 @@
 import { ArrowUpIcon } from '@heroicons/react/outline';
-import { UserCircleIcon } from '@heroicons/react/solid';
+import { DocumentAddIcon, UserCircleIcon } from '@heroicons/react/solid';
 import { motion } from 'framer-motion';
 import React from 'react';
 
-export default function InputPhoto({ photo, handlerChangPhoto, typePhoto }) {
+export default function InputPhoto({
+  photo,
+  handlerChangPhoto,
+  typePhoto,
+
+  label = 'Take a Selfie',
+}) {
   return (
     <motion.div whileTap={{ scale: 0.85 }} className="flex flex-col text-sm">
       <label htmlFor="image" className="text-gray-500 font-semibold rounded-lg">
@@ -18,13 +24,20 @@ export default function InputPhoto({ photo, handlerChangPhoto, typePhoto }) {
           />
         ) : (
           <div className="flex flex-col justify-center items-center bg-gray-100 p-2 rounded-lg">
-            <UserCircleIcon
-              tabIndex="0"
-              className="h-12 text-gray-400 cursor-pointer"
-            />
+            {typePhoto === 'evidence' ? (
+              <DocumentAddIcon
+                tabIndex="0"
+                className="h-12 text-gray-400 cursor-pointer"
+              />
+            ) : (
+              <UserCircleIcon
+                tabIndex="0"
+                className="h-12 text-gray-400 cursor-pointer"
+              />
+            )}
             <ArrowUpIcon className="h-3 text-gray-400 animate-bounce mt-2" />
             <p className="text-xs text-gray-400 text-center  font-medium">
-              Take a Selfie
+              {label}
             </p>
           </div>
         )}

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loading } from '../../components/atoms';
 import {
+  ChartDoughnut,
+  ChartGauge,
   SectionFilterMonthYear,
   SectionSummary,
 } from '../../components/molecules';
@@ -109,26 +111,59 @@ export default function Bulanan() {
           </div>
 
           <div className="relative my-8 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:px-0 container mx-auto max-w-7xl">
-            {DASHBOARD?.reportKerjaBulanan?.length > 0 &&
-              DASHBOARD?.reportKerjaBulanan?.map((item) => (
-                <SectionSummary
-                  key={Math.random()}
-                  type="karyawan"
-                  data={item}
-                  handlerClick={() => null}
-                  isEvent={true}
-                />
-              ))}
             {DASHBOARD?.reportKeteranganBulanan?.length > 0 &&
               DASHBOARD?.reportKeteranganBulanan?.map((item) => (
                 <SectionSummary
                   key={Math.random()}
-                  type="karyawan"
+                  type="employee"
                   data={item}
                   handlerClick={() => null}
                   isEvent={true}
                 />
               ))}
+          </div>
+
+          {/* Chart  */}
+          <div className="relative my-8 lg:px-0 container mx-auto max-w-7xl">
+            <h1 className="text-zinc-900 font-semibold lg:text-lg">
+              Performance
+            </h1>
+
+            <div className="grid lg:grid-cols-3 gap-4 lg:gap-6 mt-4">
+              <div className="bg-white rounded-md p-4">
+                {DASHBOARD?.isLoading ? (
+                  <div className="flex justify-center items-center">
+                    <Loading height={6} width={6} color={'text-blue-500'} />
+                  </div>
+                ) : (
+                  DASHBOARD?.reportKeteranganBulanan && (
+                    <ChartDoughnut
+                      dataChart={DASHBOARD?.reportKeteranganBulanan}
+                      type={'emp'}
+                      title={'Attendance Explanation'}
+                    />
+                  )
+                )}
+              </div>
+              <div className="bg-white rounded-md p-4">
+                {DASHBOARD?.isLoading ? (
+                  <div className="flex justify-center items-center">
+                    <Loading height={6} width={6} color={'text-blue-500'} />
+                  </div>
+                ) : (
+                  <ChartGauge
+                    dataChart={DASHBOARD?.reportKehadiranBulanan?.filter(
+                      (item) =>
+                        item.name === 'kehadiran' ||
+                        item.name === 'Tidak Absen',
+                    )}
+                    title={'Attendance'}
+                    type="emp"
+                    isNegative={true}
+                  />
+                )}
+              </div>
+            </div>
           </div>
         </>
       )}

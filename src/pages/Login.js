@@ -114,7 +114,6 @@ export default function Login() {
                       <input
                         name="nik"
                         type="text"
-                        autoComplete="off"
                         onChange={(e) => handlerOnchange(e)}
                         value={input.nik}
                         required

@@ -21,7 +21,7 @@ export default {
   // 1.progress 2.description 3.photo 4. activity_id
   addProgressActivity: (data) => axios.post('activity/progress', data),
   // 1.title 2.description
-  updateActivity: (data, id) => axios.post(`activity/${id}`, data),
+  updateActivity: (data, id) => axios.patch(`activity/${id}`, data),
 
   // regional
   regional: () => axios.get('regional'),

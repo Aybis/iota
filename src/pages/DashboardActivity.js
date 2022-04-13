@@ -22,17 +22,17 @@ export default function DashboardActivity() {
   const navigate = useNavigate();
   const dataSubMenu = [
     {
-      name: 'Harian',
+      name: 'Daily',
       link: '/activities',
       url: '/activities',
     },
     {
-      name: 'Bulanan',
+      name: 'Monthly',
       link: 'bulanan',
       url: '/activities/bulanan',
     },
     {
-      name: 'Karyawan',
+      name: 'Employee',
       link: 'karyawan',
       url: '/activities/karyawan',
     },
@@ -126,7 +126,7 @@ export default function DashboardActivity() {
 
   return (
     <Layout>
-      <SectionHeaderPage title={'Dashboard Activity'} />
+      <SectionHeaderPage title={'Activity Dashboard'} />
 
       {USER?.profile?.role_id === '3' && (
         <div className="relative m-4">

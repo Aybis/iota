@@ -85,10 +85,10 @@ export const fetchDataSummary = (data) => async (dispatch) => {
   dispatch(setStatus(status));
   dispatch(
     setSummary({
-      kehadiran: work.concat(status),
+      kehadiran: work.concat(status.reverse()),
       absensi: {
         hadir: hadir,
-        keterangan: sakit + ijin + sppd + cuti,
+        keterangan: sakit + ijin + cuti + sppd,
         terlambat: telat,
         absen: absent,
       },
@@ -97,7 +97,7 @@ export const fetchDataSummary = (data) => async (dispatch) => {
   dispatch(setAbsent(absent));
   dispatch(setKehadiran(hadir));
   dispatch(setTerlambat(telat));
-  dispatch(setKeterangan(sakit + ijin + sppd + cuti));
+  dispatch(setKeterangan(sakit + ijin + cuti + sppd));
   dispatch(setLoading(false));
 
   return result;
