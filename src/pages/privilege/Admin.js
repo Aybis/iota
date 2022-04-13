@@ -59,8 +59,6 @@ export default function Admin() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
-  console.log(ACTIVITY?.dashboardActPending);
-
   return (
     <Layout>
       <Profile open={profile} handlerOpen={() => setprofile(false)} />

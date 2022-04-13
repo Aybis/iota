@@ -17,7 +17,7 @@ export default function Daily() {
   const USER = useSelector((state) => state.user);
   const ACTIVITY = useSelector((state) => state.activity);
   const dispatch = useDispatch();
-  console.log(ACTIVITY);
+
   useEffect(() => {
     dispatch(
       fetchActivityProgressDashboard({

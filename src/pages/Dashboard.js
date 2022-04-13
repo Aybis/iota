@@ -74,7 +74,6 @@ export default function DashboardUser() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
-  console.log(SUMMARY);
 
   return (
     <Layout>

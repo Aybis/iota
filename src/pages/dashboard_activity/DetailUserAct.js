@@ -60,7 +60,6 @@ export default function DetailUserAct() {
     }, 200);
   };
 
-  console.log(ACTIVITY);
   return (
     <Layout showBottomBar={false}>
       {/* Section Header */}
