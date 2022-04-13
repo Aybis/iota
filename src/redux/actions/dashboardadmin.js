@@ -317,7 +317,7 @@ export const fetchDashboardBulanan = (data) => async (dispatch) => {
   let dataKehadiranBulanan = [
     {
       name: 'kehadiran',
-      value: result.wfh + result.wfo,
+      value: result.wfh + result.wfo + result.sppd,
     },
     {
       name: 'keterangan',
