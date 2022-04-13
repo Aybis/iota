@@ -7,6 +7,42 @@ import React from 'react';
 import { convertDate } from '../../helpers/convertDate';
 
 export default function SectionReportMingguan({ item }) {
+  const titleCard = (title) => {
+    switch (title) {
+      case 'WFO':
+        return 'At Office';
+      case 'WFH':
+        return 'At Home';
+      case 'sppd':
+        return 'Buss. Trip';
+      case 'SPPD':
+        return 'Buss. Trip';
+      case 'izin':
+        return 'Permit';
+      case 'Izin':
+        return 'Permit';
+      case 'absent':
+        return 'Tidak Absen';
+      case 'hadir':
+        return 'Kehadiran';
+      case 'cuti':
+        return 'Leave';
+      case 'sakit':
+        return 'Sick';
+      case 'Cuti':
+        return 'Leave';
+      case 'Sakit':
+        return 'Sick';
+      case 'kehadiran':
+        return 'Presence';
+
+      case 'Tidak Absen':
+        return 'Absent';
+
+      default:
+        return title;
+    }
+  };
   return (
     <div className="flex flex-none w-40 lg:w-auto flex-col gap-3 bg-white p-4 rounded-lg shadow-lg shadow-zinc-200/50">
       <span
@@ -28,13 +64,7 @@ export default function SectionReportMingguan({ item }) {
         )}
       </span>
       <p className="font-semibold text-zinc-900 text-sm lg:text-lg capitalize">
-        {item.kehadiran
-          ? item.kehadiran === 'WFH'
-            ? 'At Home'
-            : 'At Office'
-          : item.kondisi === 'sppd'
-          ? 'SPPD'
-          : item.kondisi}
+        {item.kehadiran ? titleCard(item.kehadiran) : titleCard(item.kondisi)}
       </p>
       <p className="font-medium text-sm lg:text-base text-zinc-500">
         {convertDate('tanggalHari', item.created_at)}

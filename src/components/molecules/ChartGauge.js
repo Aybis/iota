@@ -105,7 +105,7 @@ export default function ChartGauge({
     <div className="relative ">
       <Doughnut data={data} options={options} />
       <div className="flex justify-evenly items-center p-4 bg-slate-50 rounded-md shadow-md shadow-slate-200/50 mt-4">
-        {dataChart.map((item) => (
+        {dataChart?.map((item) => (
           <div key={Math.random()} className="flex items-center gap-2">
             <span className="text-zinc-500 text-sm capitalize">
               {titleCard(item.name)}

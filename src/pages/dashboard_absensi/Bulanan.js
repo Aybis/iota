@@ -7,6 +7,7 @@ import {
   SectionFilterMonthYear,
   SectionSummary,
 } from '../../components/molecules';
+import { titleCard } from '../../helpers/assetHelpers';
 import { convertDate } from '../../helpers/convertDate';
 import {
   fetchDashboardBulanan,
@@ -100,7 +101,7 @@ export default function Bulanan() {
               {DASHBOARD?.reportKehadiranBulanan?.map((item) => (
                 <div key={Math.random()} className="relative pl-2">
                   <h4 className="text-zinc-500 font-normal text-xs lg:text-sm capitalize">
-                    {item.name}
+                    {titleCard(item.name)}
                   </h4>
                   <h1 className="text-zinc-900 font-bold text-xl mt-3">
                     {item.value}
@@ -151,16 +152,18 @@ export default function Bulanan() {
                     <Loading height={6} width={6} color={'text-blue-500'} />
                   </div>
                 ) : (
-                  <ChartGauge
-                    dataChart={DASHBOARD?.reportKehadiranBulanan?.filter(
-                      (item) =>
-                        item.name === 'kehadiran' ||
-                        item.name === 'Tidak Absen',
-                    )}
-                    title={'Attendance'}
-                    type="emp"
-                    isNegative={true}
-                  />
+                  DASHBOARD?.reportKehadiranBulanan && (
+                    <ChartGauge
+                      dataChart={DASHBOARD?.reportKehadiranBulanan?.filter(
+                        (item) =>
+                          item.name === 'kehadiran' ||
+                          item.name === 'Tidak Absen',
+                      )}
+                      title={'Attendance'}
+                      type="emp"
+                      isNegative={true}
+                    />
+                  )
                 )}
               </div>
             </div>

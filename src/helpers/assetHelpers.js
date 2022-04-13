@@ -23,3 +23,43 @@ export const capitalize = (str, lower = false) =>
   (lower ? str.toLowerCase() : str).replace(/(?:^|\s|["'([{])+\S/g, (match) =>
     match.toUpperCase(),
   );
+
+export const titleCard = (title) => {
+  switch (title) {
+    case 'WFO':
+      return 'At Office';
+    case 'WFH':
+      return 'At Home';
+    case 'sppd':
+      return 'Buss. Trip';
+    case 'SPPD':
+      return 'Buss. Trip';
+    case 'izin':
+      return 'Permit';
+    case 'Izin':
+      return 'Permit';
+    case 'absent':
+      return 'Tidak Absen';
+    case 'hadir':
+      return 'Kehadiran';
+    case 'cuti':
+      return 'Leave';
+    case 'sakit':
+      return 'Sick';
+    case 'Cuti':
+      return 'Leave';
+    case 'Sakit':
+      return 'Sick';
+    case 'kehadiran':
+      return 'Presence';
+    case 'Tidak Absen':
+      return 'Absent';
+    case 'keterangan':
+      return 'Explanation';
+    case 'terlambat':
+      return 'Late';
+
+    default:
+      return title;
+  }
+};
