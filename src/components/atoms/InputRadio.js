@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import React from 'react';
+import { titleCard } from '../../helpers/assetHelpers';
 
 export default function InputRadio({
   setState,
@@ -26,7 +27,7 @@ export default function InputRadio({
         selected === value.toString()
           ? 'bg-white text-zinc-800 shadow-lg shadow-zinc-300/50'
           : 'bg-zinc-100 text-zinc-500'
-      } py-2 px-2 rounded font-medium text-sm flex justify-center items-center`}>
+      } py-2 px-2 rounded font-medium text-sm flex text-center justify-center items-center`}>
       <input
         type="radio"
         name={name}
@@ -36,7 +37,7 @@ export default function InputRadio({
         x-model="selectedPlan"
         className="hidden"
       />
-      <span className="font-semibold">{label}</span>
+      <span className="font-semibold">{titleCard(label)}</span>
     </motion.label>
   );
 }

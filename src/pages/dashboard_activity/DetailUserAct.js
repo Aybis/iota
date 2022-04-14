@@ -24,7 +24,7 @@ export default function DetailUserAct() {
   const tabNavigation = [
     {
       id: 1,
-      name: 'To Do',
+      name: 'To do',
       title: 'todo',
       total: 30,
       icon: ExclamationIcon,
@@ -68,7 +68,6 @@ export default function DetailUserAct() {
           className="relative flex items-center space-x-1"
           onClick={() => navigate(-1)}>
           <ArrowNarrowLeftIcon className="h-6 to-zinc-600" />
-          <p className="text-xs font-medium text-zinc-600">Kembali</p>
         </div>
         {/* <h1 className="text-lg font-semibold text-zinc-800">Activity Detail</h1> */}
         <div className="relative">
@@ -135,8 +134,8 @@ export default function DetailUserAct() {
                   />
                 ))
               ) : (
-                <div className="text-sm flex justify-center items-center">
-                  Tidak ada data
+                <div className="text-sm flex justify-center items-center text-zinc-500 p-4">
+                  Haven't activity yet
                 </div>
               )}
             </div>

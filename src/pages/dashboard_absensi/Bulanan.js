@@ -16,7 +16,6 @@ import {
 } from '../../redux/actions/dashboardadmin';
 
 export default function Bulanan() {
-  const REGIONAL = useSelector((state) => state.regional);
   const DASHBOARD = useSelector((state) => state.dashboardadmin);
   const USER = useSelector((state) => state.user);
   const [temporary, setTemporary] = useState({
@@ -44,7 +43,10 @@ export default function Bulanan() {
         fetchDashboardBulanan({
           month: event.target.value,
           year: temporary.year,
-          regional_id: REGIONAL?.selectRegional?.id,
+          regional_id:
+            USER?.profile?.regional_id === ''
+              ? DASHBOARD?.regionalSelected?.id
+              : USER?.profile?.regional_id,
         }),
       );
     }
@@ -60,7 +62,10 @@ export default function Bulanan() {
         fetchDashboardBulanan({
           month: temporary.month,
           year: event.target.value,
-          regional_id: REGIONAL?.selectRegional?.id,
+          regional_id:
+            USER?.profile?.regional_id === ''
+              ? DASHBOARD?.regionalSelected?.id
+              : USER?.profile?.regional_id,
         }),
       );
     }
@@ -119,7 +124,7 @@ export default function Bulanan() {
                   type="employee"
                   data={item}
                   handlerClick={() => null}
-                  isEvent={true}
+                  isEvent={false}
                 />
               ))}
           </div>

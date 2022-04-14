@@ -10,3 +10,6 @@ export { default as Time } from './Time';
 export { default as ProgressBar } from './ProgressBar';
 export { default as Dropdown } from './Dropdown';
 export { default as ButtonCustom } from './ButtonCustom';
+export { default as TableHeading } from './TableHeading';
+export { default as TableBody } from './TableBody';
+export { default as TableContent } from './TableContent';

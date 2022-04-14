@@ -219,7 +219,7 @@ export default function Profile({ open, handlerOpen }) {
                             Regional
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 capitalize">
-                            {USER?.profile?.regional ?? '...'}
+                            {USER?.profile?.regional?.alias ?? 'ALL TREG'}
                           </dd>
                         </div>
                         <div>
@@ -227,7 +227,7 @@ export default function Profile({ open, handlerOpen }) {
                             Witel
                           </dt>
                           <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 capitalize">
-                            {USER?.profile?.witel ?? '...'}
+                            {USER?.profile?.witel ?? 'ALL WITEL'}
                           </dd>
                         </div>
                         <div>

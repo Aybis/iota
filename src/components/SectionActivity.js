@@ -24,7 +24,7 @@ export default function SectionActivity({
       onClick={handlerClick ?? null}
       className="relative flex flex-col p-4 bg-white w-full rounded-lg shadow-lg shadow-zinc-200/50">
       <div className="relative flex flex-col w-full ">
-        <div className="relative flex flex-col">
+        <div className="relative flex flex-col flex-none w-64">
           <h1 className="text-sm font-semibold text-zinc-800 capitalize">
             {title}
           </h1>

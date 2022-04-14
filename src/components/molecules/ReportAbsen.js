@@ -59,11 +59,11 @@ export default function ReportAbsen({
               }>
               {type === 'out'
                 ? checkout === 'Normal'
-                  ? 'Disiplin'
-                  : 'Tidak Disiplin'
+                  ? 'Discipline'
+                  : 'Undisciplined'
                 : kehadiran && keterangan
-                ? 'Tidak Disiplin'
-                : 'Disiplin'}
+                ? 'Undisciplined'
+                : 'Discipline'}
             </span>
           )}
         </p>

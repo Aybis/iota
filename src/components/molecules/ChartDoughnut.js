@@ -105,7 +105,10 @@ export default function ChartDoughnut({ dataChart, title, type }) {
             :{' '}
             <span className="text-zinc-800 font-semibold">
               {' '}
-              {item.value} <small className="font-normal">{type}</small>
+              {item.value}{' '}
+              <small className="font-normal">
+                {item.value > 1 ? `${type}s` : type}
+              </small>
             </span>
           </div>
         ))}

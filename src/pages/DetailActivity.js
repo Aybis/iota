@@ -83,22 +83,23 @@ export default function DetailActivity() {
   ) : (
     <Layout showBottomBar={false}>
       {/* Section Header */}
-      <div className="relative mx-4 mt-6 mb-6 flex items-center justify-between">
+      <div className="relative mx-4 mt-6 mb-4 flex items-center justify-between">
         <div
           className="relative cursor-pointer hover:bg-white rounded-lg transition-all duration-300 ease-out text-zinc-600"
           onClick={() => navigate(-1)}>
           <ArrowNarrowLeftIcon className="h-6" />
         </div>
-        {ACTIVITY?.historyActivity?.progress < 100 && (
-          <button
-            onClick={() => handlerClickShowModalUpdate()}
-            className="h-8 w-8 rounded-lg bg-green-600 flex justify-center items-center shadow-lg shadow-green-500/50">
-            <PencilIcon className="h-6 text-white" />
-          </button>
-        )}
+        {ACTIVITY?.historyActivity?.progress < 100 &&
+          USER?.profile?.id === ACTIVITY?.historyActivity?.user_id && (
+            <button
+              onClick={() => handlerClickShowModalUpdate()}
+              className="h-8 w-8 rounded-lg bg-green-600 flex justify-center items-center shadow-lg shadow-green-500/50">
+              <PencilIcon className="h-6 text-white" />
+            </button>
+          )}
       </div>
 
-      <div className="relative flex justify-between my-4 p-4">
+      <div className="relative flex justify-between my-4 px-4">
         <div className="flex flex-col flex-none w-64">
           <h1 className="text-lg font-semibold text-zinc-700 capitalize">
             {ACTIVITY?.historyActivity?.title}
@@ -149,15 +150,15 @@ export default function DetailActivity() {
             value={ACTIVITY?.historyActivity?.progress}
             total={100}
             width={75}
-            colorFinish="#16a34a"
-            colorStart="#fbbf24"
+            colorFinish="#1d4ed8"
+            colorStart="#93c5fd"
             colorProgress="#e7e5e4"
             labelColor="#27272a"
           />
         </div>
       </div>
 
-      <div className="relative p-4 -mt-6">
+      <div className="relative p-4 -mt-3">
         <p className="text-sm font-medium text-zinc-800">Description</p>
         <p className="text-sm text-zinc-400 mt-1">
           {ACTIVITY?.historyActivity?.description}
@@ -169,20 +170,21 @@ export default function DetailActivity() {
       <div className="relative my-8 mx-4">
         <div className="flex justify-between items-center mb-4">
           <p className="text-sm font-semibold text-zinc-800">
-            History Activity{' '}
+            Progress{' '}
             <span className="ml-1 text-xs bg-blue-400 text-white px-3 py-1 rounded-full">
               {ACTIVITY?.historyActivity?.progress_detail?.length}
             </span>
           </p>
 
-          {ACTIVITY?.historyActivity?.progress < 100 && (
-            <Link
-              to={`/add-progress/${activity}`}
-              className="flex gap-1 items-center text-sm text-blue-600 font-semibold">
-              <PlusIcon className="h-4" />
-              Add Progress
-            </Link>
-          )}
+          {ACTIVITY?.historyActivity?.progress < 100 &&
+            USER?.profile?.id === ACTIVITY?.historyActivity?.user_id && (
+              <Link
+                to={`/add-progress/${activity}`}
+                className="flex gap-1 items-center text-sm text-blue-600 font-semibold">
+                <PlusIcon className="h-4" />
+                Add Progress
+              </Link>
+            )}
         </div>
 
         <div className="relative">

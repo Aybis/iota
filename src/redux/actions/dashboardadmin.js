@@ -1,6 +1,9 @@
 import { setHeader } from '../../config/api/constant';
 import iota from '../../config/api/route/iota';
 import * as type from '../types/dashboardadmin';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { convertDate } from '../../helpers/convertDate';
 
 export const setLoading = (data) => ({
   type: type.LOADING,
@@ -213,10 +216,12 @@ export const fetchDashboardHarian = (data) => async (dispatch) => {
         value:
           result.kehadiran.sakit.value +
           result.kehadiran.cuti.value +
-          result.kehadiran.sppd.value,
+          result.kehadiran.sppd.value +
+          result.kehadiran.izin.value,
         users: result.kehadiran.sakit.users.concat(
           result.kehadiran.cuti.users,
           result.kehadiran.sppd.users,
+          result.kehadiran.izin.users,
         ),
       },
       {
@@ -262,8 +267,8 @@ export const fetchDashboardHarian = (data) => async (dispatch) => {
       },
       {
         name: 'Izin',
-        value: 0,
-        users: 0,
+        value: result.kehadiran.izin.value,
+        users: result.kehadiran.izin.users,
       },
       {
         name: 'Cuti',
@@ -320,7 +325,7 @@ export const fetchDashboardBulanan = (data) => async (dispatch) => {
     },
     {
       name: 'keterangan',
-      value: result.cuti + result.sakit + result.sppd ?? 0,
+      value: result.cuti + result.sakit + result.sppd + result.izin ?? 0,
     },
     {
       name: 'terlambat',
@@ -346,16 +351,16 @@ export const fetchDashboardBulanan = (data) => async (dispatch) => {
       value: result.sppd ?? 0,
     },
     {
-      name: 'Sakit',
-      value: result.sakit ?? 0,
+      name: 'Izin',
+      value: result.izin ?? 0,
     },
     {
       name: 'Cuti',
       value: result.cuti ?? 0,
     },
     {
-      name: 'Izin',
-      value: result.izin ?? 0,
+      name: 'Sakit',
+      value: result.sakit ?? 0,
     },
   ];
 
@@ -429,6 +434,65 @@ export const fetchReportKaryawanId = (data) => async (dispatch) => {
 
     const messageError = error?.response.data.message ?? 'Something Happened!';
 
+    return {
+      status: error?.response.status,
+      message: messageError,
+      data: null,
+    };
+  }
+};
+
+export const downloadReportByUnit = async (data) => {
+  const token = Cookies.get('session');
+
+  let url = `https://squadiota-apistaging.pins.co.id/api/absensi/export-user-by-regional?month=${data.month}&year=${data.year}`;
+
+  if (typeof data.regional_id === 'number') {
+    url = url + '&regional_id=' + data.regional_id;
+  }
+
+  var config = {
+    method: 'get',
+    url: url,
+    headers: {
+      'Content-Type':
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      Authorization: `Bearer ${token}`,
+    },
+    responseType: 'blob',
+  };
+
+  return await axios(config).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute(
+      'download',
+      `List Absensi Teknisi ${convertDate('namaBulan', data.month)}-${
+        data.year
+      }.xlsx`,
+    );
+    document.body.appendChild(link);
+    link.click();
+  });
+};
+
+export const sendNotifReminder = async (data) => {
+  try {
+    const result = await iota.notifWa({
+      id: data.id,
+      nama_atasan: data.nama_atasan ?? 'ttd Atasan',
+    });
+
+    return {
+      status: result.status,
+      message: result.data.message,
+      data: result.data,
+    };
+  } catch (error) {
+    console.log('notif action error', error.response);
+
+    const messageError = error?.response.data.message ?? 'Something Happened!';
     return {
       status: error?.response.status,
       message: messageError,

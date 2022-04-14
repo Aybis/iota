@@ -1,7 +1,9 @@
+import axios from 'axios';
 import { setHeader } from '../../config/api/constant';
 import iota from '../../config/api/route/iota';
 import { convertDate } from '../../helpers/convertDate';
 import * as type from '../types/reportuser';
+import Cookies from 'js-cookie';
 
 export const setDataMingguan = (data) => ({
   type: type.MINGGUAN,
@@ -98,6 +100,32 @@ export const fetchAbsensiBulanan = (data) => async (dispatch) => {
       data: null,
     };
   }
+};
+
+export const downloadReportPersonal = async (data) => {
+  const token = Cookies.get('session');
+
+  var config = {
+    method: 'get',
+    url: `https://squadiota-apistaging.pins.co.id/api/absensi/export-personal?month=${data.month}&year=${data.year}&user_id=${data.id}&name=${data.name}`,
+    headers: {
+      'Content-Type':
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      Authorization: `Bearer ${token}`,
+    },
+    responseType: 'blob',
+  };
+
+  return await axios(config)
+    .then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${data.name}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+    })
+    .catch((error) => console.log(error.response));
 };
 
 export const setDownloadParam = (data) => (dispatch) => {

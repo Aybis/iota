@@ -1,8 +1,11 @@
+import axios from 'axios';
 import swal from 'sweetalert';
 import { setHeader } from '../../config/api/constant';
 import iota from '../../config/api/route/iota';
 import ToastHandler from '../../helpers/toast';
 import * as type from '../types/activity';
+import Cookies from 'js-cookie';
+import { convertDate } from '../../helpers/convertDate';
 
 export const setLoadingAct = (data) => ({
   type: type.LOADING,
@@ -86,6 +89,11 @@ export const setAcitvityDashboardByDone = (data) => ({
 
 export const setAcitvityDashboardByPending = (data) => ({
   type: type.DASHBOARD_ACTIVITIES_PENDING,
+  payload: data,
+});
+
+export const setDataStatus = (data) => ({
+  type: type.SET_DATA_STATUS,
   payload: data,
 });
 
@@ -280,12 +288,17 @@ export const fetchActivityPendingDashboard = (data) => async (dispatch) => {
     })
     .then((res) => {
       res.data
-        .filter((item) => item.role_id === '1')
-        .map((item) => {
-          count += item?.activity?.length;
-          return count;
-        });
-
+        .filter((user) => user.role_id === '1')
+        .map((item) =>
+          item.activity
+            .filter(
+              (act) =>
+                act.progress < 100 &&
+                convertDate('tanggalFormat', act.created_at) !==
+                  convertDate('tanggalFormat'),
+            )
+            .map((list) => (count += 1)),
+        );
       dispatch(
         setAcitvityDashboardByPending({
           name: 'pending',
@@ -435,4 +448,42 @@ export const insertProgressActivity = (data) => async (dispatch) => {
       );
       return err.response.data;
     });
+};
+
+// api/activity/export
+
+export const downloadActivityByUnit = async (data) => {
+  const token = Cookies.get('session');
+
+  let url = `https://squadiota-apistaging.pins.co.id/api/activity/export?month=${data.month}&year=${data.year}`;
+
+  if (typeof data.regional_id === 'number') {
+    url = url + '&regional_id=' + data.regional_id;
+  }
+
+  var config = {
+    method: 'get',
+    // url: `https://squadiota-apistaging.pins.co.id/api/activity/export?month=${data.month}&year=${data.year}&regional_id=${data.regional_id}`,
+    url: url,
+    headers: {
+      'Content-Type':
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      Authorization: `Bearer ${token}`,
+    },
+    responseType: 'blob',
+  };
+
+  return await axios(config).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute(
+      'download',
+      `List Activity Teknisi ${convertDate('namaBulan', data.month)}-${
+        data.year
+      }.xlsx`,
+    );
+    document.body.appendChild(link);
+    link.click();
+  });
 };

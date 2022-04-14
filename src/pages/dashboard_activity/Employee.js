@@ -11,6 +11,7 @@ import { SectionFilterMonthYear } from '../../components/molecules';
 import { imageApiAvatarUser } from '../../helpers/assetHelpers';
 import { convertDate } from '../../helpers/convertDate';
 import {
+  downloadActivityByUnit,
   fetchAllActivity,
   setDataSelectedAct,
   setMonthAct,
@@ -159,10 +160,21 @@ export default function Employee() {
           Result :{' '}
           {ACTIVITY?.isLoading ? '' : ACTIVITY?.dashboardActEmployee?.length}
         </p>
-        <div className="flex space-x-1 justify-center items-center text-sm font-medium text-zinc-500">
+        <button
+          onClick={() =>
+            downloadActivityByUnit({
+              month: temporary.month,
+              year: temporary.year,
+              regional_id:
+                USER?.profile?.regional_id === ''
+                  ? ACTIVITY?.regionalSelectedAct?.id
+                  : USER?.profile?.regional_id,
+            })
+          }
+          className="flex space-x-1 justify-center items-center text-sm font-medium text-zinc-500">
           <DownloadIcon className="h-4" />
           <p>Download</p>
-        </div>
+        </button>
       </div>
 
       <div>

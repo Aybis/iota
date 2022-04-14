@@ -29,7 +29,7 @@ export default function Textarea({
         onChange={onChange}
         rows="3"
         className={[
-          'text-zinc-800  font-medium  block w-full sm:text-sm border-gray-200 rounded-md py-3 placeholder-opacity-50 placeholder-gray-500 transition-all duration-300 ease-in-out',
+          'text-zinc-800 placeholder:capitalize font-medium  block w-full sm:text-sm border-gray-200 rounded-md py-3 placeholder-opacity-50 placeholder-gray-500 transition-all duration-300 ease-in-out',
           error
             ? 'focus:ring-red-600 focus:border-red-500'
             : 'focus:ring-blue-600 focus:border-sky-500',

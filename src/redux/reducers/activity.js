@@ -83,6 +83,13 @@ export default function (state = initialState, action) {
         ...state,
         listActivities: action.payload ?? {},
       };
+
+    case type.SET_DATA_STATUS:
+      return {
+        ...state,
+        dataStatus: action.payload ?? {},
+      };
+
     case type.SELECTED_ACTIVITIES:
       return {
         ...state,

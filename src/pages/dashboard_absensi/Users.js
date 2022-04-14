@@ -6,6 +6,7 @@ import { SectionFilterMonthYear } from '../../components/molecules';
 import { imageApiAvatarUser } from '../../helpers/assetHelpers';
 import { convertDate } from '../../helpers/convertDate';
 import {
+  downloadReportByUnit,
   fetchDashboardRegional,
   setBulan,
   setTahun,
@@ -36,7 +37,10 @@ export default function Users() {
 
       dispatch(
         fetchDashboardRegional({
-          regional_id: DASHBOARD?.regionalSelected?.id,
+          regional_id:
+            USER?.profile?.regional_id === ''
+              ? DASHBOARD?.regionalSelected?.id
+              : USER?.profile?.regional_id,
           month: event.target.value,
           year: temporary.year,
         }),
@@ -53,7 +57,10 @@ export default function Users() {
 
       dispatch(
         fetchDashboardRegional({
-          regional_id: DASHBOARD?.regionalSelected?.id,
+          regional_id:
+            USER?.profile?.regional_id === ''
+              ? DASHBOARD?.regionalSelected?.id
+              : USER?.profile?.regional_id,
           month: temporary.month,
           year: event.target.value,
         }),
@@ -95,10 +102,23 @@ export default function Users() {
             <p className="text-sm text-zinc-500 font-medium">
               Result : {DASHBOARD?.listKaryawan?.length}
             </p>
-            <div className="flex space-x-1 justify-center items-center text-sm font-medium text-zinc-500">
+            <button
+              onClick={() =>
+                downloadReportByUnit({
+                  month: temporary.month,
+                  year: temporary.year,
+                  regional_id:
+                    USER?.profile?.regional_id === ''
+                      ? typeof DASHBOARD?.regionalSelected?.id === 'number'
+                        ? DASHBOARD?.regionalSelected?.id
+                        : null
+                      : USER?.profile?.regional_id,
+                })
+              }
+              className="flex space-x-1 justify-center items-center text-sm font-medium text-zinc-500">
               <DownloadIcon className="h-4" />
               <p>Download</p>
-            </div>
+            </button>
           </div>
 
           <div className="relative grid grid-cols-1 gap-y-5 mt-4">

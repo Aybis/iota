@@ -58,6 +58,16 @@ export const titleCard = (title) => {
       return 'Explanation';
     case 'terlambat':
       return 'Late';
+    case 'Hadir':
+      return 'Presence';
+    case 'Keterangan':
+      return 'Explanation';
+    case 'Terlambat':
+      return 'Late';
+    case 'Belum Absen':
+      return 'Not Absence';
+    case 'Sehat':
+      return 'Health';
 
     default:
       return title;

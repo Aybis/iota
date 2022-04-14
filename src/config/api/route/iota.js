@@ -55,4 +55,7 @@ export default {
   fetchDataDashboardMonthly: (data) => axios.get('absensi/users/monthly', data),
   fetchDataDashboardByRegional: (params) =>
     axios.get('absensi/users/employe', params),
+
+  // end point push notif to WA
+  notifWa: (data) => axios.post('notifikasi/notif-to-subordinate', data),
 };

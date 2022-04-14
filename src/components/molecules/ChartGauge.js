@@ -38,7 +38,10 @@ export default function ChartGauge({
         return 'Sick';
       case 'kehadiran':
         return 'Presence';
-
+      case 'Hadir':
+        return 'Presence';
+      case 'Belum Absen':
+        return 'Not Absence';
       case 'Tidak Absen':
         return 'Absent';
 
@@ -113,7 +116,10 @@ export default function ChartGauge({
             :{' '}
             <span className="text-zinc-800 font-semibold">
               {' '}
-              {item.value} <small className="font-normal">{type}</small>
+              {item.value}{' '}
+              <small className="font-normal">
+                {item.value > 1 ? `${type}s` : type}
+              </small>
             </span>
           </div>
         ))}

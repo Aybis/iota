@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Absensi from '../../helpers/Absensi';
+import { titleCard } from '../../helpers/assetHelpers';
 import { Button, Card, Textarea } from '../atoms';
 import GroupInputRadio from './GroupInputRadio';
 
@@ -12,10 +13,8 @@ export default function FormCheckin({
   isSubmit,
 }) {
   const [didMount, setDidMount] = useState(false);
-  const [imageRequired, setimageRequired] = useState(false);
 
   useEffect(() => {
-    setimageRequired(true);
     setDidMount(true);
     return () => {
       setDidMount(false);
@@ -31,7 +30,7 @@ export default function FormCheckin({
     <form onSubmit={handlerSubmit}>
       <Card>
         <GroupInputRadio
-          title="Kondisi"
+          title="Condition"
           data={['sehat', 'sakit', 'cuti', 'SPPD', 'izin']}
           isSelected={state.kondisi}
           handlerOnClick={handlerKondisi}
@@ -59,7 +58,7 @@ export default function FormCheckin({
 
           <Card>
             <GroupInputRadio
-              title="Kehadiran"
+              title="Attendance"
               data={['WFH', 'WFO']}
               setState={setState}
               isSelected={state.kehadiran}
@@ -74,14 +73,14 @@ export default function FormCheckin({
         <Card>
           <Absensi shift={state.is_shift} kondisi={state.kondisi}>
             <Textarea
-              labelName="Keterangan"
+              labelName="Explanation"
               name="keterangan"
               value={state.keterangan}
               onChange={setState}
-              placeholder={`Alasan ${
+              placeholder={`Explanation ${
                 state.kondisi === 'sehat' || state.kondisi === ''
-                  ? 'Terlambat'
-                  : state.kondisi
+                  ? 'Late'
+                  : titleCard(state.kondisi)
               }? `}
             />
           </Absensi>
@@ -89,15 +88,10 @@ export default function FormCheckin({
       )}
 
       <Card addClass={'mt-10'}>
-        {imageRequired
-          ? (state.kehadiran || state.keterangan) &&
-            state.kondisi && (
-              <Button type="in" value="Check In" isSubmit={isSubmit} />
-            )
-          : photo &&
-            (state.kehadiran || state.keterangan) &&
-            state.kondisi &&
-            photo && <Button type="in" value="Check In" isSubmit={isSubmit} />}
+        {photo &&
+          (state.kehadiran || state.keterangan) &&
+          state.kondisi &&
+          photo && <Button type="in" value="Check In" isSubmit={isSubmit} />}
       </Card>
     </form>
   );

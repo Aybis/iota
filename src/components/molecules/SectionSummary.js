@@ -153,7 +153,9 @@ export default function SectionSummary({
           <span className="text-lg lg:text-xl lg:font-bold font-semibold text-zinc-900">
             {data.value}
           </span>{' '}
-          <small className="text-sm font-normal text-zinc-500">{type}</small>
+          <small className="text-sm font-normal text-zinc-500">
+            {data.value > 1 ? `${type}s` : type}
+          </small>
         </p>
       </div>
       <div className="">

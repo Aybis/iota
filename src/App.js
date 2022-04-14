@@ -24,6 +24,7 @@ import Users from './pages/dashboard_absensi/Users';
 import Daily from './pages/dashboard_activity/Daily';
 import DetailUserAct from './pages/dashboard_activity/DetailUserAct';
 import Employee from './pages/dashboard_activity/Employee';
+import ListActivityByStatus from './pages/dashboard_activity/ListActivityByStatus';
 import Monthly from './pages/dashboard_activity/Monthly';
 
 function App() {
@@ -54,6 +55,8 @@ function App() {
             <Route path="karyawan" element={<Users />} />
             <Route path="*" element={<NotFound />} />
           </Route>
+          <Route path="activities/status" element={<ListActivityByStatus />} />
+
           <Route path="/activities" element={<DashboardActivity />}>
             <Route index element={<Daily />} />
             <Route path="activities" element={<Daily />} />

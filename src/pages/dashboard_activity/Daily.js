@@ -1,7 +1,7 @@
-import ReactCircularSlider from '@fseehawer/react-circular-slider';
 import { BadgeCheckIcon, ClockIcon, TruckIcon } from '@heroicons/react/solid';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   SectionProgressCircle,
   SkeletonDashboardSummary,
@@ -11,12 +11,30 @@ import {
   fetchActivityDoneDashboard,
   fetchActivityPendingDashboard,
   fetchActivityProgressDashboard,
+  setDataStatus,
 } from '../../redux/actions/activity';
 
 export default function Daily() {
   const USER = useSelector((state) => state.user);
   const ACTIVITY = useSelector((state) => state.activity);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handlerClickListDetail = (item) => {
+    dispatch(
+      setDataStatus({
+        type: item.name,
+        name: item.title,
+        value: item.value,
+        regional_id:
+          USER?.profile?.regional_id === ''
+            ? ACTIVITY?.regionalSelectedAct?.id
+            : USER?.profile?.regional_id,
+        date: convertDate('tanggalFormat'),
+      }),
+    );
+    navigate('/activities/status');
+  };
 
   useEffect(() => {
     dispatch(
@@ -79,7 +97,11 @@ export default function Daily() {
             />
           </div>
 
-          <div className="bg-gradient-to-br from-amber-500 to-amber-400 rounded-lg px-4 py-3 shadow-lg shadow-amber-500/50 flex flex-col justify-between space-y-4">
+          <div
+            onClick={() =>
+              handlerClickListDetail(ACTIVITY?.dashboardActProgress)
+            }
+            className="bg-gradient-to-br from-amber-500 to-amber-400 rounded-lg px-4 py-3 shadow-lg shadow-amber-500/50 flex flex-col justify-between space-y-4">
             <div className="flex justify-center items-center bg-white h-10 p-2 w-10 rounded-full">
               <TruckIcon className="text-amber-500 h-7" />
             </div>
@@ -90,7 +112,9 @@ export default function Daily() {
               </p>
             </div>
           </div>
-          <div className="bg-gradient-to-br from-teal-500 to-teal-400 rounded-lg px-4 py-3 shadow-lg shadow-teal-500/50 flex flex-col justify-between">
+          <div
+            onClick={() => handlerClickListDetail(ACTIVITY?.dashboardActDone)}
+            className="bg-gradient-to-br from-teal-500 to-teal-400 rounded-lg px-4 py-3 shadow-lg shadow-teal-500/50 flex flex-col justify-between">
             <div className="flex justify-center items-center bg-white h-10 p-2 w-10 rounded-full">
               <BadgeCheckIcon className="text-teal-500 h-7" />
             </div>
@@ -101,7 +125,11 @@ export default function Daily() {
               </p>
             </div>
           </div>
-          <div className=" flex space-x-4 items-center p-4 col-span-2 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg">
+          <div
+            onClick={() =>
+              handlerClickListDetail(ACTIVITY?.dashboardActPending)
+            }
+            className=" flex space-x-4 items-center p-4 col-span-2 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg">
             <div>
               <ClockIcon className="h-12 text-white" />
             </div>
@@ -110,7 +138,9 @@ export default function Daily() {
               <p className="mt-1 text-2xl font-bold text-white">
                 {ACTIVITY?.dashboardActPending?.value}{' '}
                 <small className="text-sm font-normal text-zinc-100">
-                  activity
+                  {ACTIVITY?.dashboardActPending?.value > 1
+                    ? 'activities'
+                    : 'activity'}
                 </small>
               </p>
             </div>

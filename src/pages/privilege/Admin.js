@@ -1,9 +1,7 @@
 import {
   BadgeCheckIcon,
   ClockIcon,
-  HomeIcon,
   MenuAlt2Icon,
-  OfficeBuildingIcon,
   TruckIcon,
 } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react';
@@ -30,9 +28,7 @@ export default function Admin() {
   useEffect(() => {
     dispatch(
       fetchDashboardHarian(
-        USER?.profile?.regional_id === ''
-          ? DASHBOARD?.regionalSelected?.id
-          : USER?.profile?.regional_id,
+        USER?.profile?.regional_id === '' ? null : USER?.profile?.regional_id,
       ),
     );
 
@@ -123,7 +119,9 @@ export default function Admin() {
                 {ACTIVITY?.dashboardActPending?.value}
                 <small className="text-sm font-normal text-zinc-100">
                   {' '}
-                  activity
+                  {ACTIVITY?.dashboardActPending?.value > 1
+                    ? 'acitivities'
+                    : 'activity'}
                 </small>
               </p>
             </div>
@@ -154,22 +152,24 @@ export default function Admin() {
             <div className="flex flex-col p-3">
               <p className="font-medium text-white">Total Activity</p>
               <h1 className="text-4xl text-white font-bold">
-                {ACTIVITY?.dashboardActProgress?.value +
-                  ACTIVITY?.dashboardActDone?.value ?? ' '}
+                {ACTIVITY?.isLoading
+                  ? 0
+                  : ACTIVITY?.dashboardActProgress?.value +
+                    ACTIVITY?.dashboardActDone?.value}
               </h1>
             </div>
             <div className="flex justify-between items-center bg-white p-3 rounded-lg">
               <div className="flex flex-col space-y-1 items-start text-sm font-semibold ">
                 <BadgeCheckIcon className="h-4 text-teal-600" />
                 <p className="text-zinc-600 text-lg font-semibold">
-                  {ACTIVITY?.dashboardActDone?.value}
+                  {ACTIVITY?.dashboardActDone?.value ?? 0}
                 </p>
                 <p className="text-xs font-light text-zinc-500">Complete</p>
               </div>
               <div className="flex flex-col space-y-1 items-start text-sm font-semibold ">
                 <TruckIcon className="h-4 text-amber-600" />
                 <p className="text-zinc-600 text-lg font-semibold">
-                  {ACTIVITY?.dashboardActProgress?.value}
+                  {ACTIVITY?.dashboardActProgress?.value ?? 0}
                 </p>
                 <p className="text-xs font-light text-zinc-500">To do</p>
               </div>
@@ -182,7 +182,7 @@ export default function Admin() {
               <h1 className="font-semibold text-4xl text-zinc-800">
                 {DASHBOARD?.reportKehadiran
                   ?.filter((item) => item.name === 'Hadir')
-                  .map((item) => item.value)}
+                  .map((item) => item.value) ?? ''}
               </h1>
               <p className="mt-2 px-2 py-1 text-blue-600 bg-blue-50 rounded-full text-xs w-fit">
                 Presence
@@ -193,42 +193,11 @@ export default function Admin() {
               <h1 className="font-semibold text-4xl text-zinc-800">
                 {DASHBOARD?.reportKehadiran
                   ?.filter((item) => item.name === 'Belum Absen')
-                  .map((item) => item.value)}
+                  .map((item) => item.value) ?? ''}
               </h1>
               <p className="mt-2 px-2 py-1 text-red-600 bg-red-50 rounded-full text-xs w-fit">
-                Not Absent
+                Not Absence
               </p>
-            </div>
-          </div>
-
-          <div className="relative hidden grid-cols-2 p-3 rounded-xl bg-blue-500 mt-6 ">
-            <div className="flex flex-col p-3">
-              <p className="font-medium text-white">Total Absensi</p>
-              <h1 className="text-4xl text-white font-bold">
-                {DASHBOARD?.reportKehadiran
-                  ?.filter((item) => item.name === 'Hadir')
-                  .map((item) => item.value)}
-              </h1>
-            </div>
-            <div className="flex justify-between items-center bg-white p-3 rounded-lg">
-              <div className="flex flex-col space-y-1 items-start text-sm font-semibold ">
-                <HomeIcon className="h-4 text-blue-600" />
-                <p className="text-zinc-600 text-lg font-semibold">
-                  {DASHBOARD?.reportKerja
-                    ?.filter((item) => item.name === 'WFH')
-                    .map((item) => item.value)}
-                </p>
-                <p className="text-xs font-light text-zinc-500">At Home</p>
-              </div>
-              <div className="flex flex-col space-y-1 items-start text-sm font-semibold ">
-                <OfficeBuildingIcon className="h-4 text-green-600" />
-                <p className="text-zinc-600 text-lg font-semibold">
-                  {DASHBOARD?.reportKerja
-                    ?.filter((item) => item.name === 'WFO')
-                    .map((item) => item.value)}
-                </p>
-                <p className="text-xs font-light text-zinc-500">At Office</p>
-              </div>
             </div>
           </div>
         </div>

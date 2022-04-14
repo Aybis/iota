@@ -135,7 +135,7 @@ export default function Checkin() {
       {/* Kehadiran  */}
       <Card addClass="z-10 mt-24">
         <label htmlFor="Shifting" className=" font-semibold text-zinc-900">
-          Lokasi
+          Location
         </label>
         <GoogleMaps
           height="100%"

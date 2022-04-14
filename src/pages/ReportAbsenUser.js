@@ -10,6 +10,7 @@ import SectionHeaderPage from '../components/molecules/SectionHeaderPage';
 import SectionReportMingguan from '../components/molecules/SectionReportMingguan';
 import { convertDate } from '../helpers/convertDate';
 import {
+  downloadReportPersonal,
   fetchAbsensiBulanan,
   fetchAbsensiMingguan,
   setDownloadParam,
@@ -122,8 +123,8 @@ export default function ReportUser() {
               <SectionReportMingguan key={Math.random()} item={item} />
             ))
           ) : (
-            <p className="text-center flex w-full items-center justify-center text-zinc-500 font-semibold mt-6">
-              Belum ada absen minggu ini!
+            <p className="text-center text-sm flex w-full items-center justify-center text-zinc-500 font-semibold mt-6">
+              No absences this week!
             </p>
           )}
         </div>
@@ -142,12 +143,20 @@ export default function ReportUser() {
           <span className="text-sm lg:text-base font-medium text-zinc-600">
             Result : {REPORT?.bulanan?.length}
           </span>
-          <a
-            href={REPORT?.linkDownload}
+          <button
+            // href={REPORT?.linkDownload}
+            onClick={() =>
+              downloadReportPersonal({
+                month: temporary.month,
+                year: temporary.year,
+                id: USER?.profile?.id,
+                name: USER?.profile?.name,
+              })
+            }
             className="flex gap-1 cursor-pointer hover:border-zinc-600 border-b-2 border-transparent items-center justify-center text-sm lg:text-base font-medium text-zinc-600">
             <DownloadIcon className="h-4" />
             Download
-          </a>
+          </button>
         </div>
         <div className="flex gap-6 flex-col">
           {REPORT?.isLoading ? (
@@ -164,7 +173,7 @@ export default function ReportUser() {
             ))
           ) : (
             <p className="text-center text-sm lg:text-base text-zinc-500 font-semibold mt-6">
-              Belum ada absen bulan ini!
+              No absences this month!
             </p>
           )}
         </div>

@@ -192,7 +192,7 @@ export default function DashboardUser() {
                   },
                 ]}
                 title={'Attendance'}
-                type="days"
+                type="day"
                 isNegative={true}
               />
             )}

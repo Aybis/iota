@@ -47,7 +47,16 @@ export default function Layout({ showBottomBar = true, children, moreClass }) {
           <ArrowNarrowUpIcon className="h-5 lg:h-10 text-white" />
         </div>
       )}
-      <div className="relative overflow-hidden">
+
+      <div className="hidden sm:flex flex-col relative justify-center items-center h-screen bg-zinc-50">
+        <span className="text-black text-lg font-semibold text-center">
+          Maaf untuk saat ini halaman ini hanya dapat diakses melalui smartphone
+          saja.
+          <p className="mt-2">Terima kasih.</p>
+        </span>
+      </div>
+
+      <div className="relative overflow-hidden sm:hidden">
         <Header />
 
         {showBottomBar && <BottomBar />}
