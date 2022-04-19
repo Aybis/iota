@@ -27,8 +27,6 @@ export default function Activity() {
   const [isLoading, setisLoading] = useState(false);
   const [date, setdate] = useState(convertDate('tanggalFormat'));
 
-  console.log(ABSEN);
-
   const tabNavigation = [
     {
       id: 1,
