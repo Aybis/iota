@@ -247,7 +247,7 @@ export const fetchDashboardHarian = (data) => async (dispatch) => {
     ]),
   );
   dispatch(setReportDirektorat(result.dir));
-  dispatch(setReportUnit(result.unit));
+  dispatch(setReportUnit(result.regional));
   dispatch(
     setReportKeterangan([
       {

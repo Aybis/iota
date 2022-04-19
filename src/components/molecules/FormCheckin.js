@@ -31,7 +31,7 @@ export default function FormCheckin({
       <Card>
         <GroupInputRadio
           title="Condition"
-          data={['sehat', 'sakit', 'cuti', 'SPPD', 'izin']}
+          data={['sehat', 'sakit', 'cuti', 'sppd', 'izin']}
           isSelected={state.kondisi}
           handlerOnClick={handlerKondisi}
           setState={setState}
@@ -40,33 +40,16 @@ export default function FormCheckin({
       </Card>
 
       {state.kondisi === 'sehat' && (
-        <>
-          {/* {1 === 1 || state.is_shift > 0 ? (
-            <Card>
-              <GroupInputRadio
-                title="Shifting"
-                data={['Pagi', 'Siang', 'Malam']}
-                setState={setState}
-                isSelected={state.kehadiran}
-                handlerOnClick={handlerKondisi}
-                textName="kehadiran"
-              />
-            </Card>
-          ) : (
-            <> </>
-          )} */}
-
-          <Card>
-            <GroupInputRadio
-              title="Attendance"
-              data={['WFH', 'WFO']}
-              setState={setState}
-              isSelected={state.kehadiran}
-              handlerOnClick={handlerKondisi}
-              textName="kehadiran"
-            />
-          </Card>
-        </>
+        <Card>
+          <GroupInputRadio
+            title="Attendance"
+            data={['WFH', 'WFO']}
+            setState={setState}
+            isSelected={state.kehadiran}
+            handlerOnClick={handlerKondisi}
+            textName="kehadiran"
+          />
+        </Card>
       )}
 
       {state.kondisi.length > 0 && (

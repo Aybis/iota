@@ -78,7 +78,7 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="fixed inset-x-0 lg:w-1/2  px-4 lg:px-12 bottom-4 lg:bottom-8">
+          <div className="fixed inset-x-0 lg:w-1/2  px-4 lg:px-12 bottom-4 lg:bottom-8 hidden">
             <div className="flex justify-center items-center">
               <p className="text-xs text-zinc-400">© Copyright PINS 2022.</p>
             </div>

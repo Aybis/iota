@@ -102,9 +102,9 @@ export default function Bulanan() {
       ) : (
         <>
           <div className="relative my-8 lg:px-0 container mx-auto max-w-7xl">
-            <div className="grid grid-cols-4 lg:grid-cols-6 gap-2 gap-y-3 divide-x divide-zinc-100 bg-white rounded-md p-2">
+            <div className="grid grid-cols-4 gap-2 gap-y-3 divide-x divide-zinc-100 bg-white rounded-md py-4">
               {DASHBOARD?.reportKehadiranBulanan?.map((item) => (
-                <div key={Math.random()} className="relative pl-2">
+                <div key={Math.random()} className="relative px-4">
                   <h4 className="text-zinc-500 font-normal text-xs lg:text-sm capitalize">
                     {titleCard(item.name)}
                   </h4>

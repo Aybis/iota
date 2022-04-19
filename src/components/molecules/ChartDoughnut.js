@@ -96,7 +96,10 @@ export default function ChartDoughnut({ dataChart, title, type }) {
   return (
     <div>
       <Doughnut data={data} options={options} />
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 p-4 bg-slate-50 rounded-md shadow-md shadow-slate-200/50 mt-4">
+      <div
+        className={`grid grid-cols-2 lg:grid-cols-${
+          data?.labels?.length / 3
+        } gap-2 p-4 bg-slate-50 rounded-md shadow-md shadow-slate-200/50 mt-4`}>
         {dataChart.map((item) => (
           <div key={Math.random()} className="flex items-center gap-2">
             <span className="text-zinc-400 text-sm capitalize">

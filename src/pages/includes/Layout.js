@@ -1,5 +1,6 @@
 import { ArrowNarrowUpIcon } from '@heroicons/react/solid';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import BottomBar from './BottomBar';
 import Footer from './Footer';
 import Header from './Header';
@@ -7,6 +8,7 @@ import Header from './Header';
 export default function Layout({ showBottomBar = true, children, moreClass }) {
   const [visible, setVisible] = useState(false);
   const [didMount, setDidMount] = useState(false);
+  const USER = useSelector((state) => state.user);
 
   const toggleVisible = () => {
     const scrolled = document.documentElement.scrollTop;
@@ -48,21 +50,29 @@ export default function Layout({ showBottomBar = true, children, moreClass }) {
         </div>
       )}
 
-      <div className="hidden sm:flex flex-col relative justify-center items-center h-screen bg-zinc-50">
-        <span className="text-black text-lg font-semibold text-center">
-          Maaf untuk saat ini halaman ini hanya dapat diakses melalui smartphone
-          saja.
-          <p className="mt-2">Terima kasih.</p>
-        </span>
-      </div>
+      {USER?.profile?.role_id === '1' && (
+        <div className="hidden md:flex flex-col relative justify-center items-center h-screen bg-zinc-50">
+          <span className="text-black text-lg font-semibold text-center">
+            Maaf untuk saat ini halaman ini hanya dapat diakses melalui
+            smartphone saja.
+            <p className="mt-2">Terima kasih.</p>
+          </span>
+        </div>
+      )}
 
-      <div className="relative overflow-hidden sm:hidden">
-        <Header />
+      <div
+        className={[
+          'relative overflow-hidden',
+          USER?.profile?.role_id === '1' ? 'md:hidden' : 'block',
+        ].join(' ')}>
+        {USER?.profile?.role_id !== '1' && <Header />}
 
         {showBottomBar && <BottomBar />}
 
-        <main>
-          <div className="relative sm:pt-16 lg:pt-8 lg:pb-14">{children}</div>
+        <main className="min-h-full">
+          <div className="relative sm:pt-16 lg:p-8 lg:pb-14 lg:max-w-7xl container mx-auto lg:mt-16">
+            {children}
+          </div>
         </main>
         <Footer />
       </div>

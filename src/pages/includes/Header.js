@@ -1,20 +1,22 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { ProfileDropdown } from '../../components/molecules';
 import { getImageFromAssets } from '../../helpers/assetHelpers';
 
 export default function Header() {
+  const location = useLocation();
   const navigation = [
-    { name: 'Home', href: '#' },
-    { name: 'Report', href: '#' },
-    { name: 'Activity', href: '#' },
-    { name: 'Dashboard', href: '#' },
+    { name: 'Home', href: '/' },
+    { name: 'Attendance', href: '/absensi' },
+    { name: 'Activity', href: '/activities' },
   ];
 
   return (
-    <div className="bg-gray-900 py-6 hidden lg:block">
+    <div className="bg-white border-b-2 border-zinc-100 shadow-lg shadow-zinc-100/50 p-6 hidden lg:block fixed top-0 inset-x-0 z-10">
       <nav
-        className="relative max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6"
+        className=" max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6"
         aria-label="Global">
-        <div className="flex items-center flex-1">
+        <div className="flex justify-between items-center flex-1">
           <div className="hidden lg:flex items-center justify-between w-full md:w-auto">
             <p>
               <span className="sr-only">IOTA</span>
@@ -27,22 +29,20 @@ export default function Header() {
           </div>
           <div className="hidden space-x-8 md:flex md:ml-10">
             {navigation.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
-                className="text-base font-medium text-white hover:text-gray-300">
+                to={item.href}
+                className={[
+                  location.pathname === item.href
+                    ? 'font-semibold text-zinc-800'
+                    : 'text-base font-medium text-zinc-400 hover:text-gray-300',
+                  'border-b-2 pb-1 border-transparent hover:border-blue-500 transition-all duration-300 ease-in-out hover:text-zinc-800',
+                ].join(' ')}>
                 {item.name}
-              </a>
+              </Link>
             ))}
           </div>
-        </div>
-        <div className="hidden md:flex md:items-center md:space-x-6">
-          <p className="text-base font-medium text-white hover:text-gray-300">
-            Abdul Muchtar
-          </p>
-          <p className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700">
-            Sign Out
-          </p>
+          <ProfileDropdown />
         </div>
       </nav>
     </div>

@@ -130,7 +130,7 @@ export default function Harian() {
         {convertDate('tanggalHari')}
       </h1>
       <div className="relative mt-4 mb-6 lg:px-0 container mx-auto max-w-7xl">
-        <div className="grid grid-cols-4 lg:grid-cols-6 gap-2 gap-y-3 divide-x divide-zinc-100 bg-white rounded-md p-2">
+        <div className="grid grid-cols-4 gap-2 gap-y-3 divide-x divide-zinc-100 bg-white rounded-md py-4">
           {DASHBOARD?.reportKehadiran?.length > 0 &&
             DASHBOARD?.reportKehadiran
               ?.filter(
@@ -141,7 +141,7 @@ export default function Harian() {
                 <div
                   onClick={() => handlerClickData(item)}
                   key={Math.random()}
-                  className="relative pl-2">
+                  className="relative pl-2 lg:px-4 cursor-pointer">
                   <h4 className="text-zinc-500 font-normal text-xs lg:text-sm">
                     {item.name === 'Hadir'
                       ? 'Presence'

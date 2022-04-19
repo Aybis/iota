@@ -13,6 +13,7 @@ import {
   Textarea,
   Time,
 } from '../components/atoms';
+import { convertDate } from '../helpers/convertDate';
 import useForm from '../helpers/useForm';
 import { insertProgressActivity } from '../redux/actions/activity';
 
@@ -31,6 +32,7 @@ export default function AddProgress() {
     user_id: USER?.profile?.id,
     lokasi: '',
     long_lat: '',
+    jam: '',
     photo: '',
     progress: ACTIVITY?.historyActivity?.progress,
     description: '',
@@ -76,6 +78,7 @@ export default function AddProgress() {
     state.user_id = USER?.profile?.id;
     state.photo = image;
     state.lokasi = address;
+    state.jam = convertDate('tanggalWaktuLengkap');
 
     await dispatch(insertProgressActivity(state))
       .then((res) => {

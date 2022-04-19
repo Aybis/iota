@@ -35,7 +35,7 @@ export default function SectionHistoryActivity({
           </p>
           <ProgressBar moreClass={'mt-4'} progress={item.progress} />
           <p className="text-xs text-gray-400 text-right mt-2">
-            {convertTimeAgo(item.created_at)}
+            {convertTimeAgo(item.jam)}
           </p>
         </div>
       </div>

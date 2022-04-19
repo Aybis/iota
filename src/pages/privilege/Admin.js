@@ -6,13 +6,18 @@ import {
 } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SectionProgressCircle } from '../../components/molecules';
-import { imageApiAvatarUser } from '../../helpers/assetHelpers';
+import { ChartBar, SectionProgressCircle } from '../../components/molecules';
+import {
+  IconThumbnail,
+  imageApiAvatarUser,
+  titleCard,
+} from '../../helpers/assetHelpers';
 import { convertDate } from '../../helpers/convertDate';
 import {
   fetchActivityDoneDashboard,
   fetchActivityPendingDashboard,
   fetchActivityProgressDashboard,
+  fetchAllActivity,
 } from '../../redux/actions/activity';
 import { fetchDashboardHarian } from '../../redux/actions/dashboardadmin';
 import Layout from '../includes/Layout';
@@ -24,6 +29,66 @@ export default function Admin() {
   const ACTIVITY = useSelector((state) => state.activity);
   const [profile, setprofile] = useState(false);
   const dispatch = useDispatch();
+
+  const testData = [
+    {
+      name: 'pending',
+      value: 64,
+      title: 'Pending',
+    },
+    {
+      name: 'todo',
+      title: 'To do',
+      value: 14,
+    },
+    {
+      name: 'progress',
+      title: 'Progress',
+
+      value: 23,
+    },
+    {
+      name: 'completed',
+      title: 'Completed',
+
+      value: 30,
+    },
+  ];
+
+  const testDataTable = [
+    {
+      name: 'TR1 SUMATERA',
+      emp: 33,
+      pending: 54,
+      todo: 20,
+      progress: 14,
+      completed: 60,
+    },
+    {
+      name: 'TR2 JABODETABEK',
+      emp: 33,
+      pending: 54,
+      todo: 20,
+      progress: 14,
+      completed: 60,
+    },
+    {
+      name: 'TR3 JABAR',
+      emp: 33,
+      pending: 54,
+      todo: 20,
+      progress: 14,
+      completed: 60,
+    },
+    {
+      name: 'TR4 JATENG & DIY',
+      emp: 33,
+      pending: 54,
+      todo: 20,
+      progress: 14,
+      completed: 60,
+    },
+  ];
 
   useEffect(() => {
     dispatch(
@@ -51,6 +116,11 @@ export default function Admin() {
         regional_id: USER?.profile?.regional_id,
       }),
     );
+    dispatch(
+      fetchAllActivity({
+        regional_id: USER?.profile?.regional_id,
+      }),
+    );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
@@ -60,7 +130,7 @@ export default function Admin() {
       <Profile open={profile} handlerOpen={() => setprofile(false)} />
 
       {/* Section Header */}
-      <div className="relative flex flex-row-reverse justify-between px-4 inset-x-0 mt-6">
+      <div className="relative flex lg:hidden flex-row-reverse justify-between px-4 inset-x-0 mt-6">
         <div className="flex space-x-2">
           <img
             src={imageApiAvatarUser(USER?.profile?.name ?? 'Anonymous')}
@@ -83,13 +153,21 @@ export default function Admin() {
       </div>
 
       <div className="relative m-4">
-        <h4 className="text-sm text-zinc-500">Welcome,</h4>
-        <h1 className="text-2xl font-semibold text-zinc-800 capitalize">
+        <h4 className="text-sm text-zinc-500 hidden">Welcome,</h4>
+        <h1 className="text-2xl font-semibold text-zinc-800 capitalize hidden">
           {USER?.profile?.name?.toLowerCase() ?? 'Anonymous'}
         </h1>
+
+        <h1 className="text-2xl font-bold text-zinc-800 capitalize">
+          Overview
+        </h1>
+        <h4 className="text-sm text-zinc-500 mt-1">
+          {convertDate('tanggalHari')}
+        </h4>
       </div>
 
-      <div className="relative my-2">
+      {/* Section Dashboard For Mobile */}
+      <div className="relative my-2 block sm:hidden">
         <div className="relative bg-white mx-4 p-3 rounded-lg">
           {/* Section Header */}
           <div className="flex justify-between items-center">
@@ -201,6 +279,164 @@ export default function Admin() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Section Dashboard For Desktop */}
+
+      <div className="relative mt-10 mb-4 hidden sm:block">
+        <div className="grid grid-cols-4 gap-6">
+          {/* Section Activity */}
+          {testData.map((item) => (
+            <div
+              key={Math.random()}
+              className={[
+                'relative flex justify-between items-center  p-4 rounded-lg',
+                item.name === 'pending' &&
+                  'bg-gradient-to-br from-red-500 to-pink-500 text-white',
+                item.name === 'todo' &&
+                  'bg-gradient-to-br from-sky-500 to-blue-500 text-white',
+                item.name === 'progress' &&
+                  'bg-gradient-to-br from-amber-500 to-orange-500 text-white',
+                item.name === 'completed' &&
+                  'bg-gradient-to-br from-green-400 to-teal-500 text-white',
+              ].join(' ')}>
+              <div className="relative">
+                <h1 className="mb-3 font-medium">{item.title}</h1>
+
+                <h1 className="text-2xl font-semibold mt-3">
+                  {item.value}
+                  <span className="text-sm ml-1">
+                    {item.value > 1 ? 'activities' : 'activity'}
+                  </span>
+                </h1>
+              </div>
+              <IconThumbnail
+                name={item.name}
+                addClas="h-14 w-14 p-2 rounded-lg"
+                backgroundClass={'bg-white'}
+              />
+            </div>
+          ))}
+
+          {/* Section Absensi */}
+          <div className="relative col-span-3 bg-white rounded-lg px-4">
+            <ChartBar title={'Attendance'} dataChart={DASHBOARD?.reportUnit} />
+          </div>
+          <div className="bg-white p-3 rounded-lg">
+            <h1 className="font-medium text-zinc-700">Summary Attendance</h1>
+            <hr className="border border-zinc-100 mt-2 mx-4" />
+            <dl className="mt-8 divide-y divide-zinc-100 text-sm lg:mt-0 lg:col-span-5">
+              {DASHBOARD?.reportKeterangan?.map((item) => (
+                <div
+                  key={Math.random()}
+                  className="py-2 mt-2 flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div
+                      className={[
+                        'h-4 w-4 rounded-lg',
+                        ['Izin', 'Sakit', 'Cuti'].indexOf(item.name) > -1 &&
+                          'bg-yellow-400',
+                        ['SPPD', 'WFH', 'WFO'].indexOf(item.name) > -1 &&
+                          'bg-sky-500',
+                      ].join(' ')}></div>
+
+                    <dt className="text-zinc-600">{titleCard(item.name)}</dt>
+                  </div>
+                  <dd className="font-semibold text-zinc-900">
+                    {item.value}{' '}
+                    <span className="font-light">
+                      {item.value > 1 ? 'emps' : 'emp'}
+                    </span>
+                  </dd>
+                </div>
+              ))}
+              {DASHBOARD?.reportKehadiran
+                ?.filter((item) => item.name === 'Belum Absen')
+                .map((val) => (
+                  <div
+                    key={Math.random()}
+                    className="py-2 mt-2 flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div
+                        className={[
+                          'h-4 w-4 rounded-lg',
+                          ['Izin', 'Sakit', 'Cuti'].indexOf(val.name) > -1 &&
+                            'bg-yellow-400',
+                          ['SPPD', 'WFH', 'WFO'].indexOf(val.name) > -1 &&
+                            'bg-sky-500',
+                          val.name === 'Belum Absen' && 'bg-red-500',
+                        ].join(' ')}></div>
+
+                      <dt className="text-zinc-600">{titleCard(val.name)}</dt>
+                    </div>
+                    <dd className="font-semibold text-zinc-900">
+                      {val.value}{' '}
+                      <span className="font-light">
+                        {val.value > 1 ? 'emps' : 'emp'}
+                      </span>
+                    </dd>
+                  </div>
+                ))}
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      {/* Section Table Summary Activity */}
+
+      <div className="relative bg-white rounded-lg p-4 mt-8 hidden sm:block">
+        <h1 className="font-semibold text-zinc-800">Summary Activtiy</h1>
+        <table className="w-full rounded-xl mt-4">
+          <thead className="border-b-2 text-zinc-500 text-sm border-zinc-50 bg-zinc-100 rounded-lg">
+            <tr className="border-y border-white rounded-lg">
+              <th rowSpan={2} className="font-medium">
+                No
+              </th>
+              <th rowSpan={2} className="font-medium">
+                T.Regional
+              </th>
+              <th rowSpan={2} className="font-medium border-r border-white">
+                Total Emp.
+              </th>
+              <th colSpan={4} className="p-1 font-medium">
+                Activity
+              </th>
+            </tr>
+            <tr>
+              <th className="py-1 font-medium">Pending</th>
+              <th className="py-1 font-medium">To do</th>
+              <th className="py-1 font-medium">Progress</th>
+              <th className="py-1 font-medium">Completed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {testDataTable?.map((item, index) => (
+              <tr
+                key={Math.random()}
+                className={`border-b-2 hover:bg-slate-100 transition-all duration-300 ease-in-out`}>
+                <td className="text-center py-2 text-zinc-500">{index + 1}</td>
+                <td className="pl-4 font-medium text-zinc-700 text-sm">
+                  {item.name}
+                </td>
+                <td className="text-center font-light text-zinc-500">
+                  {item.emp}
+                </td>
+                <td className="text-center font-semibold text-blue-500 cursor-pointer">
+                  {item.pending}
+                </td>
+                <td className="text-center font-semibold text-blue-500 cursor-pointer">
+                  {item.todo}
+                </td>
+                <td className="text-center font-semibold text-blue-500 cursor-pointer">
+                  {item.progress}
+                </td>
+                <td className="text-center font-semibold text-blue-500 cursor-pointer">
+                  {item.completed}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </Layout>
   );

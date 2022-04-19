@@ -1,4 +1,3 @@
-import ReactCircularSlider from '@fseehawer/react-circular-slider';
 import { BadgeCheckIcon, ClockIcon, TruckIcon } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,7 +16,6 @@ import {
 } from '../../redux/actions/activity';
 
 export default function Monthly() {
-  const REGIONAL = useSelector((state) => state.regional);
   const USER = useSelector((state) => state.user);
   const ACTIVITY = useSelector((state) => state.activity);
   const dispatch = useDispatch();

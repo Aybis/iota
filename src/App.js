@@ -26,6 +26,7 @@ import DetailUserAct from './pages/dashboard_activity/DetailUserAct';
 import Employee from './pages/dashboard_activity/Employee';
 import ListActivityByStatus from './pages/dashboard_activity/ListActivityByStatus';
 import Monthly from './pages/dashboard_activity/Monthly';
+import Desktop from './pages/Desktop';
 
 function App() {
   return (
@@ -39,6 +40,8 @@ function App() {
 
         {/* Route wih autentikasi */}
         <Route path="/" element={<Authenticated />}>
+          <Route path="/dekstop" element={<Desktop />} />
+
           <Route path="/" element={<Home />} />
           <Route path="/report" element={<ReportAbsenUser />} />
           <Route path="/activity" element={<Activity />} />

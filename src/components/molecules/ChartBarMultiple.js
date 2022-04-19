@@ -9,7 +9,6 @@ import {
 } from 'chart.js';
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 ChartJS.register(
   CategoryScale,
@@ -20,28 +19,19 @@ ChartJS.register(
   Legend,
 );
 
-export default function ChartBar({ title, dataChart, type }) {
+export default function ChartBarMultiple({ title, dataChart, type }) {
   const data = {
-    labels: dataChart.map((item) => item.alias.substring(0, 4)),
+    labels: dataChart.map((item) => item.alias),
     datasets: [
       {
-        label: 'Attendance',
-        data: dataChart.map((item) => item.hadir + item.sppd),
-        backgroundColor: 'rgba(53, 162, 235, 1)',
+        label: 'At Office',
+        data: dataChart.map((item) => item.wfh),
+        backgroundColor: 'rgba(75, 192, 192, 1)',
       },
       {
-        label: 'Explanation',
-        data: dataChart.map((item) => item.sakit + item.izin + item.cuti),
-        backgroundColor: 'rgba(255, 206, 86,1)',
-      },
-      {
-        label: 'Not Absence',
-        data: dataChart.map(
-          (item) =>
-            item.total_karyawan -
-            (item.hadir + item.izin + item.cuti + item.sakit),
-        ),
-        backgroundColor: 'rgba(255, 99, 132, 1)',
+        label: 'At Home',
+        data: dataChart.map((item) => item.wfo),
+        backgroundColor: 'rgba(54, 162, 235, 1)',
       },
     ],
   };
@@ -69,19 +59,6 @@ export default function ChartBar({ title, dataChart, type }) {
       },
     },
     plugins: {
-      datalabels: {
-        color: '#000',
-        anchor: 'end',
-        clamp: false,
-        align: 'top',
-        offset: 5,
-        opacity: function (val) {
-          let value = val.dataset.data;
-          return value.map((item) => {
-            return item > 0 ? 1 : 0;
-          });
-        },
-      },
       legend: {
         position: 'bottom',
         labels: {
@@ -108,12 +85,5 @@ export default function ChartBar({ title, dataChart, type }) {
     },
   };
 
-  return (
-    <Bar
-      height={120}
-      options={options}
-      plugins={[ChartDataLabels]}
-      data={data}
-    />
-  );
+  return <Bar options={options} data={data} />;
 }

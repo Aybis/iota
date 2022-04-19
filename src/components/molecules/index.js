@@ -15,3 +15,4 @@ export { default as ChartDoughnut } from './ChartDoughnut';
 export { default as ChartGauge } from './ChartGauge';
 export { default as SectionProgressCircle } from './SectionProgressCircle';
 export { default as Pagination } from './Pagination';
+export { default as ProfileDropdown } from './ProfileDropdown';
