@@ -1,6 +1,10 @@
 import { Menu, Transition } from '@headlessui/react';
+import Cookies from 'js-cookie';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
+import swal from 'sweetalert';
+import { setHeader } from '../../config/api/constant';
+import iota from '../../config/api/route/iota';
 import { imageApiAvatarUser } from '../../helpers/assetHelpers';
 
 function classNames(...classes) {
@@ -9,6 +13,42 @@ function classNames(...classes) {
 
 export default function ProfileDropdown() {
   const USER = useSelector((state) => state.user);
+
+  const handlerLogout = (event) => {
+    event.preventDefault();
+    setHeader();
+
+    swal({
+      title: 'Are you sure?',
+      text: 'Anda yakin ingin keluar dari aplikasi!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        return iota
+          .logout()
+          .then((res) => {
+            Cookies.remove('session');
+            localStorage.clear();
+            swal('Anda berhasil logout!', {
+              icon: 'success',
+            });
+            setTimeout(() => {
+              window.location.reload();
+            }, 300);
+          })
+          .catch((err) => {
+            console.log(err.response);
+            swal('Something Happened!', {
+              icon: 'error',
+            });
+          });
+      } else {
+        swal('Okay!');
+      }
+    });
+  };
 
   return (
     <>
@@ -35,9 +75,10 @@ export default function ProfileDropdown() {
             <Menu.Item>
               {({ active }) => (
                 <button
+                  disabled={true}
                   className={classNames(
                     active ? 'bg-gray-100' : '',
-                    'block px-4 py-2 text-sm text-gray-700',
+                    'block px-4 py-2 text-sm text-gray-700 disabled:opacity-30 w-full text-left cursor-not-allowed',
                   )}>
                   View Profile
                 </button>
@@ -45,13 +86,16 @@ export default function ProfileDropdown() {
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <button
-                  className={classNames(
-                    active ? 'bg-gray-100' : '',
-                    'block px-4 py-2 text-sm text-gray-700',
-                  )}>
-                  Logout
-                </button>
+                <form onSubmit={handlerLogout}>
+                  <button
+                    type="submit"
+                    className={classNames(
+                      active ? 'bg-gray-100' : '',
+                      'block px-4 py-2 text-sm text-gray-700 w-full text-left',
+                    )}>
+                    Logout
+                  </button>
+                </form>
               )}
             </Menu.Item>
           </Menu.Items>

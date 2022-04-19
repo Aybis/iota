@@ -50,7 +50,7 @@ export default function Layout({ showBottomBar = true, children, moreClass }) {
         </div>
       )}
 
-      {USER?.profile?.role_id === '1' && (
+      {USER?.profile?.role_id !== '3' && (
         <div className="hidden md:flex flex-col relative justify-center items-center h-screen bg-zinc-50">
           <span className="text-black text-lg font-semibold text-center">
             Maaf untuk saat ini halaman ini hanya dapat diakses melalui
@@ -63,9 +63,9 @@ export default function Layout({ showBottomBar = true, children, moreClass }) {
       <div
         className={[
           'relative overflow-hidden',
-          USER?.profile?.role_id === '1' ? 'md:hidden' : 'block',
+          USER?.profile?.role_id === '3' ? 'block' : 'md:hidden',
         ].join(' ')}>
-        {USER?.profile?.role_id !== '1' && <Header />}
+        {USER?.profile?.role_id === '3' && <Header />}
 
         {showBottomBar && <BottomBar />}
 

@@ -25,6 +25,7 @@ export default function DetailActivity() {
   const { activity } = useParams();
   const [showModalUpdated, setshowModalUpdated] = useState(false);
   const ACTIVITY = useSelector((state) => state.activity);
+  const ABSEN = useSelector((state) => state.absen);
   const USER = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [isLoading, setisLoading] = useState(false);
@@ -177,7 +178,8 @@ export default function DetailActivity() {
           </p>
 
           {ACTIVITY?.historyActivity?.progress < 100 &&
-            USER?.profile?.id === ACTIVITY?.historyActivity?.user_id && (
+            USER?.profile?.id === ACTIVITY?.historyActivity?.user_id &&
+            Object.values(ABSEN?.checkin).length > 0 && (
               <Link
                 to={`/add-progress/${activity}`}
                 className="flex gap-1 items-center text-sm text-blue-600 font-semibold">
@@ -230,16 +232,22 @@ export default function DetailActivity() {
         open={showModalUpdated}
         title={'Edit Activity'}>
         <div className="relative">
-          <SectionTextArea
-            isLoading={isLoading}
-            uploadPhoto={false}
-            handlerChange={handlerChangInput}
-            handlerSubmit={handlerSubmitEditActivity}
-            valueDescription={formInput.description}
-            valueTitle={formInput.title}
-            showTitle={true}
-            buttonName="Edit"
-          />
+          {Object.values(ABSEN?.checkin).length > 0 ? (
+            <SectionTextArea
+              isLoading={isLoading}
+              uploadPhoto={false}
+              handlerChange={handlerChangInput}
+              handlerSubmit={handlerSubmitEditActivity}
+              valueDescription={formInput.description}
+              valueTitle={formInput.title}
+              showTitle={true}
+              buttonName="Edit"
+            />
+          ) : (
+            <p className="text-lg text-red-500 font-medium">
+              You have not been absent, please be absent first !
+            </p>
+          )}
         </div>
       </Modals>
     </Layout>

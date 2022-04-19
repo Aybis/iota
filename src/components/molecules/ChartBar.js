@@ -22,21 +22,21 @@ ChartJS.register(
 
 export default function ChartBar({ title, dataChart, type }) {
   const data = {
-    labels: dataChart.map((item) => item.alias.substring(0, 4)),
+    labels: dataChart?.map((item) => item.alias.substring(0, 4)),
     datasets: [
       {
         label: 'Attendance',
-        data: dataChart.map((item) => item.hadir + item.sppd),
+        data: dataChart?.map((item) => item.hadir + item.sppd),
         backgroundColor: 'rgba(53, 162, 235, 1)',
       },
       {
         label: 'Explanation',
-        data: dataChart.map((item) => item.sakit + item.izin + item.cuti),
+        data: dataChart?.map((item) => item.sakit + item.izin + item.cuti),
         backgroundColor: 'rgba(255, 206, 86,1)',
       },
       {
         label: 'Not Absence',
-        data: dataChart.map(
+        data: dataChart?.map(
           (item) =>
             item.total_karyawan -
             (item.hadir + item.izin + item.cuti + item.sakit),

@@ -21,10 +21,13 @@ export default function Activity() {
   const navigate = useNavigate();
   const USER = useSelector((state) => state.user);
   const ACTIVITY = useSelector((state) => state.activity);
+  const ABSEN = useSelector((state) => state.absen);
   const [showModal, setshowModal] = useState(false);
   const [tabActive, setTabActive] = useState(1);
   const [isLoading, setisLoading] = useState(false);
   const [date, setdate] = useState(convertDate('tanggalFormat'));
+
+  console.log(ABSEN);
 
   const tabNavigation = [
     {
@@ -233,18 +236,26 @@ export default function Activity() {
         moreClass="rounded-xl"
         handlerClose={setshowModal}
         open={showModal}
-        title={'Add Activity'}>
+        title={
+          Object.values(ABSEN?.checkin).length > 0 ? 'Add Activity' : 'Warning'
+        }>
         <div className="relative">
-          <SectionTextArea
-            uploadPhoto={false}
-            isLoading={isLoading}
-            handlerChange={handlerChangInput}
-            handlerSubmit={handlerSubmitAddActivity}
-            valueDescription={form.description}
-            valueTitle={form.title}
-            showTitle={true}
-            buttonName="Add"
-          />
+          {Object.values(ABSEN?.checkin).length > 0 ? (
+            <SectionTextArea
+              uploadPhoto={false}
+              isLoading={isLoading}
+              handlerChange={handlerChangInput}
+              handlerSubmit={handlerSubmitAddActivity}
+              valueDescription={form.description}
+              valueTitle={form.title}
+              showTitle={true}
+              buttonName="Add"
+            />
+          ) : (
+            <p className="text-lg text-red-500 font-medium">
+              You have not been absent, please be absent first !
+            </p>
+          )}
         </div>
       </Modals>
     </Layout>
