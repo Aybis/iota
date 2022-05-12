@@ -444,10 +444,14 @@ export const fetchReportKaryawanId = (data) => async (dispatch) => {
 
 export const downloadReportByUnit = async (data) => {
   const token = Cookies.get('session');
+  console.log(data);
 
   let url = `https://squadiota-apistaging.pins.co.id/api/absensi/export-user-by-regional?month=${data.month}&year=${data.year}`;
 
-  if (typeof data.regional_id === 'number') {
+  if (
+    typeof data.regional_id === 'string' ||
+    typeof data.regional_id === 'number'
+  ) {
     url = url + '&regional_id=' + data.regional_id;
   }
 

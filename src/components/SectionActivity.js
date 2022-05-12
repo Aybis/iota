@@ -22,7 +22,7 @@ export default function SectionActivity({
     <Link
       to={`/activity/${idActivity}`}
       onClick={handlerClick ?? null}
-      className="relative flex flex-col p-4 bg-white w-full rounded-lg shadow-lg shadow-zinc-200/50">
+      className="relative flex flex-col p-4 bg-white w-full rounded-lg shadow-lg shadow-zinc-200/50 group hover:scale-105 transition-all duration-300 ease-in-out">
       <div className="relative flex flex-col w-full ">
         <div className="relative flex flex-col flex-none w-64">
           <h1 className="text-sm font-semibold text-zinc-800 capitalize">

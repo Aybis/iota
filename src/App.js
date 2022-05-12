@@ -27,6 +27,8 @@ import Employee from './pages/dashboard_activity/Employee';
 import ListActivityByStatus from './pages/dashboard_activity/ListActivityByStatus';
 import Monthly from './pages/dashboard_activity/Monthly';
 import Desktop from './pages/Desktop';
+import { ManageLibur, ManageUser } from './pages/management';
+import Management from './pages/management/Management';
 
 function App() {
   return (
@@ -40,8 +42,8 @@ function App() {
 
         {/* Route wih autentikasi */}
         <Route path="/" element={<Authenticated />}>
+          {/* Route Link Teknisi  */}
           <Route path="/dekstop" element={<Desktop />} />
-
           <Route path="/" element={<Home />} />
           <Route path="/report" element={<ReportAbsenUser />} />
           <Route path="/activity" element={<Activity />} />
@@ -51,6 +53,8 @@ function App() {
           <Route path="/checkin" element={<Checkin />} />
           <Route path="/checkout/:id" element={<Checkout />} />
           <Route path="/profile" element={<Profile />} />
+
+          {/* Link Dashboard Absensi Manar dan Leader*/}
           <Route path="/absensi" element={<DashboardAbsensi />}>
             <Route index element={<Harian />} />
             <Route path="absensi" element={<Harian />} />
@@ -59,7 +63,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Route>
           <Route path="activities/status" element={<ListActivityByStatus />} />
-
+          {/* Link Dashboard Activities Manar dan Leader */}
           <Route path="/activities" element={<DashboardActivity />}>
             <Route index element={<Daily />} />
             <Route path="activities" element={<Daily />} />
@@ -67,6 +71,10 @@ function App() {
             <Route path="karyawan" element={<Employee />} />
             <Route path="*" element={<NotFound />} />
           </Route>
+          {/* Link Management Data Leader MSO*/}
+          <Route path="/management" element={<Management />} />
+          <Route path="/management/users" element={<ManageUser />} />
+          <Route path="/management/libur" element={<ManageLibur />} />
           <Route path="activities/:user" element={<DetailUserAct />} />
         </Route>
         <Route path="/*" element={<NotFound />} />

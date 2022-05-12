@@ -78,11 +78,11 @@ export default function DashboardUser() {
   return (
     <Layout>
       <SectionHeaderPage title={'Personal Attendance Dashboard'} />
-      <div className="relative mx-auto container px-4 pt-4 lg:pt-8 lg:px-0 max-w-7xl">
+      <div className="relative mx-auto container pt-4 lg:px-0 max-w-7xl">
         <h1 className="text-zinc-900 font-semibold lg:text-lg">Summary</h1>
       </div>
 
-      <div className="lg:container lg:mx-auto flex justify-center items-center relative -mt-2 p-4 lg:p-0">
+      <div className="lg:container lg:mx-auto flex justify-center items-center relative -mt-2  lg:p-0">
         <SectionFilterMonthYear
           month={temporary.month}
           year={temporary.year}
@@ -90,9 +90,9 @@ export default function DashboardUser() {
         />
       </div>
 
-      <div className="relative my-8 px-4 lg:px-0 container mx-auto max-w-7xl">
-        <div className="grid grid-cols-4 lg:grid-cols-6 gap-2 lg:divide-x divide-zinc-100 bg-white rounded-md p-2">
-          <div className="lg:flex justify-start hidden items-start gap-3 pl-4 col-span-2">
+      <div className="relative my-8 container mx-auto max-w-7xl">
+        <div className="grid grid-cols-4 gap-2 divide-zinc-100 bg-white rounded-md p-2">
+          <div className="lg:hidden justify-start hidden items-start gap-3 pl-4 col-span-2">
             <img
               src={USER?.profile?.avatar ?? imageApi(USER?.profile?.name)}
               alt=""
@@ -142,7 +142,7 @@ export default function DashboardUser() {
         </div>
       </div>
 
-      <div className="relative my-8 px-4 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:px-0 container mx-auto max-w-7xl">
+      <div className="relative my-8 grid grid-cols-2 gap-4 lg:px-0 container mx-auto max-w-7xl">
         {SUMMARY?.isLoading ? (
           <div className="flex justify-center items-center col-span-2 lg:col-span-4">
             <Loading height={6} width={6} color={'text-blue-500'} />
@@ -158,7 +158,7 @@ export default function DashboardUser() {
       <div className="relative my-8 px-4 lg:px-0 container mx-auto max-w-7xl">
         <h1 className="text-zinc-900 font-semibold lg:text-lg">Performance</h1>
 
-        <div className="grid lg:grid-cols-3 gap-4 lg:gap-6 mt-4">
+        <div className="grid gap-4 mt-4">
           <div className="bg-white rounded-md p-4">
             {SUMMARY?.isLoading ? (
               <div className="flex justify-center items-center">

@@ -114,23 +114,21 @@ export default function ReportUser() {
       <SectionHeaderPage title={'Personal Attendance Report'} />
 
       <div className="relative mt-8 max-w-7xl container mx-auto">
-        <h1 className="px-4 font-semibold text-zinc-900">
-          Attendance This Week
-        </h1>
-        <div className="flex overflow-x-auto  lg:grid grid-cols-5 gap-4  p-4">
+        <h1 className="font-semibold text-zinc-900">Attendance This Week</h1>
+        <div className="flex overflow-x-auto gap-4 py-4">
           {REPORT?.mingguan?.length > 0 ? (
             REPORT?.mingguan?.map((item) => (
               <SectionReportMingguan key={Math.random()} item={item} />
             ))
           ) : (
-            <p className="text-center text-sm flex w-full items-center justify-center text-zinc-500 font-semibold mt-6">
+            <p className="text-center text-sm flex flex-1 w-96 items-center justify-center text-zinc-500 font-semibold mt-6">
               No absences this week!
             </p>
           )}
         </div>
       </div>
 
-      <div className="lg:container lg:mx-auto flex justify-center items-center relative mt-4 px-4 lg:px-0">
+      <div className="lg:container lg:mx-auto flex justify-center items-center relative">
         <SectionFilterMonthYear
           month={temporary.month}
           year={temporary.year}
@@ -138,9 +136,9 @@ export default function ReportUser() {
         />
       </div>
 
-      <div className="container mx-auto max-w-7xl flex flex-col gap-3 px-4 my-8">
-        <div className="relative flex justify-between items-center mb-4">
-          <span className="text-sm lg:text-base font-medium text-zinc-600">
+      <div className="container mx-auto max-w-7xl flex flex-col gap-3 my-8">
+        <div className="relative flex justify-between items-center mb-2">
+          <span className="text-sm font-medium text-zinc-600">
             Result : {REPORT?.bulanan?.length}
           </span>
           <button
@@ -153,7 +151,7 @@ export default function ReportUser() {
                 name: USER?.profile?.name,
               })
             }
-            className="flex gap-1 cursor-pointer hover:border-zinc-600 border-b-2 border-transparent items-center justify-center text-sm lg:text-base font-medium text-zinc-600">
+            className="flex gap-1 cursor-pointer hover:border-zinc-600 border-b-2 border-transparent items-center justify-center text-sm font-medium text-zinc-600 transition-all duration-300 ease-in pb-2">
             <DownloadIcon className="h-4" />
             Download
           </button>
@@ -172,7 +170,7 @@ export default function ReportUser() {
               />
             ))
           ) : (
-            <p className="text-center text-sm lg:text-base text-zinc-500 font-semibold mt-6">
+            <p className="text-center text-sm text-zinc-500 font-semibold mt-6">
               No absences this month!
             </p>
           )}

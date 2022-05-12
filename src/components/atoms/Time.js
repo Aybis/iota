@@ -21,10 +21,11 @@ export default function Time({ moreClass }) {
 
   return (
     <div
-      className={['flex justify-center items-center w-full', moreClass].join(
-        ' ',
-      )}>
-      <h1 className="text-xl font-semibold text-white">
+      className={[
+        'flex justify-center mx-auto container max-w-md items-center',
+        moreClass,
+      ].join(' ')}>
+      <h1 className="text-xl text-center font-semibold text-white">
         {time.getHours() +
           ' : ' +
           (time.getMinutes() > 9

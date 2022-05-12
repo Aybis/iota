@@ -3,7 +3,7 @@ import {
   getImageFromAssets,
   getImageFromStorage,
 } from '../helpers/assetHelpers';
-import { convertTimeAgo } from '../helpers/timeAgo';
+import { convertDate } from '../helpers/convertDate';
 import { ProgressBar } from './atoms';
 
 export default function SectionHistoryActivity({
@@ -17,11 +17,11 @@ export default function SectionHistoryActivity({
   handlerShowImage,
 }) {
   return (
-    <div className="py-4 bg-white p-3 rounded-lg shadow-lg shadow-zinc-200/50">
+    <div className="py-4 bg-white p-3 rounded-lg shadow-lg shadow-zinc-200/50 md:cursor-pointer group hover:scale-105 transition-all duration-300 ease-in-out">
       <div className="flex items-start space-x-3">
         <img
           onClick={() => handlerShowImage(item)}
-          className="h-14 w-14 rounded-md object-cover object-bottom"
+          className="h-14 w-14 rounded-md object-cover object-bottom cursor-pointer"
           src={
             item.photo
               ? getImageFromStorage(item.photo)
@@ -35,7 +35,8 @@ export default function SectionHistoryActivity({
           </p>
           <ProgressBar moreClass={'mt-4'} progress={item.progress} />
           <p className="text-xs text-gray-400 text-right mt-2">
-            {convertTimeAgo(item.jam)}
+            {/* {convertTimeAgo(item.jam)} */}
+            {convertDate('tanggalWaktuLengkap', item.jam)}
           </p>
         </div>
       </div>

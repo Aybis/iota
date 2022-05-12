@@ -1,0 +1,7 @@
+export const PAGINATION_HOLIDAY = 'PAGINATION_HOLIDAY';
+export const LIST_DATA_HOLIDAY = 'LIST_DATA_HOLIDAY';
+export const HOLIDAY_SELECTED = 'HOLIDAY_SELECTED';
+export const TABLE_HEADER = 'TABLE_HEADER';
+export const LOADING = 'LOADING';
+export const MESSAGE = 'MESSAGE';
+export const ERROR = 'ERROR';

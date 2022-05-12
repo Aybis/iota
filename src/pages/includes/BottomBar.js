@@ -2,6 +2,7 @@ import {
   ChartBarIcon as Chart,
   ClipboardCheckIcon,
   ClipboardListIcon as Clipboard,
+  CogIcon,
   FingerPrintIcon,
   HomeIcon as Home,
 } from '@heroicons/react/outline';
@@ -11,6 +12,7 @@ import {
   ClipboardListIcon as ClipboardSolid,
   FingerPrintIcon as FingerSolid,
   HomeIcon as HomeSolid,
+  CogIcon as CogSolid,
 } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -29,63 +31,94 @@ export default function BottomBar() {
   const [menumobiles, setmenumobiles] = useState([]);
 
   useEffect(() => {
-    USER?.profile?.role_id === '1'
-      ? setmenumobiles([
-          {
-            link: '/',
-            name: 'Home',
-            icon: Home,
-            iconActive: HomeSolid,
-          },
-          {
-            link: '/activity',
-            name: 'Activity',
-            icon: ClipboardCheckIcon,
-            iconActive: ClipboardCheckIconSolid,
-          },
+    if (USER?.profile?.role_id === '1') {
+      setmenumobiles([
+        {
+          link: '/',
+          name: 'Home',
+          icon: Home,
+          iconActive: HomeSolid,
+        },
+        {
+          link: '/activity',
+          name: 'Activity',
+          icon: ClipboardCheckIcon,
+          iconActive: ClipboardCheckIconSolid,
+        },
 
-          {
-            link: '/checkin',
-            name: 'Check-in',
-            icon: FingerPrintIcon,
-            iconActive: FingerSolid,
-          },
-          {
-            link: '/report',
-            name: 'Report',
-            icon: Clipboard,
-            iconActive: ClipboardSolid,
-          },
-          {
-            link: '/dashboard',
-            name: 'Summary',
-            icon: Chart,
-            iconActive: ChartSolid,
-          },
-        ])
-      : setmenumobiles([
-          {
-            link: '/',
-            name: 'Home',
-            icon: Home,
-            iconActive: HomeSolid,
-          },
-          {
-            link: '/absensi',
-            name: 'Attendance',
-            icon: ClipboardCheckIcon,
-            iconActive: ClipboardCheckIconSolid,
-          },
-          {
-            link: '/activities',
-            name: 'Activity',
-            icon: Clipboard,
-            iconActive: ClipboardSolid,
-          },
-        ]);
+        {
+          link: '/checkin',
+          name: 'Check-in',
+          icon: FingerPrintIcon,
+          iconActive: FingerSolid,
+        },
+        {
+          link: '/report',
+          name: 'Report',
+          icon: Clipboard,
+          iconActive: ClipboardSolid,
+        },
+        {
+          link: '/dashboard',
+          name: 'Summary',
+          icon: Chart,
+          iconActive: ChartSolid,
+        },
+      ]);
+    }
+
+    if (USER?.profile?.role_id === '2') {
+      setmenumobiles([
+        {
+          link: '/',
+          name: 'Home',
+          icon: Home,
+          iconActive: HomeSolid,
+        },
+        {
+          link: '/absensi',
+          name: 'Attendance',
+          icon: ClipboardCheckIcon,
+          iconActive: ClipboardCheckIconSolid,
+        },
+        {
+          link: '/activities',
+          name: 'Activity',
+          icon: CogIcon,
+          iconActive: ClipboardSolid,
+        },
+      ]);
+    }
+    if (USER?.profile?.role_id === '3') {
+      setmenumobiles([
+        {
+          link: '/',
+          name: 'Home',
+          icon: Home,
+          iconActive: HomeSolid,
+        },
+        {
+          link: '/absensi',
+          name: 'Attendance',
+          icon: ClipboardCheckIcon,
+          iconActive: ClipboardCheckIconSolid,
+        },
+        {
+          link: '/activities',
+          name: 'Activity',
+          icon: Clipboard,
+          iconActive: ClipboardSolid,
+        },
+        {
+          link: '/management',
+          name: 'Management',
+          icon: CogIcon,
+          iconActive: CogSolid,
+        },
+      ]);
+    }
   }, [USER]);
 
-  // console.log(ABSEN);
   if (ABSEN?.absen === undefined) {
     link = '/checkin';
   } else {
@@ -102,25 +135,15 @@ export default function BottomBar() {
       link = `/checkout/${ABSEN?.absen?.id}`;
     }
   }
-  // if (Object.entries(ABSEN?.absen)?.length < 1) {
-  //   link = '/checkin';
-  // } else {
-  //   if (ABSEN?.checkout?.jam) {
-  //     link = 'hidden';
-  //     if (
-  //       convertDate('tanggal', ABSEN?.checkin?.jam) !== convertDate('tanggal')
-  //     ) {
-  //       link = '/checkin';
-  //     }
-  //   } else if (ABSEN?.checkin?.jam) {
-  //     colorIcon = 'bg-red-600';
-  //     name = 'Checkout';
-  //     link = `/checkout/${ABSEN?.absen?.id}`;
-  //   }
-  // }
 
   return (
-    <div className="fixed z-30 bottom-0 inset-x-0 lg:hidden shadow-xl">
+    <div
+      className={[
+        'fixed z-30 bottom-0 inset-x-0 ',
+        USER?.profile?.role_id === '1'
+          ? 'max-w-md mx-auto container'
+          : 'lg:hidden',
+      ].join(' ')}>
       <div
         className={[
           `bg-white shadow-2xl  mb-0 py-1 border-t border-gray-200 border-opacity-50`,

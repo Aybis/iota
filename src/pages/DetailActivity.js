@@ -84,7 +84,7 @@ export default function DetailActivity() {
   ) : (
     <Layout showBottomBar={false}>
       {/* Section Header */}
-      <div className="relative mx-4 mt-6 mb-4 flex items-center justify-between">
+      <div className="relative mt-6 mb-4 flex items-center justify-between">
         <div
           className="relative cursor-pointer hover:bg-white rounded-lg transition-all duration-300 ease-out text-zinc-600"
           onClick={() => navigate(-1)}>
@@ -94,14 +94,14 @@ export default function DetailActivity() {
           USER?.profile?.id === ACTIVITY?.historyActivity?.user_id && (
             <button
               onClick={() => handlerClickShowModalUpdate()}
-              className="h-8 w-8 rounded-lg bg-green-600 flex justify-center items-center shadow-lg shadow-green-500/50">
+              className="h-8 w-8 rounded-lg bg-green-600 flex justify-center items-center shadow-lg shadow-green-500/50 hover:bg-green-400 transition-all duration-300 ease-in-out">
               <PencilIcon className="h-6 text-white" />
             </button>
           )}
       </div>
 
-      <div className="relative flex justify-between my-4 px-4">
-        <div className="flex flex-col flex-none w-64">
+      <div className="relative flex justify-between my-4">
+        <div className="flex flex-col flex-none w-64 lg:w-full">
           <h1 className="text-lg font-semibold text-zinc-700 capitalize">
             {ACTIVITY?.historyActivity?.title}
           </h1>
@@ -145,7 +145,7 @@ export default function DetailActivity() {
             )}
           </div>
         </div>
-        <div className="text-black mt-2 mr-4">
+        <div className="text-black mt-2 mr-4 hidden">
           <SectionProgressCircle
             fontSize="1.2rem"
             value={ACTIVITY?.historyActivity?.progress}
@@ -159,8 +159,8 @@ export default function DetailActivity() {
         </div>
       </div>
 
-      <div className="relative p-4 -mt-3">
-        <p className="text-sm font-medium text-zinc-800">Description</p>
+      <div className="relative py-4 -mt-3">
+        <p className="text-sm font-medium text-zinc-700">Description</p>
         <p className="text-sm text-zinc-400 mt-1">
           {ACTIVITY?.historyActivity?.description}
         </p>
@@ -168,7 +168,7 @@ export default function DetailActivity() {
 
       <hr className="mx-4 border-zinc-200" />
 
-      <div className="relative my-8 mx-4">
+      <div className="relative my-8">
         <div className="flex justify-between items-center mb-4">
           <p className="text-sm font-semibold text-zinc-800">
             Progress{' '}
@@ -177,12 +177,12 @@ export default function DetailActivity() {
             </span>
           </p>
 
-          {ACTIVITY?.historyActivity?.progress < 100 &&
-            USER?.profile?.id === ACTIVITY?.historyActivity?.user_id &&
-            Object.values(ABSEN?.checkin).length > 0 && (
+          {USER?.profile?.role_id === '1' &&
+            ACTIVITY?.historyActivity?.progress < 100 &&
+            USER?.profile?.id === ACTIVITY?.historyActivity?.user_id && (
               <Link
                 to={`/add-progress/${activity}`}
-                className="flex gap-1 items-center text-sm text-blue-600 font-semibold">
+                className="flex gap-1 items-center text-sm text-blue-600 font-semibold hover:text-blue-400 transition-all duration-300 ease-in-out">
                 <PlusIcon className="h-4" />
                 Add Progress
               </Link>
@@ -232,7 +232,9 @@ export default function DetailActivity() {
         open={showModalUpdated}
         title={'Edit Activity'}>
         <div className="relative">
-          {Object.values(ABSEN?.checkin).length > 0 ? (
+          {USER?.profile?.role_id === '1' &&
+          Object.values(ABSEN?.checkin).length > 0 &&
+          USER?.profile?.id === ACTIVITY?.historyActivity?.user_id ? (
             <SectionTextArea
               isLoading={isLoading}
               uploadPhoto={false}

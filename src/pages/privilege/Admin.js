@@ -7,6 +7,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChartBar, SectionProgressCircle } from '../../components/molecules';
+import { setHeader } from '../../config/api/constant';
+import iota from '../../config/api/route/iota';
 import {
   IconThumbnail,
   imageApiAvatarUser,
@@ -28,6 +30,7 @@ export default function Admin() {
   const DASHBOARD = useSelector((state) => state.dashboardadmin);
   const ACTIVITY = useSelector((state) => state.activity);
   const [profile, setprofile] = useState(false);
+  const [dataRegional, setdataRegional] = useState([]);
   const dispatch = useDispatch();
 
   const testData = [
@@ -55,42 +58,23 @@ export default function Admin() {
     },
   ];
 
-  const testDataTable = [
-    {
-      name: 'TR1 SUMATERA',
-      emp: 33,
-      pending: 54,
-      todo: 20,
-      progress: 14,
-      completed: 60,
-    },
-    {
-      name: 'TR2 JABODETABEK',
-      emp: 33,
-      pending: 54,
-      todo: 20,
-      progress: 14,
-      completed: 60,
-    },
-    {
-      name: 'TR3 JABAR',
-      emp: 33,
-      pending: 54,
-      todo: 20,
-      progress: 14,
-      completed: 60,
-    },
-    {
-      name: 'TR4 JATENG & DIY',
-      emp: 33,
-      pending: 54,
-      todo: 20,
-      progress: 14,
-      completed: 60,
-    },
-  ];
+  const getActivityRegional = async () => {
+    setHeader();
+
+    return iota
+      .fetchActivityRegional({
+        params: {
+          date: convertDate('tanggalWaktuLengkap'),
+        },
+      })
+      .then((res) => {
+        setdataRegional(res.data);
+      })
+      .catch((err) => console.log(err.response));
+  };
 
   useEffect(() => {
+    getActivityRegional();
     dispatch(
       fetchDashboardHarian(
         USER?.profile?.regional_id === '' ? null : USER?.profile?.regional_id,
@@ -147,8 +131,8 @@ export default function Admin() {
 
         <button
           onClick={() => setprofile(true)}
-          className="flex flex-col justify-center items-center">
-          <MenuAlt2Icon className="h-8 text-zinc-400" />
+          className="flex flex-col justify-center items-center bg-white shadow-lg shadow-zinc-200 p-1 rounded-lg">
+          <MenuAlt2Icon className="h-8 text-zinc-600" />
         </button>
       </div>
 
@@ -284,13 +268,13 @@ export default function Admin() {
       {/* Section Dashboard For Desktop */}
 
       <div className="relative mt-10 mb-4 hidden sm:block">
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {/* Section Activity */}
           {testData.map((item) => (
             <div
               key={Math.random()}
               className={[
-                'relative flex justify-between items-center  p-4 rounded-lg',
+                'relative flex justify-between items-center p-4 rounded-lg',
                 item.name === 'pending' &&
                   'bg-gradient-to-br from-red-500 to-pink-500 text-white',
                 item.name === 'todo' &&
@@ -387,7 +371,7 @@ export default function Admin() {
       <div className="relative bg-white rounded-lg p-4 mt-8 hidden sm:block">
         <h1 className="font-semibold text-zinc-800">Summary Activtiy</h1>
         <table className="w-full rounded-xl mt-4">
-          <thead className="border-b-2 text-zinc-500 text-sm border-zinc-50 bg-zinc-100 rounded-lg">
+          <thead className="border-b-2 text-zinc-500 uppercase text-sm border-zinc-50 bg-zinc-100 rounded-lg">
             <tr className="border-y border-white rounded-lg">
               <th rowSpan={2} className="font-medium">
                 No
@@ -410,27 +394,27 @@ export default function Admin() {
             </tr>
           </thead>
           <tbody>
-            {testDataTable?.map((item, index) => (
+            {dataRegional?.map((item, index) => (
               <tr
                 key={Math.random()}
-                className={`border-b-2 hover:bg-slate-100 transition-all duration-300 ease-in-out`}>
-                <td className="text-center py-2 text-zinc-500">{index + 1}</td>
+                className={`border-b hover:bg-slate-100 transition-all duration-300 ease-in-out`}>
+                <td className="text-center py-4 text-zinc-500">{index + 1}</td>
                 <td className="pl-4 font-medium text-zinc-700 text-sm">
                   {item.name}
                 </td>
                 <td className="text-center font-light text-zinc-500">
-                  {item.emp}
+                  {item.total_karyawan}
                 </td>
-                <td className="text-center font-semibold text-blue-500 cursor-pointer">
+                <td className="text-center font-semibold text-blue-500">
                   {item.pending}
                 </td>
-                <td className="text-center font-semibold text-blue-500 cursor-pointer">
+                <td className="text-center font-semibold text-blue-500">
                   {item.todo}
                 </td>
-                <td className="text-center font-semibold text-blue-500 cursor-pointer">
+                <td className="text-center font-semibold text-blue-500">
                   {item.progress}
                 </td>
-                <td className="text-center font-semibold text-blue-500 cursor-pointer">
+                <td className="text-center font-semibold text-blue-500">
                   {item.completed}
                 </td>
               </tr>

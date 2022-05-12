@@ -88,7 +88,7 @@ export default function Teknisi() {
       <Profile open={profile} handlerOpen={() => setprofile(false)} />
 
       {/* Section Header */}
-      <div className="relative flex flex-row-reverse justify-between px-4 inset-x-0 mt-6">
+      <div className="relative flex flex-row-reverse justify-between inset-x-0 mt-6">
         <div className="flex space-x-2">
           <img
             src={imageApiAvatarUser(USER?.profile?.name ?? 'Anonymous')}
@@ -105,12 +105,12 @@ export default function Teknisi() {
 
         <button
           onClick={() => setprofile(true)}
-          className="flex flex-col justify-center items-center">
-          <MenuAlt2Icon className="h-8 text-zinc-400" />
+          className="flex flex-col justify-center items-center bg-white shadow-lg p-1 rounded-lg">
+          <MenuAlt2Icon className="h-8 text-zinc-600" />
         </button>
       </div>
 
-      <div className="relative m-4">
+      <div className="relative my-4">
         <h4 className="text-sm text-zinc-500">Welcome,</h4>
         <h1 className="text-2xl font-semibold text-zinc-800 capitalize">
           {USER?.profile?.name?.toLowerCase() ?? 'Anonymous'}
@@ -119,7 +119,7 @@ export default function Teknisi() {
 
       <>
         {/* Section CTA */}
-        <div className="relative m-4 mt-8">
+        <div className="relative my-4 mt-8">
           <div className="bg-white rounded-lg flex justify-between">
             <div className="flex flex-col justify-evenly pl-4 py-2">
               <div>
@@ -152,10 +152,10 @@ export default function Teknisi() {
 
         {/* Summary Section */}
         <div className="relative my-8">
-          <div className="px-4 mb-4">
+          <div className=" mb-4">
             <h1 className="to-zinc-800 font-semibold">Activity Summary</h1>
           </div>
-          <div className="grid grid-cols-2 gap-4 mt-3 mx-4">
+          <div className="grid grid-cols-2 gap-4 mt-3">
             <div className="flex justify-between items-center px-8 col-span-2 bg-gradient-to-br from-blue-500 via-blue-400 to-teal-400 p-3 rounded-lg">
               <div>
                 <h1 className="text-xl font-bold text-white">
@@ -223,10 +223,10 @@ export default function Teknisi() {
 
         {/* Task Overview Section */}
         <div className="relative my-8">
-          <div className="px-4 mb-4">
+          <div className="mb-4">
             <h1 className="to-zinc-800 font-semibold">Task Overview</h1>
           </div>
-          <div className="relative flex overflow-x-scroll scroll-smooth hidden-scroll space-x-4 pl-4 border-b-2 border-zinc-100 pb-2">
+          <div className="relative flex overflow-x-scroll scroll-smooth hidden-scroll space-x-4  border-b-2 border-zinc-100 pb-2">
             {tabNavigation.map((item, index) => (
               <div
                 key={index}
@@ -253,7 +253,7 @@ export default function Teknisi() {
             ))}
           </div>
 
-          <div className="relative bg-gradient-to-b from-zinc-100 to-zinc-50 p-4 scroll-smooth transition-all duration-300 ease-in-out">
+          <div className="relative bg-gradient-to-b from-zinc-100 to-zinc-50 py-4 scroll-smooth transition-all duration-300 ease-in-out -mx-4 px-4">
             {ACTIVITY?.isLoading ? (
               <SkeletonTask />
             ) : (

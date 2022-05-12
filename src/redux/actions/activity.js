@@ -423,41 +423,31 @@ export const updateActivity = (data, id) => async (dispatch) => {
     });
 };
 
-export const insertProgressActivity = (data) => async (dispatch) => {
+export const insertProgressActivity = async (data) => {
   setHeader();
 
   return iota
     .addProgressActivity(data)
     .then((res) => {
-      swal(
-        'Yeay!',
-        res?.data?.message ?? 'Progress berhasil ditambahkan!',
-        'success',
-      );
-      dispatch(fetchHistoryProgress(data.activity_id));
-
       return res;
     })
     .catch((err) => {
-      swal(
-        'Oh no!',
-        err?.response?.data?.message?.length > 1
-          ? err?.response?.data?.message
-          : err?.response?.data?.message?.join(', \n') ?? 'Something Happened!',
-        'error',
-      );
-      return err.response.data;
+      return err?.response;
     });
 };
 
 // api/activity/export
 
 export const downloadActivityByUnit = async (data) => {
+  console.log(data);
   const token = Cookies.get('session');
 
   let url = `https://squadiota-apistaging.pins.co.id/api/activity/export?month=${data.month}&year=${data.year}`;
 
-  if (typeof data.regional_id === 'number') {
+  if (
+    typeof data.regional_id === 'string' ||
+    typeof data.regional_id === 'number'
+  ) {
     url = url + '&regional_id=' + data.regional_id;
   }
 

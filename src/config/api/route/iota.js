@@ -22,6 +22,8 @@ export default {
   addProgressActivity: (data) => axios.post('activity/progress', data),
   // 1.title 2.description
   updateActivity: (data, id) => axios.patch(`activity/${id}`, data),
+  // 1.date
+  fetchActivityRegional: (data) => axios.get('activity/per-regional', data),
 
   // regional
   regional: () => axios.get('regional'),
@@ -55,6 +57,9 @@ export default {
   fetchDataDashboardMonthly: (data) => axios.get('absensi/users/monthly', data),
   fetchDataDashboardByRegional: (params) =>
     axios.get('absensi/users/employe', params),
+
+  //endpoint CRUD data users
+  fetchAllUsers: (params) => axios.get('user'),
 
   // end point push notif to WA
   notifWa: (data) => axios.post('notifikasi/notif-to-subordinate', data),

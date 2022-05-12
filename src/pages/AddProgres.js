@@ -3,8 +3,9 @@ import { Slider } from '@mui/material';
 import Compressor from 'compressorjs';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 import {
   ButtonCustom,
   Card,
@@ -24,7 +25,6 @@ export default function AddProgress() {
   const [didMount, setDidMount] = useState(false);
   const [isSubmit, setisSubmit] = useState(false);
   const [photo, setPhoto] = useState(null);
-  const dispatch = useDispatch();
   const [longLat, setlongLat] = useState(null);
   const [address, setAddress] = useState(null);
   const [image, setImage] = useState(null);
@@ -80,16 +80,16 @@ export default function AddProgress() {
     state.lokasi = address;
     state.jam = convertDate('tanggalWaktuLengkap');
 
-    await dispatch(insertProgressActivity(state))
-      .then((res) => {
-        if (res.status === 200) {
-          navigate(-1);
-        }
-        setisSubmit(false);
-      })
-      .catch((err) => {
-        setisSubmit(false);
-      });
+    const result = await insertProgressActivity(state);
+
+    if (result?.status === 200) {
+      setisSubmit(false);
+      swal('Yeay!', result?.data?.message, 'success');
+      navigate(-1);
+    } else {
+      setisSubmit(false);
+      swal('Oh No!', result?.data?.message ?? 'Something Happened!', 'error');
+    }
   };
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export default function AddProgress() {
   }
 
   return (
-    <motion.div className="flex flex-col min-h-screen h-full bg-zinc-50">
+    <motion.div className="flex flex-col min-h-screen h-full bg-zinc-50 max-w-md mx-auto container">
       <motion.div
         initial={{
           top: -50,
@@ -117,7 +117,7 @@ export default function AddProgress() {
         }}
         transition={{ duration: 0.5 }}
         className="fixed top-4 inset-x-0 z-20 px-3">
-        <div className="bg-gray-800 bg-blend-multiply backdrop-filter backdrop-blur bg-opacity-40 shadow-xl h-16 py-2 px-4 rounded-lg grid grid-cols-4 w-full place-content-center">
+        <div className="bg-gray-800 mx-auto container max-w-md bg-blend-multiply backdrop-filter backdrop-blur bg-opacity-40 shadow-xl h-16 py-2 px-4 rounded-lg grid grid-cols-4 w-full place-content-center">
           <div className="flex justify-start items-center">
             <motion.button
               whileHover={{ scale: 1.1 }}

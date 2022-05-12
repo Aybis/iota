@@ -144,7 +144,7 @@ export default function Activity() {
 
   return (
     <Layout>
-      <div className="relative mx-4 mt-8">
+      <div className="relative mt-8">
         <div className="flex justify-between items-center">
           <div className="flex flex-col">
             <p className="text-zinc-500 text-lg">Today</p>
@@ -164,10 +164,10 @@ export default function Activity() {
 
       <SectionDateHor setDate={setdate} handlerChange={handlerChangeDate} />
 
-      <hr className="mx-4 -mt-2" />
+      <hr className="-mt-2" />
       <div className="relative my-4">
-        <h1 className="text-zinc-800 font-semibold px-4 mb-4">List Activity</h1>
-        <div className="relative flex overflow-x-scroll hidden-scroll space-x-4 pl-4 border-b-2 border-zinc-100 pb-2">
+        <h1 className="text-zinc-800 font-semibold mb-4">List Activity</h1>
+        <div className="relative flex overflow-x-scroll hidden-scroll space-x-4 border-b-2 border-zinc-100 pb-2">
           {tabNavigation.map((item, index) => (
             <div
               key={index}
@@ -193,7 +193,7 @@ export default function Activity() {
             <Loading height={5} width={5} />
           </div>
         ) : (
-          <div className="relative p-4">
+          <div className="relative py-4">
             {isLoading ? (
               <SkeletonTask />
             ) : (
