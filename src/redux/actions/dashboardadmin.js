@@ -446,7 +446,7 @@ export const downloadReportByUnit = async (data) => {
   const token = Cookies.get('session');
   console.log(data);
 
-  let url = `https://squadiota-apistaging.pins.co.id/api/absensi/export-user-by-regional?month=${data.month}&year=${data.year}`;
+  let url = `https://apiota.pins.co.id/api/absensi/export-user-by-regional?month=${data.month}&year=${data.year}`;
 
   if (
     typeof data.regional_id === 'string' ||

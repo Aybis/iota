@@ -107,7 +107,7 @@ export const downloadReportPersonal = async (data) => {
 
   var config = {
     method: 'get',
-    url: `https://squadiota-apistaging.pins.co.id/api/absensi/export-personal?month=${data.month}&year=${data.year}&user_id=${data.id}&name=${data.name}`,
+    url: `https://apiota.pins.co.id/api/absensi/export-personal?month=${data.month}&year=${data.year}&user_id=${data.id}&name=${data.name}`,
     headers: {
       'Content-Type':
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

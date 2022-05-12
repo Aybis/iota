@@ -442,7 +442,7 @@ export const downloadActivityByUnit = async (data) => {
   console.log(data);
   const token = Cookies.get('session');
 
-  let url = `https://squadiota-apistaging.pins.co.id/api/activity/export?month=${data.month}&year=${data.year}`;
+  let url = `https://apiota.pins.co.id/api/activity/export?month=${data.month}&year=${data.year}`;
 
   if (
     typeof data.regional_id === 'string' ||
