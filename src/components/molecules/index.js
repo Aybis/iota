@@ -16,3 +16,6 @@ export { default as ChartGauge } from './ChartGauge';
 export { default as SectionProgressCircle } from './SectionProgressCircle';
 export { default as Pagination } from './Pagination';
 export { default as ProfileDropdown } from './ProfileDropdown';
+export { default as SectionCardEmployee } from './SectionCardEmployee';
+export { default as SkeletonCardEmployee } from './SkeletonCardEmployee';
+export { default as RedirectPage } from './RedirectPage';

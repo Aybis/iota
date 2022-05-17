@@ -52,7 +52,6 @@ export const fetchDataHoliday = (page, date, total) => async (dispatch) => {
       .then((res) => {
         dispatch(getDataHoliday(res.data.data));
         dispatch(setPaginationHoliday(res.data));
-        console.log(res);
         let dataHeader = Object.keys(res?.data?.data[0]).filter(
           (item) => item !== 'id',
         );

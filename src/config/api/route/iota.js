@@ -62,7 +62,7 @@ export default {
   fetchAllUsers: (params) => axios.get('user'),
   insertUser: (data) => axios.post('user', data),
   updateUser: (id, data) => axios.patch(`user/${id}`, data),
-  deleteUser: (id) => axios.delete('user', id),
+  deleteUser: (id) => axios.delete(`user/${id}`),
 
   // end point push notif to WA
   notifWa: (data) => axios.post('notifikasi/notif-to-subordinate', data),

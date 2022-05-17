@@ -1,31 +1,42 @@
-import {
-  ArrowNarrowLeftIcon,
-  DocumentAddIcon,
-  IdentificationIcon,
-  PencilAltIcon,
-} from '@heroicons/react/solid';
+import { ArrowNarrowLeftIcon, DocumentAddIcon } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
-import { ButtonCustom, Input, Modals } from '../../../components/atoms';
-import { SectionHeaderPage } from '../../../components/molecules';
+import {
+  ButtonCustom,
+  Input,
+  Modals,
+  SearchInput,
+  Select,
+} from '../../../components/atoms';
+import {
+  SectionCardEmployee,
+  SectionHeaderPage,
+  SkeletonCardEmployee,
+} from '../../../components/molecules';
 import { setHeader } from '../../../config/api/constant';
 import iota from '../../../config/api/route/iota';
-import { imageApi } from '../../../helpers/assetHelpers';
 import useForm from '../../../helpers/useForm';
+import {
+  fetchAllEmployee,
+  insertEmployee,
+  setEmpLoading,
+  updateEmployee,
+} from '../../../redux/actions/employee';
 import { fetchAllRegional } from '../../../redux/actions/regional';
 import Layout from '../../includes/Layout';
 
 export default function Index() {
   const navigate = useNavigate();
-  const REGIONAL = useSelector((state) => state.regional);
-  const [dataUsers, setdataUsers] = useState([]);
-  const [loadingFetch, setloadingFetch] = useState(false);
-  const [isSubmit, setisSubmit] = useState(false);
-  const [resValidation, setresValidation] = useState([]);
   const dispatch = useDispatch();
+  const [isSubmit, setisSubmit] = useState(false);
   const [showModal, setshowModal] = useState(false);
+  const [resValidation, setresValidation] = useState([]);
+  const USER = useSelector((state) => state.user);
+  const REGIONAL = useSelector((state) => state.regional);
+  const EMPLOYEE = useSelector((state) => state.employee);
+  const [filterData, setfilterData] = useState(EMPLOYEE?.allEmployee);
 
   const [formData, setformData] = useState({
     type: '',
@@ -44,6 +55,27 @@ export default function Index() {
     phone: '',
     password: 'password2022',
   });
+
+  const handlerSearchEmployee = (event) => {
+    dispatch(setEmpLoading(true));
+    let result = EMPLOYEE?.allEmployee?.filter((item) => {
+      return (
+        item.name.toLowerCase().includes(event.target.value.toLowerCase()) ||
+        item.nik
+          .toString()
+          .toLowerCase()
+          .includes(event.target.value.toLowerCase()) ||
+        item.witel
+          .toString()
+          .toLowerCase()
+          .includes(event.target.value.toLowerCase())
+      );
+    });
+    setfilterData(result);
+    setTimeout(() => {
+      dispatch(setEmpLoading(false));
+    }, 400);
+  };
 
   // set all form into one array
   // set exclude password and when role_id is leader remove regional to validation required
@@ -72,6 +104,8 @@ export default function Index() {
     setshowModal(true);
 
     removeValueProperty();
+    setresValidation([]);
+
     setformData({
       type: type,
       data: item,
@@ -92,39 +126,20 @@ export default function Index() {
     }
   };
 
-  // fetch data all user
-  const fetchData = async () => {
-    setloadingFetch(true);
-    setHeader();
-    return await iota
-      .fetchAllUsers()
-      .then((res) => {
-        setdataUsers(res.data);
-        setloadingFetch(false);
-        return res;
-      })
-      .catch((err) => {
-        setloadingFetch(false);
-        return err.response;
-      });
-  };
-
   // add user
   const addUser = async () => {
     setisSubmit(true);
     try {
-      const result = await iota.insertUser(form);
+      const result = await dispatch(insertEmployee(form));
       if (result?.status === 200) {
-        swal('Yeay', result?.data?.message, 'success');
-        fetchData();
-        removeValueProperty();
-        setresValidation([]);
         setshowModal(false);
+        dispatch(fetchAllEmployee()).then((res) => {
+          setfilterData(res.data);
+        });
       }
       setisSubmit(false);
     } catch (error) {
       setisSubmit(false);
-      swal('Oh No!', 'Something Happened', 'error');
       setresValidation(error?.response?.data?.message);
     }
   };
@@ -133,19 +148,53 @@ export default function Index() {
   const updateUser = async () => {
     setisSubmit(true);
     try {
-      const result = await iota.updateUser(formData?.data?.id, form);
+      const result = await dispatch(updateEmployee(formData?.data?.id, form));
       if (result?.status === 200) {
-        swal('Yeay', result?.data?.message, 'success');
-        fetchData();
-        setresValidation([]);
         setshowModal(false);
+        dispatch(fetchAllEmployee()).then((res) => {
+          setfilterData(res.data);
+        });
+      } else {
+        setresValidation(result?.data?.message);
       }
       setisSubmit(false);
     } catch (error) {
-      setisSubmit(false);
-      swal('Oh No!', 'Something Happened', 'error');
-      setresValidation(error?.response?.data?.message);
+      return true;
     }
+  };
+
+  const deleteUser = async (event, item) => {
+    event.preventDefault();
+
+    swal({
+      title: 'Are you sure?',
+      className: 'text-center',
+      text: `Anda yakin ingin menghapus karyawan ${item.name} !`,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        setHeader();
+        return iota
+          .deleteUser(item.id)
+          .then((res) => {
+            dispatch(fetchAllEmployee()).then((res) => {
+              setfilterData(res.data);
+            });
+            swal(res?.data?.message ?? 'Karyawan berhasil dihapus!', {
+              icon: 'success',
+            });
+          })
+          .catch((err) => {
+            swal('Oh No!', 'Something Happened!', {
+              icon: 'error',
+            });
+          });
+      } else {
+        swal('Okay!');
+      }
+    });
   };
 
   const handlerSubmit = async (event) => {
@@ -159,129 +208,73 @@ export default function Index() {
   };
 
   useEffect(() => {
-    fetchData();
+    dispatch(fetchAllEmployee()).then((res) => {
+      setfilterData(res.data);
+    });
     dispatch(fetchAllRegional());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Layout showBottomBar={false}>
-      <SectionHeaderPage title={'Manage Data Teknisi'} />
+    <Layout showBottomBar={false} isLeadOnly={true}>
+      <SectionHeaderPage title={'Manage Data Employee'} />
       {/* Section Header */}
       <div className="relative my-4 px-4 lg:-mt-2 lg:px-0 flex items-center justify-between">
         <div
-          className="relative cursor-pointer hover:scale-110 rounded-lg transition-all duration-300 ease-out text-zinc-600"
+          className="relative flex items-center space-x-2 cursor-pointer hover:scale-110 rounded-lg transition-all duration-300 ease-out text-zinc-600"
           onClick={() => navigate(-1)}>
           <ArrowNarrowLeftIcon className="h-6" />
+          <span className="text-sm font-medium">Back</span>
         </div>
       </div>
 
       {/* Section Header List and Button Add Employee */}
-      <div className="relative flex justify-between items-center m-4">
+      <div className="relative flex justify-between items-center my-8 px-4 md:px-0">
         <div>
           <p className="text-base sm:text-lg font-semibold text-zinc-700">
-            List Data Teknisi
+            List Data Employee
           </p>
           <p className="mt-2 text-xs sm:text-sm text-zinc-400">
-            Result : <span>{dataUsers?.length ?? 0} Teknisi</span>
+            Result : <span>{filterData?.length ?? 0} Employee</span>
           </p>
         </div>
 
-        <div className="relative flex justify-between items-center mb-4">
-          <button
-            onClick={() => handlerShowModal('add')}
-            className="px-4 text-sm py-2 rounded-md text-white font-medium bg-blue-600 flex justify-center items-center gap-2 hover:bg-blue-400 transition-all duration-300 ease-in-out shadow-lg shadow-blue-500/50">
-            <DocumentAddIcon className=" h-5" />
-            Add Employee
-          </button>
-        </div>
+        {USER?.profile?.role_id === '3' && (
+          <div className="relative flex justify-between items-center mb-4">
+            <button
+              onClick={() => handlerShowModal('add')}
+              className="px-4 text-sm py-2 rounded-md text-white font-medium bg-blue-600 flex justify-center items-center gap-2 hover:bg-blue-400 transition-all duration-300 ease-in-out shadow-lg shadow-blue-500/50">
+              <DocumentAddIcon className=" h-5" />
+              Add Employee
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="my-4 mx-2">
+        <SearchInput
+          onchange={handlerSearchEmployee}
+          placeholder={'Search name, NIK, witel'}
+        />
       </div>
 
       <div className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-4 px-2">
-        {loadingFetch ? (
-          Array.from({ length: 20 }).map((item) => (
-            <div
-              key={Math.random()}
-              className=" bg-white p-4 relative flex flex-col justify-center items-center space-y-4 shadow-lg shadow-zinc-200/40  rounded-lg">
-              <img
-                src={imageApi('')}
-                alt=""
-                className="h-20 w-20 rounded-lg animate-pulse"
-              />
-              <div className="relative w-full h-auto">
-                <div className="relative text-sm text-zinc-700 font-semibold h-6 bg-zinc-100 rounded-md w-full transition-all animate-pulse"></div>
-                <div className="relative mt-2 text-zinc-400 capitalize h-6 bg-zinc-100 rounded-md w-full transition-all animate-pulse"></div>
-              </div>
-            </div>
+        {EMPLOYEE?.isLoading ? (
+          Array.from({ length: 20 }).map((item, index) => (
+            <SkeletonCardEmployee key={index} />
           ))
-        ) : dataUsers?.length > 0 ? (
-          dataUsers
-            .slice()
+        ) : filterData?.length > 0 ? (
+          filterData
+            ?.slice()
             .reverse()
-            .map((item) => (
-              <div
-                key={Math.random()}
-                className="bg-white relative shadow-lg shadow-zinc-200/40 flex flex-col text-center rounded-lg divide-y divide-gray-200">
-                <div className="flex-1 flex flex-col p-4 lg:p-8">
-                  <img
-                    className="w-20 h-20 lg:w-32 lg:h-32 flex-shrink-0 mx-auto rounded-full"
-                    src={imageApi(item.name)}
-                    alt=""
-                  />
-                  <h3 className="mt-6 text-gray-900 text-sm font-medium uppercase">
-                    {item.name}
-                  </h3>
-                  <dl className="mt-1 flex-grow flex flex-col justify-between">
-                    <dt className="sr-only">Title</dt>
-                    <dd className="text-gray-500 text-xs md:text-sm">
-                      {item.nik}
-                    </dd>
-                    <dt className="sr-only">Role</dt>
-                    <dd className="mt-3">
-                      <span
-                        className={[
-                          'px-2 py-1  text-xs font-medium  rounded-full',
-                          item.role_id === '3' && 'bg-red-100 text-red-800',
-                          item.role_id === '2' && 'bg-green-100 text-green-800',
-                          item.role_id === '1' &&
-                            'bg-yellow-100 text-yellow-800',
-                        ].join(' ')}>
-                        {item.role_id === '3'
-                          ? 'Leader'
-                          : item.role_id === '2'
-                          ? 'Manager'
-                          : 'Teknisi'}
-                      </span>
-                    </dd>
-                  </dl>
-                </div>
-                <div>
-                  <div className="-mt-px flex divide-x divide-gray-200">
-                    <div className="w-0 flex-1 flex">
-                      <button
-                        onClick={() => handlerShowModal('view', item)}
-                        className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-xs md:text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-400 group">
-                        <IdentificationIcon
-                          className="md:w-5 md:h-5 h-4 w-4 text-gray-400"
-                          aria-hidden="true"
-                        />
-                        <span className="ml-3">View</span>
-                      </button>
-                    </div>
-                    <div className="-ml-px w-0 flex-1 flex">
-                      <button
-                        onClick={() => handlerShowModal('update', item)}
-                        className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-xs md:text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-400 group">
-                        <PencilAltIcon
-                          className="md:w-5 md:h-5 h-4 w-4 text-gray-400"
-                          aria-hidden="true"
-                        />
-                        <span className="ml-3">Update</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            .map((item, index) => (
+              <SectionCardEmployee
+                key={index}
+                isAdmin={USER?.profile?.role_id === '3'}
+                item={item}
+                handlerDelete={deleteUser}
+                handlerClick={handlerShowModal}
+              />
             ))
         ) : (
           <div className="flex justify-center items-center col-span-2 md:col-span-3 lg:col-span-4">
@@ -313,59 +306,39 @@ export default function Index() {
             resValidation?.length > 0 && 'mt-3',
           ].join(' ')}>
           {/* Input Role */}
-          <div className="sm:col-span-3 text-left">
-            <label
-              htmlFor="role"
-              className="block text-sm text-gray-700 capitalize">
-              Role
-            </label>
-            <select
-              disabled={formData?.type === 'view'}
-              onChange={(e) => setform(e)}
-              name="role_id"
-              value={form.role_id}
-              className="disabled:bg-zinc-100 disabled:cursor-not-allowed mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
-              <option value="" disabled>
-                Choose Role
-              </option>
-              <option value="1">Technisian</option>
-              <option value="2">Manager</option>
-              <option value="3">Leader</option>
-            </select>
-          </div>
+          <Select
+            isDisabled={formData?.type === 'view'}
+            onchange={setform}
+            name="role_id"
+            value={form.role_id}
+            labelName="Role">
+            <option value="1">Technician</option>
+            <option value="2">Manager</option>
+            <option value="3">Leader</option>
+          </Select>
 
           {/* Input Regional */}
           {form.role_id !== '' && form.role_id !== '3' && (
-            <div className="sm:col-span-3 text-left">
-              <label
-                htmlFor="regional"
-                className="block text-sm text-gray-700 capitalize">
-                Regional
-              </label>
-              <select
-                onChange={(e) => setform(e)}
-                disabled={formData?.type === 'view'}
-                name="regional_id"
-                value={
-                  formData?.type === 'add'
-                    ? form.regional_id
-                    : formData?.data?.regional_id
-                }
-                className="disabled:bg-zinc-100 disabled:cursor-not-allowed mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                <option value="" disabled>
-                  Choose Regional
-                </option>
-                {REGIONAL?.listRegional?.length > 0
-                  ? REGIONAL?.listRegional
-                      ?.filter((id) => id.alias !== 'ALL TREG')
-                      .map((item, index) => (
-                        <option value={item.id} key={index}>
-                          {item.alias}
-                        </option>
-                      ))
-                  : ''}
-              </select>
-            </div>
+            <Select
+              isDisabled={formData?.type === 'view'}
+              labelName={'Regional'}
+              name="regional_id"
+              onchange={setform}
+              value={
+                formData?.type === 'add'
+                  ? form.regional_id
+                  : formData?.data?.regional_id
+              }>
+              {REGIONAL?.listRegional?.length > 0
+                ? REGIONAL?.listRegional
+                    ?.filter((id) => id.alias !== 'ALL TREG')
+                    .map((item, index) => (
+                      <option value={item.id} key={index}>
+                        {item.alias}
+                      </option>
+                    ))
+                : ''}
+            </Select>
           )}
 
           {/* Validasi when regional and role have been input or role input as leader  */}
@@ -410,6 +383,7 @@ export default function Index() {
               {formData?.type !== 'view' ? (
                 <ButtonCustom
                   isSubmit={isSubmit}
+                  type={formData?.type === 'add' ? 'in' : 'edit'}
                   isDisabled={allForm?.includes('')}
                   moreClass={'capitalize'}>
                   {formData.type} Employee

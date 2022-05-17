@@ -14,9 +14,6 @@ export default function Input({
   showLabel = true,
   inputType = 'text',
   note,
-  pattern,
-  minLength,
-  handlerInput = null,
 }) {
   return (
     <div className={['sm:col-span-3 text-left', addClassParent].join(' ')}>

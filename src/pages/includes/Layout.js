@@ -1,11 +1,19 @@
 import { ArrowNarrowUpIcon } from '@heroicons/react/solid';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { RedirectPage } from '../../components/molecules';
 import BottomBar from './BottomBar';
 import Footer from './Footer';
 import Header from './Header';
 
-export default function Layout({ showBottomBar = true, children, moreClass }) {
+export default function Layout({
+  showBottomBar = true,
+  children,
+  moreClass,
+  notTechnician = false,
+  isLeadOnly = false,
+  isAdminOnly = false,
+}) {
   const [visible, setVisible] = useState(false);
   const [didMount, setDidMount] = useState(false);
   const USER = useSelector((state) => state.user);
@@ -37,6 +45,14 @@ export default function Layout({ showBottomBar = true, children, moreClass }) {
   if (!didMount) {
     return null;
   }
+
+  if (isLeadOnly && USER?.profile?.role_id === '1') {
+    return <RedirectPage />;
+  }
+
+  if (isAdminOnly && USER?.profile?.role_id !== '3') {
+    return <RedirectPage />;
+  }
   return (
     <div
       className={[
@@ -57,12 +73,38 @@ export default function Layout({ showBottomBar = true, children, moreClass }) {
       )}
 
       <div className={['relative overflow-hidden'].join(' ')}>
-        {USER?.profile?.role_id === '3' && <Header />}
+        {USER?.profile?.role_id !== '1' && <Header />}
 
         {showBottomBar && <BottomBar />}
 
-        <main className="min-h-full">
-          {USER?.profile?.role_id !== '1' ? (
+        {notTechnician && USER?.profile?.role_id !== '1' && (
+          <main className="min-h-full">
+            <div className="relative sm:pt-16 lg:p-8 lg:pb-14 lg:max-w-7xl container mx-auto lg:mt-16 overflow-scroll">
+              {children}
+            </div>
+          </main>
+        )}
+
+        {!notTechnician &&
+          (USER?.profile?.role_id === '2' ||
+            USER?.profile?.role_id === '3') && (
+            <main className="min-h-full">
+              <div className="relative sm:pt-16 lg:p-8 lg:pb-14 lg:max-w-7xl container mx-auto lg:mt-16 overflow-scroll">
+                {children}
+              </div>
+            </main>
+          )}
+
+        {!notTechnician && USER?.profile?.role_id === '1' && (
+          <main className="min-h-full">
+            <div className="relative mx-auto container max-w-md overflow-scroll min-h-screen bg-zinc-50 px-4">
+              {children}
+            </div>
+          </main>
+        )}
+
+        {/* <main className="min-h-full">
+          {USER?.profile?.role_id === '3' ? (
             <div className="relative sm:pt-16 lg:p-8 lg:pb-14 lg:max-w-7xl container mx-auto lg:mt-16 overflow-scroll">
               {children}
             </div>
@@ -71,8 +113,8 @@ export default function Layout({ showBottomBar = true, children, moreClass }) {
               {children}
             </div>
           )}
-        </main>
-        {USER?.profile?.role_id === '3' && <Footer />}
+        </main> */}
+        {USER?.profile?.role_id !== '1' && <Footer />}
       </div>
     </div>
   );

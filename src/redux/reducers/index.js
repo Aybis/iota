@@ -11,6 +11,7 @@ import dashboarduser from './dashboarduser';
 import dashboardadmin from './dashboardadmin';
 import forget from './forget';
 import holiday from './libur';
+import employee from './employee';
 
 const persistConfig = {
   key: 'root',
@@ -25,6 +26,7 @@ const persistConfig = {
     'dashboardadmin',
     'forget',
     'holiday',
+    'employee',
   ],
 };
 
@@ -38,6 +40,7 @@ const rootReducer = combineReducers({
   dashboardadmin,
   forget,
   holiday,
+  employee,
 });
 
 export default persistReducer(persistConfig, rootReducer);

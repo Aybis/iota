@@ -8,7 +8,7 @@ export default function Management() {
   const navigate = useNavigate();
   const dataModules = [
     {
-      name: 'Karyawan',
+      name: 'Employee',
       isActive: true,
       icon: UsersIcon,
       link: '/management/users',
@@ -18,7 +18,7 @@ export default function Management() {
       color: 'blue-500',
     },
     {
-      name: 'Hari Libur',
+      name: 'Day Off',
       isActive: true,
       icon: CalendarIcon,
       isDisabled: false,
@@ -30,7 +30,7 @@ export default function Management() {
   ];
 
   return (
-    <Layout>
+    <Layout isLeadOnly={true}>
       <SectionHeaderPage title={'Management'} />
 
       <div className="relative grid grid-cols-2 gap-6 lg:gap-8 my-8 px-4">

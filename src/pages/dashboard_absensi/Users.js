@@ -121,7 +121,7 @@ export default function Users() {
             </button>
           </div>
 
-          <div className="relative grid grid-cols-1 gap-y-5 mt-4">
+          <div className="relative grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-4">
             {DASHBOARD?.listKaryawan?.map((item) => (
               <div
                 key={Math.random()}

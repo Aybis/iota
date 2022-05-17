@@ -125,7 +125,7 @@ export default function DashboardActivity() {
   }, [dispatch]);
 
   return (
-    <Layout>
+    <Layout isLeadOnly={true}>
       <SectionHeaderPage title={'Activity Dashboard'} />
 
       {USER?.profile?.role_id === '3' && (

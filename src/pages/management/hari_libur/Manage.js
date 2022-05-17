@@ -217,13 +217,13 @@ export default function Index() {
   }, [dispatch]);
 
   return (
-    <Layout showBottomBar={false}>
+    <Layout showBottomBar={false} isLeadOnly={true} isAdminOnly={true}>
       <SectionHeaderPage title={'Management Libur Tahunan'} />
 
       <div className="relative mx-auto container px-4 pt-4 lg:-mt-4 lg:px-0 max-w-7xl">
         <button
           onClick={() => navigate(-1)}
-          className="w-fit text-zinc-600 pb-2 flex gap-3 items-center lg:text-lg hover:font-semibold transition-all duration-300 ease-in-out border-b-2 border-transparent hover:border-zinc-600">
+          className="w-fit text-zinc-600 pb-2 flex space-x-1 items-center lg:text-lg hover:font-semibold transition-all duration-300 ease-in-out border-b-2 border-transparent hover:border-zinc-600">
           <ArrowLeftIcon className="h-4" />
           <span className="text-sm font-medium">Back</span>
         </button>

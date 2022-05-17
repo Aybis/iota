@@ -80,7 +80,7 @@ export default function DashboardAbsensi() {
   }, []);
 
   return (
-    <Layout>
+    <Layout isLeadOnly={true}>
       <SectionHeaderPage title={'Attendance Dashboard'} />
 
       {USER?.profile?.role_id === '3' && (

@@ -10,6 +10,7 @@ import Layout from '../../includes/Layout';
 
 export default function Index() {
   const HOLIDAY = useSelector((state) => state.holiday);
+  const USER = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -19,8 +20,8 @@ export default function Index() {
   }, [dispatch]);
 
   return (
-    <Layout showBottomBar={false}>
-      <SectionHeaderPage title={'Manage Hari Libur'} />
+    <Layout showBottomBar={false} isLeadOnly={true}>
+      <SectionHeaderPage title={'Manage Day Off'} />
       {/* Section Header */}
       <div className="relative my-4 px-4 lg:px-0 flex items-center justify-between">
         <div
@@ -31,17 +32,19 @@ export default function Index() {
         </div>
       </div>
 
-      <div className="relative px-4 flex mx-auto container max-w-7xl justify-end mb-8">
-        <ButtonCustom
-          isAnimated={true}
-          handlerClick={() => navigate('/management/libur/data')}
-          moreClass={'shadow-lg shadow-blue-500/50 gap-1'}>
-          <CogIcon className="h-4 text-white" />
-          <span className="text-sm font-semibold text-white">
-            Manage Hari Libur
-          </span>
-        </ButtonCustom>
-      </div>
+      {USER?.profile?.role_id === '3' && (
+        <div className="relative px-4 flex mx-auto container max-w-7xl justify-end mb-8">
+          <ButtonCustom
+            isAnimated={true}
+            handlerClick={() => navigate('/management/libur/data')}
+            moreClass={'shadow-lg shadow-blue-500/50 gap-1'}>
+            <CogIcon className="h-4 text-white" />
+            <span className="text-sm font-semibold text-white">
+              Manage Day Off
+            </span>
+          </ButtonCustom>
+        </div>
+      )}
 
       {/* Section Content */}
       <div className="relative mx-auto container px-4 pt-4 lg:px-0 max-w-7xl mt-2">

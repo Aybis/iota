@@ -151,7 +151,11 @@ export default function Admin() {
       </div>
 
       {/* Section Dashboard For Mobile */}
-      <div className="relative my-2 block sm:hidden">
+      <div
+        className={[
+          'relative my-2',
+          USER?.profile?.role_id === '3' ? ' block sm:hidden' : 'block',
+        ].join(' ')}>
         <div className="relative bg-white mx-4 p-3 rounded-lg">
           {/* Section Header */}
           <div className="flex justify-between items-center">
@@ -267,7 +271,11 @@ export default function Admin() {
 
       {/* Section Dashboard For Desktop */}
 
-      <div className="relative mt-10 mb-4 hidden sm:block">
+      <div
+        className={[
+          'relative mt-10 mb-4',
+          USER?.profile?.role_id === '3' ? ' hidden sm:block' : 'hidden',
+        ].join(' ')}>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {/* Section Activity */}
           {testData.map((item) => (
@@ -368,7 +376,11 @@ export default function Admin() {
 
       {/* Section Table Summary Activity */}
 
-      <div className="relative bg-white rounded-lg p-4 mt-8 hidden sm:block">
+      <div
+        className={[
+          'relative bg-white rounded-lg p-4 mt-8',
+          USER?.profile?.role_id === '3' ? ' hidden sm:block' : 'hidden',
+        ].join(' ')}>
         <h1 className="font-semibold text-zinc-800">Summary Activtiy</h1>
         <table className="w-full rounded-xl mt-4">
           <thead className="border-b-2 text-zinc-500 uppercase text-sm border-zinc-50 bg-zinc-100 rounded-lg">

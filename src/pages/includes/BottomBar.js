@@ -87,6 +87,12 @@ export default function BottomBar() {
           icon: CogIcon,
           iconActive: ClipboardSolid,
         },
+        {
+          link: '/management',
+          name: 'Management',
+          icon: CogIcon,
+          iconActive: CogSolid,
+        },
       ]);
     }
     if (USER?.profile?.role_id === '3') {
