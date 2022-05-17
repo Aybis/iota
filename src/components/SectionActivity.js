@@ -32,7 +32,7 @@ export default function SectionActivity({
         </div>
 
         <div className="absolute top-0 text-xs text-zinc-400 right-0">
-          {convertDate('tanggalShort', date) ?? 'Rabu, 12 Maret'}
+          {convertDate('tanggalShort', date)}
         </div>
         {/* <div
           className={[

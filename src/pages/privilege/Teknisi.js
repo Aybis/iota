@@ -61,6 +61,8 @@ export default function Teknisi() {
     }, 200);
   };
 
+  console.log(ACTIVITY);
+
   useEffect(() => {
     dispatch(fetchActivityPendingByUser({ user_id: USER?.profile?.id }));
 
@@ -206,11 +208,13 @@ export default function Teknisi() {
               <div>
                 <h1 className="font-semibold text-zinc-100">Pending</h1>
                 <p className="mt-1 text-2xl font-bold text-white">
-                  {ACTIVITY?.activitiesByUserPending?.filter(
-                    (item) =>
-                      convertDate('tanggalHari', item.created_at) !==
-                      convertDate('tanggalHari'),
-                  )?.length ?? 0}
+                  {
+                    ACTIVITY?.activitiesByUserPending?.filter(
+                      (item) =>
+                        convertDate('tanggalFormat', item.created_at) !==
+                        convertDate('tanggalFormat'),
+                    )?.length
+                  }
                   <small className="text-sm font-normal text-zinc-100">
                     {' '}
                     activity

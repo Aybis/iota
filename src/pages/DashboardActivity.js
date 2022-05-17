@@ -115,7 +115,7 @@ export default function DashboardActivity() {
   };
 
   useEffect(() => {
-    dispatch(setSelectedRegional(ACTIVITY?.regionalSelected));
+    dispatch(setSelectedRegional(ACTIVITY?.regionalSelectedAct));
 
     if (USER?.profile?.role_id === '1') {
       navigate('/404');
@@ -125,7 +125,7 @@ export default function DashboardActivity() {
   }, [dispatch]);
 
   return (
-    <Layout isLeadOnly={true}>
+    <Layout>
       <SectionHeaderPage title={'Activity Dashboard'} />
 
       {USER?.profile?.role_id === '3' && (

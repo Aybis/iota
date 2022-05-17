@@ -135,7 +135,7 @@ export const fetchActivityProgressByUser = (data) => async (dispatch) => {
       res?.data?.map((item) => {
         dispatch(setAcitvityUserByProgress(item.activity));
         dispatch(setLoadingAct(false));
-
+        console.log('progres', res.data, data);
         return item;
       });
     })
@@ -162,6 +162,7 @@ export const fetchActivityPendingByUser = (data) => async (dispatch) => {
       res?.data?.map((item) => {
         dispatch(setAcitvityUserByPending(item.activity));
         dispatch(setLoadingAct(false));
+        console.log('pending', res.data);
 
         return item.activity;
       });
@@ -190,6 +191,7 @@ export const fetchActivityDoneByUser = (data) => async (dispatch) => {
       res?.data?.map((item) => {
         dispatch(setAcitvityUserByDone(item.activity));
         dispatch(setLoadingAct(false));
+        console.log('done', res.data);
 
         return item.activity;
       });
