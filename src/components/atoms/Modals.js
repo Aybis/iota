@@ -10,6 +10,8 @@ export default function Modals({
   dontClose = false,
   position = 'center',
   margin = true,
+  addClass,
+  addClassTitle,
 }) {
   let completeButtonRef = useRef(null);
 
@@ -55,12 +57,17 @@ export default function Modals({
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
             <div
               className={[
-                'mx-4 inline-block align-bottom bg-white p-3 shadow-xl transform transition-all h-auto',
+                'mx-4 inline-block align-bottom bg-white p-3 shadow-xl transform transition-all h-auto my-12 overflow-auto',
                 margin ? 'rounded-xl  max-w-full' : 'rounded-xl w-full',
+                addClass,
               ].join(' ')}>
               <div className="p-2">
                 <div className="flex justify-between items-center mb-4">
-                  <h1 className="text-left text-zinc-800 text-lg font-semibold ">
+                  <h1
+                    className={[
+                      'text-left text-zinc-800 text-lg font-semibold',
+                      addClassTitle,
+                    ].join(' ')}>
                     {title}
                   </h1>
                   <XIcon

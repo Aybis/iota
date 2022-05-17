@@ -1,3 +1,5 @@
+import { setHeader } from '../../config/api/constant';
+import iota from '../../config/api/route/iota';
 import * as type from '../types/libur';
 
 export const getDataHoliday = (data) => ({
@@ -37,9 +39,9 @@ export const setPaginationHoliday = (data) => ({
 
 export const fetchDataHoliday = (page, date, total) => async (dispatch) => {
   dispatch(setLoading(true));
-
+  setHeader();
   try {
-    return await absensis
+    return await iota
       .getHoliday({
         params: {
           page: page ?? 1,
@@ -50,6 +52,7 @@ export const fetchDataHoliday = (page, date, total) => async (dispatch) => {
       .then((res) => {
         dispatch(getDataHoliday(res.data.data));
         dispatch(setPaginationHoliday(res.data));
+        console.log(res);
         let dataHeader = Object.keys(res?.data?.data[0]).filter(
           (item) => item !== 'id',
         );
@@ -72,7 +75,9 @@ export const fetchDataHoliday = (page, date, total) => async (dispatch) => {
 };
 
 export const insertDataHoliday = (data) => async (dispatch) => {
-  return await absensis
+  setHeader();
+
+  return await iota
     .insertHoliday(data)
     .then((res) => {
       return res;
@@ -89,7 +94,9 @@ export const insertDataHoliday = (data) => async (dispatch) => {
 };
 
 export const updateDataHoliday = (data, id) => async (dispatch) => {
-  return await absensis
+  setHeader();
+
+  return await iota
     .updateHoliday(id, data)
     .then((res) => {
       return res;
@@ -106,7 +113,9 @@ export const updateDataHoliday = (data, id) => async (dispatch) => {
 };
 
 export const deleteDataHoliday = (id) => async (dispatch) => {
-  return await absensis
+  setHeader();
+
+  return await iota
     .updateHoliday(id)
     .then((res) => {
       console.log(res);

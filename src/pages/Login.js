@@ -1,7 +1,7 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import Loading from '../components/atoms/Loading';
 import { getImageFromAssets } from '../helpers/assetHelpers';
@@ -32,8 +32,6 @@ export default function Login() {
     event.preventDefault();
     return await dispatch(userLogin(input))
       .then((res) => {
-        // swal('Yeay', 'Login Berhasil', 'success');
-        // navigate(location.state?.from?.pathname || '/', { replace: true });
         if (res.status === 200) {
           swal('Yeay', res.data.message ?? 'Login Berhasil', 'success');
           navigate(location.state?.from?.pathname || '/', { replace: true });
@@ -140,7 +138,7 @@ export default function Login() {
                         className="appearance-none block w-full px-3 py-2 border border-gray-300 font-medium text-zinc-800 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-indigo-500"
                       />
                       <span
-                        className="absolute top-3 right-4"
+                        className="absolute top-3 right-4 cursor-pointer"
                         onClick={() => setshowPassword(!showPassword)}>
                         {showPassword ? (
                           <EyeIcon className="h-5 text-zinc-400" />
@@ -167,21 +165,26 @@ export default function Login() {
                     </div>
 
                     <div className="text-sm">
-                      <p className="font-medium text-blue-600 hover:text-blue-500">
+                      <Link
+                        to={'/forgot'}
+                        className="font-medium text-blue-600 hover:text-blue-400 transition-all duration-300 ease-in-out">
                         Forgot your password?
-                      </p>
+                      </Link>
                     </div>
                   </div>
 
                   <div className="pt-6">
                     <button
                       type="submit"
-                      disabled={isLoading}
+                      disabled={
+                        isLoading ||
+                        !(input?.nik !== '' && input?.password?.length > 6)
+                      }
                       className="disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-300 ease-in-out w-full flex space-x-2 justify-center py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                       {isLoading && (
                         <Loading height={5} width={5} color={'text-white'} />
                       )}
-                      Sign in
+                      Login
                     </button>
                   </div>
                 </form>

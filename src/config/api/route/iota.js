@@ -60,7 +60,24 @@ export default {
 
   //endpoint CRUD data users
   fetchAllUsers: (params) => axios.get('user'),
+  insertUser: (data) => axios.post('user', data),
+  updateUser: (id, data) => axios.patch(`user/${id}`, data),
+  deleteUser: (id) => axios.delete('user', id),
 
   // end point push notif to WA
   notifWa: (data) => axios.post('notifikasi/notif-to-subordinate', data),
+
+  // end point hari libur
+  getHoliday: (page) => axios.get(`holiday`, page),
+  insertHoliday: (data) => axios.post('holiday', data),
+  deleteHoliday: (id) => axios.delete(`holiday/${id}`),
+  updateHoliday: (id, data) => axios.patch(`holiday/${id}`, data),
+
+  // reset password
+  // {phone}
+  getOtp: (credentials) => axios.post('auth/otp/generate', credentials),
+  // {phone,token}
+  verifOtp: (credentials) => axios.post('auth/otp/verification', credentials),
+  // {phone,password}
+  changePassword: (data) => axios.post('auth/otp/change_password', data),
 };

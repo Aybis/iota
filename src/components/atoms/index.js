@@ -14,3 +14,4 @@ export { default as TableHeading } from './TableHeading';
 export { default as TableBody } from './TableBody';
 export { default as TableContent } from './TableContent';
 export { default as Breadcumbs } from './Breadcumbs';
+export { default as Input } from './Input';

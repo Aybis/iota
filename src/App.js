@@ -27,12 +27,13 @@ import Employee from './pages/dashboard_activity/Employee';
 import ListActivityByStatus from './pages/dashboard_activity/ListActivityByStatus';
 import Monthly from './pages/dashboard_activity/Monthly';
 import Desktop from './pages/Desktop';
-import { ManageLibur, ManageUser } from './pages/management';
+import { ForgotPassword, VerifOtp, NewPassword } from './pages/forget_password';
+import { HariLibur, ManageLibur, ManageUser } from './pages/management';
 import Management from './pages/management/Management';
 
 function App() {
   return (
-    <>
+    <div className="relative bg-zinc-50">
       <ToastContainer />
       <Routes>
         {/* Route without autenthication */}
@@ -40,7 +41,14 @@ function App() {
           <Route index element={<Login />} />
         </Route>
 
-        {/* Route wih autentikasi */}
+        {/* Route without autenthication */}
+        <Route path="/forgot" element={<Gate />}>
+          <Route index element={<ForgotPassword />} />
+          <Route path="verification" element={<VerifOtp />} />
+          <Route path="new-password" element={<NewPassword />} />
+        </Route>
+
+        {/* Route with autenthication */}
         <Route path="/" element={<Authenticated />}>
           {/* Route Link Teknisi  */}
           <Route path="/dekstop" element={<Desktop />} />
@@ -75,11 +83,12 @@ function App() {
           <Route path="/management" element={<Management />} />
           <Route path="/management/users" element={<ManageUser />} />
           <Route path="/management/libur" element={<ManageLibur />} />
+          <Route path="/management/libur/data" element={<HariLibur />} />
           <Route path="activities/:user" element={<DetailUserAct />} />
         </Route>
         <Route path="/*" element={<NotFound />} />
       </Routes>
-    </>
+    </div>
   );
 }
 
