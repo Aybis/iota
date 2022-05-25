@@ -6,5 +6,5 @@ import Teknisi from './privilege/Teknisi';
 export default function Home() {
   const USER = useSelector((state) => state.user);
 
-  return USER?.profile?.role_id === '1' ? <Teknisi /> : <Admin />;
+  return String(USER?.profile?.role_id) === '1' ? <Teknisi /> : <Admin />;
 }

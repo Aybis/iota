@@ -46,18 +46,18 @@ export default function Layout({
     return null;
   }
 
-  if (isLeadOnly && USER?.profile?.role_id === '1') {
+  if (isLeadOnly && String(USER?.profile?.role_id) === '1') {
     return <RedirectPage />;
   }
 
-  if (isAdminOnly && USER?.profile?.role_id !== '3') {
+  if (isAdminOnly && String(USER?.profile?.role_id) !== '3') {
     return <RedirectPage />;
   }
   return (
     <div
       className={[
         'min-h-screen max-h-full ',
-        USER?.profile?.role_id === '1'
+        String(USER?.profile?.role_id) === '1'
           ? 'md:bg-white bg-zinc-50 pb-16 md:pb-14'
           : 'bg-zinc-50 pb-20',
         moreClass,
@@ -73,11 +73,11 @@ export default function Layout({
       )}
 
       <div className={['relative overflow-hidden'].join(' ')}>
-        {USER?.profile?.role_id !== '1' && <Header />}
+        {String(USER?.profile?.role_id) !== '1' && <Header />}
 
         {showBottomBar && <BottomBar />}
 
-        {notTechnician && USER?.profile?.role_id !== '1' && (
+        {notTechnician && String(USER?.profile?.role_id) !== '1' && (
           <main className="min-h-full">
             <div className="relative sm:pt-16 lg:p-8 lg:pb-14 lg:max-w-7xl container mx-auto lg:mt-16 overflow-scroll">
               {children}
@@ -86,8 +86,8 @@ export default function Layout({
         )}
 
         {!notTechnician &&
-          (USER?.profile?.role_id === '2' ||
-            USER?.profile?.role_id === '3') && (
+          (String(USER?.profile?.role_id) === '2' ||
+            String(USER?.profile?.role_id) === '3') && (
             <main className="min-h-full">
               <div className="relative sm:pt-16 lg:p-8 lg:pb-14 lg:max-w-7xl container mx-auto lg:mt-16 overflow-scroll">
                 {children}
@@ -95,7 +95,7 @@ export default function Layout({
             </main>
           )}
 
-        {!notTechnician && USER?.profile?.role_id === '1' && (
+        {!notTechnician && String(USER?.profile?.role_id) === '1' && (
           <main className="min-h-full">
             <div className="relative mx-auto container max-w-md overflow-scroll min-h-screen bg-zinc-50 px-4">
               {children}
@@ -103,18 +103,7 @@ export default function Layout({
           </main>
         )}
 
-        {/* <main className="min-h-full">
-          {USER?.profile?.role_id === '3' ? (
-            <div className="relative sm:pt-16 lg:p-8 lg:pb-14 lg:max-w-7xl container mx-auto lg:mt-16 overflow-scroll">
-              {children}
-            </div>
-          ) : (
-            <div className="relative mx-auto container max-w-md overflow-scroll min-h-screen bg-zinc-50 px-4">
-              {children}
-            </div>
-          )}
-        </main> */}
-        {USER?.profile?.role_id !== '1' && <Footer />}
+        {String(USER?.profile?.role_id) !== '1' && <Footer />}
       </div>
     </div>
   );

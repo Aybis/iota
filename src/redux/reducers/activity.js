@@ -23,6 +23,12 @@ export default function (state = initialState, action) {
         activitiesByUser: action.payload ?? {},
       };
 
+    case type.ACTIVITIES_OVERVIEW:
+      return {
+        ...state,
+        activitiesOverview: action.payload ?? {},
+      };
+
     case type.SELECT_REGIONAL:
       return {
         ...state,

@@ -32,7 +32,7 @@ export default function Index() {
         </div>
       </div>
 
-      {USER?.profile?.role_id === '3' && (
+      {String(USER?.profile?.role_id) === '3' && (
         <div className="relative px-4 flex mx-auto container max-w-7xl justify-end mb-8">
           <ButtonCustom
             isAnimated={true}

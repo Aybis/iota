@@ -2,8 +2,11 @@ import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 import validator from 'validator';
 import { Loading } from '../../components/atoms';
+import { getImageFromAssets } from '../../helpers/assetHelpers';
+import { setNewPassword } from '../../redux/actions/forget';
 
 export default function SetPassword() {
   const navigate = useNavigate();
@@ -27,31 +30,70 @@ export default function SetPassword() {
       })
     ) {
       setIsStrong(true);
-      setMessage('Password anda kuat');
+      setMessage('Your password is stromg');
     } else {
       setIsStrong(false);
-      setMessage('Password anda lemah!');
+      setMessage('Your password to weak!');
     }
   };
 
   const handlerSubmit = async (event) => {
     event.preventDefault();
     setloading(true);
+    return await setNewPassword({
+      phone: FORGET?.userTemp?.phone,
+      password: password,
+    })
+      .then((res) => {
+        swal('Yeay!', res.message, 'success');
+        setloading(false);
+        setTimeout(() => {
+          navigate('/login');
+        }, 300);
+      })
+      .catch((err) => {
+        swal('Oh No!', err?.message ?? 'Something Happened!', 'error');
 
-    setloading(false);
+        setloading(false);
+      });
   };
 
-  return FORGET?.phone && FORGET?.token ? (
-    <>
+  return FORGET?.userTemp?.phone && FORGET?.token ? (
+    <div className="relative mx-auto container max-w-md bg-white flex flex-col justify-center p-4 min-h-screen h-full">
+      <div className="absolute max-w-md w-full px-8 top-4 lg:top-8">
+        <div className="flex justify-between items-center">
+          <img
+            className="h-14 lg:h-20 w-auto -ml-6"
+            src={getImageFromAssets('/assets/telkom.png')}
+            alt=""
+          />
+          <img
+            className="h-9 lg:h-12 w-auto lg:mr-2"
+            src={getImageFromAssets('/assets/pins.png')}
+            alt=""
+          />
+        </div>
+      </div>
       {/* Heading Login */}
-      <div className="relative inset-x-0 xl:mt-16 mt-10">
-        <h2 className=" font-normal mt-1 text-zinc-700">
-          Masukkan password baru anda!
+      <div className="relative -mt-24">
+        <div className="block mb-14">
+          <img
+            className="h-8 w-auto"
+            src={getImageFromAssets('/assets/logo.svg')}
+            alt=""
+          />
+        </div>
+        <h1 className="text-xl xl:text-2xl font-semibold text-zinc-900">
+          Set New Password.
+        </h1>
+        <h2 className="text-sm font-normal mt-1 text-zinc-700">
+          Type your new password.
         </h2>
       </div>
+
       <form
         onSubmit={handlerSubmit}
-        className="relative w-full flex flex-col gap-4">
+        className="relative w-full flex flex-col gap-4 mt-4">
         <div className="mt-2 rounded-md  flex relative flex-col w-full">
           <input
             type={isPassword ? 'password' : 'text'}
@@ -98,24 +140,23 @@ export default function SetPassword() {
             </button>
           </div>
         )}
-
-        <div className="relative flex justify-center items-center w-full mt-12">
-          <button
-            onClick={() => navigate('/login')}
-            className="font-medium text-zinc-400 hover:text-zinc-700 transition-all duration-300 ease-in-out text-sm  text-center">
-            Kembali ke halaman login
-          </button>
-        </div>
       </form>
-    </>
+      <div className="relative flex justify-center items-center w-full mt-12">
+        <button
+          onClick={() => navigate(-1)}
+          className=" text-zinc-400 hover:text-zinc-700 transition-all duration-300 ease-in-out text-sm  text-center cursor-pointer pb-1">
+          Back
+        </button>
+      </div>
+    </div>
   ) : (
-    <div className="mt-8 flex flex-col gap-8 justify-center items-center">
-      <p className="text-sm font-medium text-red-500 text-center">
+    <div className="mt-8 flex flex-col gap-8 justify-center items-center min-h-screen max-w-md container mx-auto bg-white">
+      <p className="text-lg font-medium text-red-500 text-center">
         Anda belum mendapatkan kode OTP, silahkan masukkan nomer WhatsApp anda
         terlebih dahulu!{' '}
       </p>
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/forgot')}
         className="cursor-pointer text-sm font-semibold text-zinc-500 hover:text-zinc-700 mt-4">
         Kembali
       </button>

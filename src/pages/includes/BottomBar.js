@@ -31,7 +31,7 @@ export default function BottomBar() {
   const [menumobiles, setmenumobiles] = useState([]);
 
   useEffect(() => {
-    if (USER?.profile?.role_id === '1') {
+    if (String(USER?.profile?.role_id) === '1') {
       setmenumobiles([
         {
           link: '/',
@@ -67,7 +67,7 @@ export default function BottomBar() {
       ]);
     }
 
-    if (USER?.profile?.role_id === '2') {
+    if (String(USER?.profile?.role_id) === '2') {
       setmenumobiles([
         {
           link: '/',
@@ -95,7 +95,7 @@ export default function BottomBar() {
         },
       ]);
     }
-    if (USER?.profile?.role_id === '3') {
+    if (String(USER?.profile?.role_id) === '3') {
       setmenumobiles([
         {
           link: '/',
@@ -146,14 +146,14 @@ export default function BottomBar() {
     <div
       className={[
         'fixed z-30 bottom-0 inset-x-0 ',
-        USER?.profile?.role_id === '1'
+        String(USER?.profile?.role_id) === '1'
           ? 'max-w-md mx-auto container'
           : 'lg:hidden',
       ].join(' ')}>
       <div
         className={[
           `bg-white shadow-2xl  mb-0 py-1 border-t border-gray-200 border-opacity-50`,
-          USER?.profile?.role_id === '1'
+          String(USER?.profile?.role_id) === '1'
             ? `grid ${
                 link === 'hidden' ? 'grid-cols-4' : 'grid-cols-5'
               } place-items-center`

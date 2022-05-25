@@ -1,42 +1,55 @@
-import React, { useState } from 'react';
+import Cookies from 'js-cookie';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import { ButtonCustom } from '../../components/atoms';
-import { setHeader } from '../../config/api/constant';
-import iota from '../../config/api/route/iota';
 import { getImageFromAssets } from '../../helpers/assetHelpers';
+import { getOtp, setUserTemp } from '../../redux/actions/forget';
 
 export default function ForgetPassword() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [phone, setphone] = useState('');
   const [loading, setloading] = useState(false);
 
   const handlerChangeInput = (event) => {
     const value = event.target.validity.valid ? event.target.value : phone;
-
     setphone(value);
   };
 
   const handlerGetOtp = async (event) => {
     event.preventDefault();
     setloading(true);
+
     try {
-      setHeader();
-      const result = await iota.getOtp(phone);
-      console.log(result);
+      const result = await dispatch(getOtp(phone));
       if (result.status === 200) {
-        swal('Yeay!', result.message, 'success');
+        swal('Yeay!', result.data.message, 'success');
+
         setTimeout(() => {
-          // navigate('/forget/verification');
+          navigate('/forgot/verification');
         }, 300);
       } else {
-        swal('Oh No!', result.message, 'error');
+        swal('Oh No!', result?.message ?? 'Something Happened!', 'error');
       }
     } catch (error) {
-      swal('Oh No!', error.message ?? 'Something Happened!', 'error');
+      swal('Oh No!', error?.message ?? 'Something Happened!', 'error');
     }
+
     setloading(false);
   };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      Cookies.remove('forgotUser');
+      dispatch(setUserTemp(null));
+    }, 300);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [dispatch]);
 
   return (
     <div className="relative mx-auto container max-w-md bg-white flex flex-col justify-center p-4 min-h-screen h-full">
@@ -64,10 +77,10 @@ export default function ForgetPassword() {
           />
         </div>
         <h1 className="text-xl xl:text-2xl font-semibold text-zinc-900">
-          Lupa Password.
+          Forgot Password.
         </h1>
         <h2 className=" font-normal mt-1 text-zinc-700">
-          Masukkan nomer WhatsApp anda.
+          Type your WhatsApp number.
         </h2>
       </div>
 
@@ -102,8 +115,8 @@ export default function ForgetPassword() {
       <div className="relative flex justify-center items-center w-full mt-12">
         <button
           onClick={() => navigate(-1)}
-          className=" text-zinc-400 hover:text-zinc-700 transition-all duration-300 ease-in-out text-sm  text-center border-b-2 border-transparent hover:border-zinc-800 pb-1">
-          Kembali ke halaman login
+          className=" text-zinc-400 hover:text-zinc-700 transition-all duration-300 ease-in-out text-sm  text-center pb-1">
+          Back
         </button>
       </div>
     </div>

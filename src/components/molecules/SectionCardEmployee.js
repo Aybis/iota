@@ -43,7 +43,7 @@ export default function SectionCardEmployee({
         </dl>
       </div>
 
-      {isAdmin && (
+      {isAdmin ? (
         <div>
           <div className="-mt-px flex divide-x divide-gray-200">
             <div className="w-0 flex-1 flex group hover:bg-red-500 transition-all duration-300 ease-in-out rounded-bl-lg">
@@ -70,6 +70,8 @@ export default function SectionCardEmployee({
             </div>
           </div>
         </div>
+      ) : (
+        ''
       )}
     </div>
   );

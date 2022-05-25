@@ -1,12 +1,19 @@
 import iota from '../../config/api/route/iota';
 import * as type from '../types/forget';
+import Cookies from 'js-cookie';
 
 export const setToken = (data) => ({
   type: type.TOKEN,
   payload: data,
 });
+
 export const setPhone = (data) => ({
   type: type.PHONE,
+  payload: data,
+});
+
+export const setUserTemp = (data) => ({
+  type: type.USER_TEMP,
   payload: data,
 });
 
@@ -26,15 +33,20 @@ export const setMessage = (data) => ({
 });
 
 export const getOtp = (data) => async (dispatch) => {
+  let threeMinute = new Date(new Date().getTime() + 3 * 60 * 1000);
+
   try {
     const result = await iota
-      .getOtp({ phone: `0${data}` })
+      .getOtp({ phone: data })
       .then((response) => {
-        dispatch(setPhone(`0${data}`));
+        Cookies.set('forgotUser', response.data.user.phone, {
+          expires: threeMinute,
+        });
+        dispatch(setUserTemp(response.data.user));
         return {
           status: response.status,
-          message: 'OTP Berhasil Terverifikasi',
-          data: {},
+          message: response?.data?.message ?? 'OTP Berhasil Terkirim',
+          data: response.data,
         };
       })
       .catch((error) => {
@@ -90,7 +102,8 @@ export const setNewPassword = async (data) => {
       .then((response) => {
         return {
           status: response.status,
-          message: response.data.data ?? 'OTP Berhasil Terverifikasi',
+          message:
+            response?.data?.message ?? 'Change password has been sucessfull',
           data: {},
         };
       })

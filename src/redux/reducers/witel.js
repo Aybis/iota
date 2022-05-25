@@ -1,40 +1,32 @@
-import * as type from '../types/forget';
+import * as type from '../types/witel';
 
 const initialState = {};
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function (state = initialState, action) {
   switch (action.type) {
-    case type.PHONE:
+    case type.ALL_WITEL:
       return {
         ...state,
-        phone: action.payload,
+        allWitel: action.payload,
       };
 
-    case type.USER_TEMP:
+    case type.TEMP_WITEL:
       return {
         ...state,
-        userTemp: action.payload,
+        tempWitel: action.payload,
       };
 
-    case type.TOKEN:
-      return {
-        ...state,
-        token: action.payload,
-      };
     case type.LOADING:
       return {
         ...state,
-        loading: action.payload,
+        loadingWitel: action.payload,
       };
-    case type.ERROR:
-      return {
-        ...state,
-        error: action.payload,
-      };
+
     case type.MESSAGE:
       return {
         ...state,
-        message: action.payload,
+        messageWitel: action.payload,
       };
 
     default:

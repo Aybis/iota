@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/solid';
 import { Fragment, useRef } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function Modals({
   open,
@@ -14,6 +15,7 @@ export default function Modals({
   addClassTitle,
 }) {
   let completeButtonRef = useRef(null);
+  const USER = useSelector((state) => state.user);
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -59,6 +61,9 @@ export default function Modals({
               className={[
                 'mx-4 inline-block align-bottom bg-white p-3 shadow-xl transform transition-all h-auto my-12 overflow-auto',
                 margin ? 'rounded-xl  max-w-full' : 'rounded-xl w-full',
+                String(USER?.profile?.role_id) === '1'
+                  ? 'max-w-md'
+                  : 'max-w-full',
                 addClass,
               ].join(' ')}>
               <div className="p-2">

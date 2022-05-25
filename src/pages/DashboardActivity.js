@@ -117,7 +117,7 @@ export default function DashboardActivity() {
   useEffect(() => {
     dispatch(setSelectedRegional(ACTIVITY?.regionalSelectedAct));
 
-    if (USER?.profile?.role_id === '1') {
+    if (String(USER?.profile?.role_id) === '1') {
       navigate('/404');
     }
 
@@ -128,7 +128,7 @@ export default function DashboardActivity() {
     <Layout>
       <SectionHeaderPage title={'Activity Dashboard'} />
 
-      {USER?.profile?.role_id === '3' && (
+      {String(USER?.profile?.role_id) === '3' && (
         <div className="relative m-4">
           <Dropdown handlerOnChnage={handlerOnChnage} />
         </div>

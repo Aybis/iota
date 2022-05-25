@@ -20,6 +20,7 @@ import {
   fetchActivityPendingDashboard,
   fetchActivityProgressDashboard,
   fetchAllActivity,
+  getActivityOverview,
 } from '../../redux/actions/activity';
 import { fetchDashboardHarian } from '../../redux/actions/dashboardadmin';
 import Layout from '../includes/Layout';
@@ -29,34 +30,10 @@ export default function Admin() {
   const USER = useSelector((state) => state.user);
   const DASHBOARD = useSelector((state) => state.dashboardadmin);
   const ACTIVITY = useSelector((state) => state.activity);
+  const [didMount, setDidMount] = useState(false);
   const [profile, setprofile] = useState(false);
   const [dataRegional, setdataRegional] = useState([]);
   const dispatch = useDispatch();
-
-  const testData = [
-    {
-      name: 'pending',
-      value: 64,
-      title: 'Pending',
-    },
-    {
-      name: 'todo',
-      title: 'To do',
-      value: 14,
-    },
-    {
-      name: 'progress',
-      title: 'Progress',
-
-      value: 23,
-    },
-    {
-      name: 'completed',
-      title: 'Completed',
-
-      value: 30,
-    },
-  ];
 
   const getActivityRegional = async () => {
     setHeader();
@@ -75,6 +52,9 @@ export default function Admin() {
 
   useEffect(() => {
     getActivityRegional();
+
+    dispatch(getActivityOverview());
+
     dispatch(
       fetchDashboardHarian(
         USER?.profile?.regional_id === '' ? null : USER?.profile?.regional_id,
@@ -105,9 +85,14 @@ export default function Admin() {
         regional_id: USER?.profile?.regional_id,
       }),
     );
-
+    setDidMount(true);
+    return () => setDidMount(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+
+  if (!didMount) {
+    return null;
+  }
 
   return (
     <Layout>
@@ -154,7 +139,7 @@ export default function Admin() {
       <div
         className={[
           'relative my-2',
-          USER?.profile?.role_id === '3' ? ' block sm:hidden' : 'block',
+          String(USER?.profile?.role_id) === '3' ? ' block sm:hidden' : 'block',
         ].join(' ')}>
         <div className="relative bg-white mx-4 p-3 rounded-lg">
           {/* Section Header */}
@@ -274,41 +259,44 @@ export default function Admin() {
       <div
         className={[
           'relative mt-10 mb-4',
-          USER?.profile?.role_id === '3' ? ' hidden sm:block' : 'hidden',
+          String(USER?.profile?.role_id) === '3'
+            ? ' hidden sm:block'
+            : 'hidden',
         ].join(' ')}>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {/* Section Activity */}
-          {testData.map((item) => (
-            <div
-              key={Math.random()}
-              className={[
-                'relative flex justify-between items-center p-4 rounded-lg',
-                item.name === 'pending' &&
-                  'bg-gradient-to-br from-red-500 to-pink-500 text-white',
-                item.name === 'todo' &&
-                  'bg-gradient-to-br from-sky-500 to-blue-500 text-white',
-                item.name === 'progress' &&
-                  'bg-gradient-to-br from-amber-500 to-orange-500 text-white',
-                item.name === 'completed' &&
-                  'bg-gradient-to-br from-green-400 to-teal-500 text-white',
-              ].join(' ')}>
-              <div className="relative">
-                <h1 className="mb-3 font-medium">{item.title}</h1>
+          {ACTIVITY?.activitiesOverview?.length > 0 &&
+            ACTIVITY?.activitiesOverview?.map((item) => (
+              <div
+                key={Math.random()}
+                className={[
+                  'relative flex justify-between items-center p-4 rounded-lg',
+                  item.name === 'pending' &&
+                    'bg-gradient-to-br from-red-500 to-pink-500 text-white',
+                  item.name === 'todo' &&
+                    'bg-gradient-to-br from-sky-500 to-blue-500 text-white',
+                  item.name === 'progress' &&
+                    'bg-gradient-to-br from-amber-500 to-orange-500 text-white',
+                  item.name === 'completed' &&
+                    'bg-gradient-to-br from-green-400 to-teal-500 text-white',
+                ].join(' ')}>
+                <div className="relative">
+                  <h1 className="mb-3 font-medium capitalize">{item.name}</h1>
 
-                <h1 className="text-2xl font-semibold mt-3">
-                  {item.value}
-                  <span className="text-sm ml-1">
-                    {item.value > 1 ? 'activities' : 'activity'}
-                  </span>
-                </h1>
+                  <h1 className="text-2xl font-semibold mt-3">
+                    {item.value}
+                    <span className="text-sm ml-1">
+                      {item.value > 1 ? 'activities' : 'activity'}
+                    </span>
+                  </h1>
+                </div>
+                <IconThumbnail
+                  name={item.name}
+                  addClas="h-14 w-14 p-2 rounded-lg"
+                  backgroundClass={'bg-white'}
+                />
               </div>
-              <IconThumbnail
-                name={item.name}
-                addClas="h-14 w-14 p-2 rounded-lg"
-                backgroundClass={'bg-white'}
-              />
-            </div>
-          ))}
+            ))}
 
           {/* Section Absensi */}
           <div className="relative col-span-3 bg-white rounded-lg px-4">
@@ -379,7 +367,9 @@ export default function Admin() {
       <div
         className={[
           'relative bg-white rounded-lg p-4 mt-8',
-          USER?.profile?.role_id === '3' ? ' hidden sm:block' : 'hidden',
+          String(USER?.profile?.role_id) === '3'
+            ? ' hidden sm:block'
+            : 'hidden',
         ].join(' ')}>
         <h1 className="font-semibold text-zinc-800">Summary Activtiy</h1>
         <table className="w-full rounded-xl mt-4">

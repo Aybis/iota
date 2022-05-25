@@ -34,15 +34,6 @@ export default function SectionActivity({
         <div className="absolute top-0 text-xs text-zinc-400 right-0">
           {convertDate('tanggalShort', date)}
         </div>
-        {/* <div
-          className={[
-            'flex absolute px-3 py-1 rounded-md text-xs font-medium text-white -top-4 right-1',
-            progress === 100 ? 'bg-teal-500' : 'bg-amber-500',
-          ].join(' ')}>
-          <p className="text-xs  capitalize">
-            {progress === 100 ? 'completed' : 'to do'}
-          </p>
-        </div> */}
 
         <ProgressBar moreClass={'mt-5 mb-3'} progress={progress} />
         <div className="relative mt-2">

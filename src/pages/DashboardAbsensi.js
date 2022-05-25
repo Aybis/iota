@@ -73,7 +73,7 @@ export default function DashboardAbsensi() {
 
   useEffect(() => {
     dispatch(setSelectedRegional(DASHBOARD?.regionalSelected));
-    if (USER?.profile?.role_id === '1') {
+    if (String(USER?.profile?.role_id) === '1') {
       navigate('/404');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,7 +83,7 @@ export default function DashboardAbsensi() {
     <Layout isLeadOnly={true}>
       <SectionHeaderPage title={'Attendance Dashboard'} />
 
-      {USER?.profile?.role_id === '3' && (
+      {String(USER?.profile?.role_id) === '3' && (
         <div className="relative m-4">
           <Dropdown handlerOnChnage={handlerOnChange} />
         </div>

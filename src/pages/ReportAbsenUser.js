@@ -103,7 +103,7 @@ export default function ReportUser() {
       }),
     );
 
-    if (USER?.profile?.role_id !== '1') {
+    if (String(USER?.profile?.role_id) !== '1') {
       navigate('/404');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

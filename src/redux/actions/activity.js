@@ -92,6 +92,11 @@ export const setAcitvityDashboardByPending = (data) => ({
   payload: data,
 });
 
+export const setActivityOverview = (data) => ({
+  type: type.ACTIVITIES_OVERVIEW,
+  payload: data,
+});
+
 export const setDataStatus = (data) => ({
   type: type.SET_DATA_STATUS,
   payload: data,
@@ -478,4 +483,17 @@ export const downloadActivityByUnit = async (data) => {
     document.body.appendChild(link);
     link.click();
   });
+};
+
+export const getActivityOverview = () => async (dispatch) => {
+  setHeader();
+
+  return await iota
+    .fetchActivityDailyOverview()
+    .then((res) => {
+      dispatch(setActivityOverview(res.data));
+    })
+    .catch((err) => {
+      return err.response;
+    });
 };

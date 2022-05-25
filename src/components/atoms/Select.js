@@ -1,4 +1,4 @@
-import React from 'react';
+import { motion } from 'framer-motion';
 
 export default function Select({
   children,
@@ -12,12 +12,30 @@ export default function Select({
   addClassLabel,
   addClassParent,
 }) {
+  const container = {
+    hidden: { opacity: 1, width: 0 },
+    visible: {
+      opacity: 1,
+      width: '100%',
+      transition: {
+        delayChildren: 1,
+        staggerChildren: 0.8,
+      },
+    },
+  };
+
   return (
-    <div className={['sm:col-span-3 text-left', addClassParent].join(' ')}>
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="visible"
+      className={['relative sm:col-span-3 text-left', addClassParent].join(
+        ' ',
+      )}>
       <label
         htmlFor={name}
         className={[
-          'block text-sm text-gray-700 capitalize',
+          'block text-sm text-zinc-600 capitalize',
           addClassLabel,
         ].join(' ')}>
         {labelName}
@@ -28,7 +46,7 @@ export default function Select({
         name={name}
         value={value}
         className={[
-          'disabled:bg-zinc-100 disabled:cursor-not-allowed mt-1 shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md',
+          'disabled:bg-zinc-100 disabled:cursor-not-allowed font-medium mt-1 shadow-sm text-zinc-800 focus:ring-blue-500 focus:border-blue-500 block w-full text-sm border-zinc-300 rounded-md',
           addClassInput,
         ].join(' ')}>
         <option value="" disabled>
@@ -36,6 +54,6 @@ export default function Select({
         </option>
         {children}
       </select>
-    </div>
+    </motion.div>
   );
 }

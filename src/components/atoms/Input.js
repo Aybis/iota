@@ -1,4 +1,4 @@
-import React from 'react';
+import { motion } from 'framer-motion';
 
 export default function Input({
   label,
@@ -15,8 +15,24 @@ export default function Input({
   inputType = 'text',
   note,
 }) {
+  const container = {
+    hidden: { opacity: 1, scale: 0 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        delayChildren: 1,
+        staggerChildren: 0.8,
+      },
+    },
+  };
+
   return (
-    <div className={['sm:col-span-3 text-left', addClassParent].join(' ')}>
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="visible"
+      className={['sm:col-span-3 text-left', addClassParent].join(' ')}>
       {showLabel && (
         <label
           htmlFor={label}
@@ -38,12 +54,12 @@ export default function Input({
           autoComplete={autoComplete}
           className={[
             'shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md',
-            'disabled:bg-zinc-100 disabled:cursor-not-allowed',
+            'disabled:bg-zinc-100 disabled:cursor-not-allowed disabled:text-zinc-600',
             addClassForm,
           ].join(' ')}
         />
         <p className="text-sm font-light text-zinc-400 mt-1">{note}</p>
       </div>
-    </div>
+    </motion.div>
   );
 }

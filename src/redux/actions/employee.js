@@ -53,6 +53,7 @@ export const insertEmployee = (data) => async (dispatch) => {
   dispatch(setEmpLoading(true));
   try {
     const result = await iota.insertUser(data);
+    console.log('resu', result);
     if (result.status === 200) {
       swal(
         'Yeay',

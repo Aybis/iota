@@ -19,3 +19,4 @@ export { default as ProfileDropdown } from './ProfileDropdown';
 export { default as SectionCardEmployee } from './SectionCardEmployee';
 export { default as SkeletonCardEmployee } from './SkeletonCardEmployee';
 export { default as RedirectPage } from './RedirectPage';
+export { default as FormUser } from './FormUser';

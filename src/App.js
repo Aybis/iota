@@ -45,7 +45,7 @@ function App() {
         <Route path="/forgot" element={<Gate />}>
           <Route index element={<ForgotPassword />} />
           <Route path="verification" element={<VerifOtp />} />
-          <Route path="new-password" element={<NewPassword />} />
+          <Route path="password" element={<NewPassword />} />
         </Route>
 
         {/* Route with autenthication */}

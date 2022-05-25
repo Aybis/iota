@@ -46,6 +46,7 @@ export default function Activity() {
   const [form, setform] = useState({
     title: '',
     description: '',
+    date: '',
     user_id: USER?.profile?.id,
   });
 
@@ -59,6 +60,8 @@ export default function Activity() {
   const handlerSubmitAddActivity = async (event) => {
     setisLoading(true);
     event.preventDefault();
+    form.date = convertDate('tanggalWaktuLengkap');
+
     return dispatch(insertActivity(form))
       .then((res) => {
         if (res.status === 200) {
@@ -136,7 +139,7 @@ export default function Activity() {
       }),
     );
 
-    if (USER?.profile?.role_id !== '1') {
+    if (String(USER?.profile?.role_id) !== '1') {
       navigate('/404');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

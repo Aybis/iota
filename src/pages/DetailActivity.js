@@ -177,7 +177,7 @@ export default function DetailActivity() {
             </span>
           </p>
 
-          {USER?.profile?.role_id === '1' &&
+          {String(USER?.profile?.role_id) === '1' &&
             ACTIVITY?.historyActivity?.progress < 100 &&
             USER?.profile?.id === ACTIVITY?.historyActivity?.user_id && (
               <Link
@@ -232,7 +232,7 @@ export default function DetailActivity() {
         open={showModalUpdated}
         title={'Edit Activity'}>
         <div className="relative">
-          {USER?.profile?.role_id === '1' &&
+          {String(USER?.profile?.role_id) === '1' &&
           Object.values(ABSEN?.checkin).length > 0 &&
           USER?.profile?.id === ACTIVITY?.historyActivity?.user_id ? (
             <SectionTextArea

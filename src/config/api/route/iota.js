@@ -33,6 +33,14 @@ export default {
   updateRegional: (data, id) => axios.post(`regional/${id}`, data),
   deleteRegional: (id) => axios.post(`regional/${id}`),
 
+  // witel
+  witel: () => axios.get('witel'),
+  // 1.name 2.alias
+  insertWitel: (data) => axios.post('witel'),
+  // 1.name 2.alias
+  updateWitel: (data, id) => axios.post(`witel/${id}`, data),
+  deleteWitel: (id) => axios.post(`witel/${id}`),
+
   // =======================================================================
 
   // functional absensi
@@ -55,6 +63,8 @@ export default {
   // endpoint dashboard manar and leader
   fetchDataDashboardDaily: (params) => axios.get('absensi/users/daily', params),
   fetchDataDashboardMonthly: (data) => axios.get('absensi/users/monthly', data),
+  fetchActivityDailyOverview: (params) =>
+    axios.get('activity/overview', params),
   fetchDataDashboardByRegional: (params) =>
     axios.get('absensi/users/employe', params),
 
@@ -75,9 +85,9 @@ export default {
 
   // reset password
   // {phone}
-  getOtp: (credentials) => axios.post('auth/otp/generate', credentials),
+  getOtp: (credentials) => axios.post('otp/generate', credentials),
   // {phone,token}
-  verifOtp: (credentials) => axios.post('auth/otp/verification', credentials),
+  verifOtp: (credentials) => axios.post('otp/verification', credentials),
   // {phone,password}
-  changePassword: (data) => axios.post('auth/otp/change_password', data),
+  changePassword: (data) => axios.post('otp/change_password', data),
 };
