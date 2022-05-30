@@ -242,6 +242,7 @@ export default function FormUser({
               key={index}
               value={formData[item[0]]}
               name={item[0]}
+              note={item[0] === 'phone' ? 'Format number must 812xxx ' : ''}
             />
           ))}
 

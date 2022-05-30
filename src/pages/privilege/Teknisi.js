@@ -61,8 +61,6 @@ export default function Teknisi() {
     }, 200);
   };
 
-  console.log(ACTIVITY);
-
   useEffect(() => {
     dispatch(fetchActivityPendingByUser({ user_id: USER?.profile?.id }));
 
