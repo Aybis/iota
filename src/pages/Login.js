@@ -84,13 +84,13 @@ export default function Login() {
           <div className="lg:mx-auto w-full max-w-md lg:w-96 bg-white lg:bg-transparent p-4 lg:p-0 rounded-lg">
             <div className="block">
               <img
-                className="h-8 w-auto"
+                className="h-8 w-auto lg:h-12"
                 src={getImageFromAssets('/assets/logo.svg')}
                 alt=""
               />
             </div>
 
-            <div className="mt-12 lg:mt-32">
+            <div className="mt-12 lg:mt-28">
               <h1 className="text-xl lg:text-3xl font-semibold text-zinc-800">
                 Log in
               </h1>
@@ -193,19 +193,18 @@ export default function Login() {
           </div>
         </div>
         <div className="hidden lg:block relative w-0 flex-1 bg-slate-50">
-          <div className="min-h-screen flex flex-col space-y-6 justify-center items-center lg:px-12 xl:px-24">
+          <div className="min-h-screen flex flex-col  justify-center items-center lg:px-12 xl:px-24">
             <img
               className="h-96"
               src={getImageFromAssets('/assets/ilustrasi.svg')}
               alt=""
             />
-            <h1 className="text-center text-xl font-bold text-zinc-800">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            <h1 className="text-center text-3xl font-bold text-zinc-800 mt-8">
+              SQUAD IOTA APPS
             </h1>
-            <p className="text-center text-sm text-zinc-400">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis
-              et autem consectetur delectus! Nam iure suscipit laborum tempore
-              odit nobis.
+            <p className="text-center text-base text-zinc-400 mt-4 mx-12">
+              Aplikasi monitoring absensi dan aktivitas pekerjaan operasional
+              dan pemeliharaan perangkat service node - SQUAD IOTA Telkom.
             </p>
           </div>
         </div>
